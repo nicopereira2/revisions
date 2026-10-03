@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Révisions</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#f3f2f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171514" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Révisions">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-d64977b1-82be-4a06-bb24-112bd60a1c1d/styles.css">
+<script src="_ds/modernist-d64977b1-82be-4a06-bb24-112bd60a1c1d/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css">
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+<style>html,body{margin:0;background:var(--color-bg);overscroll-behavior:none;-webkit-tap-highlight-color:transparent}a{color:var(--color-accent)}a:hover{color:var(--color-accent-700)}textarea::placeholder,input::placeholder{color:var(--color-neutral-600)}button{-webkit-user-select:none;user-select:none}</style>
+<style>html[data-theme="dark"]{--color-bg:#171514;--color-surface:#232120;--color-text:#f3f2f2;--color-accent:#ff563c;--color-accent-2:#ef6853;--color-divider:color-mix(in srgb,#f3f2f2 32%,transparent);
+--color-neutral-100:#2d2b2b;--color-neutral-200:#444141;--color-neutral-300:#3a3737;--color-neutral-400:#7d7979;--color-neutral-500:#9b9797;--color-neutral-600:#9b9797;--color-neutral-700:#bab6b6;--color-neutral-800:#d7d3d3;--color-neutral-900:#f8f4f4;
+--color-accent-100:#4d170e;--color-accent-200:#7c1405;--color-accent-300:#ae1800;--color-accent-400:#dd2b0f;--color-accent-500:#ff563c;--color-accent-600:#ff9783;--color-accent-700:#ff9783;--color-accent-800:#ffe0d9;--color-accent-900:#fff2ef;
+--color-accent-2-100:#471d16;--color-accent-2-200:#71261b;--color-accent-2-300:#9e3526;--color-accent-2-400:#c94b39;--color-accent-2-500:#ef6853;--color-accent-2-600:#ff9784;--color-accent-2-700:#ff9784;--color-accent-2-800:#ffe0da;--color-accent-2-900:#fff2ef;
+--shadow-sm:0 0 0 1px color-mix(in srgb,#f3f2f2 10%,transparent);--shadow-md:0 0 0 1px color-mix(in srgb,#f3f2f2 12%,transparent),0 4px 14px rgba(0,0,0,.5);--shadow-lg:0 0 0 1px color-mix(in srgb,#f3f2f2 14%,transparent),0 14px 36px rgba(0,0,0,.6);color-scheme:dark}@media (prefers-color-scheme: dark){html:not([data-theme="light"]){--color-bg:#171514;--color-surface:#232120;--color-text:#f3f2f2;--color-accent:#ff563c;--color-accent-2:#ef6853;--color-divider:color-mix(in srgb,#f3f2f2 32%,transparent);
+--color-neutral-100:#2d2b2b;--color-neutral-200:#444141;--color-neutral-300:#3a3737;--color-neutral-400:#7d7979;--color-neutral-500:#9b9797;--color-neutral-600:#9b9797;--color-neutral-700:#bab6b6;--color-neutral-800:#d7d3d3;--color-neutral-900:#f8f4f4;
+--color-accent-100:#4d170e;--color-accent-200:#7c1405;--color-accent-300:#ae1800;--color-accent-400:#dd2b0f;--color-accent-500:#ff563c;--color-accent-600:#ff9783;--color-accent-700:#ff9783;--color-accent-800:#ffe0d9;--color-accent-900:#fff2ef;
+--color-accent-2-100:#471d16;--color-accent-2-200:#71261b;--color-accent-2-300:#9e3526;--color-accent-2-400:#c94b39;--color-accent-2-500:#ef6853;--color-accent-2-600:#ff9784;--color-accent-2-700:#ff9784;--color-accent-2-800:#ffe0da;--color-accent-2-900:#fff2ef;
+--shadow-sm:0 0 0 1px color-mix(in srgb,#f3f2f2 10%,transparent);--shadow-md:0 0 0 1px color-mix(in srgb,#f3f2f2 12%,transparent),0 4px 14px rgba(0,0,0,.5);--shadow-lg:0 0 0 1px color-mix(in srgb,#f3f2f2 14%,transparent),0 14px 36px rgba(0,0,0,.6);color-scheme:dark}}</style>
+</helmet>
+<div style="height:100dvh;max-width:520px;margin:0 auto;display:flex;flex-direction:column;background:var(--color-bg);font-family:var(--font-body);color:var(--color-text)">
+<div ref="{{ scrollRef }}" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:max(env(safe-area-inset-top), 12px)">
+
+<sc-if value="{{ showSyncBanner }}">
+  <div style="margin:0 20px 4px;padding:10px 12px;background:{{ syncBannerBg }};color:{{ syncBannerFg }};font-size:13px;font-weight:600;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><span style="text-wrap:pretty">{{ syncBannerText }}</span><button onClick="{{ syncBannerAction }}" style="border:0;background:transparent;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0">{{ syncBannerBtn }}</button></div>
+</sc-if>
+
+<sc-if value="{{ authChecking }}">
+<div data-screen-label="Chargement" style="min-height:calc(100dvh - 40px);display:flex;flex-direction:column;justify-content:flex-end;padding:20px 20px 56px">
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:72px;line-height:.9;letter-spacing:-.04em;color:var(--color-accent)">J+</div>
+  <div style="font-size:15px;font-weight:600;margin-top:12px;padding-top:12px;border-top:2px solid var(--color-text)">{{ checkingLabel }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ authFailed }}">
+<div data-screen-label="Erreur de connexion" style="padding:12px 20px 28px">
+  <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Connexion</div>
+  <h2 style="font-size:30px;margin:20px 0 8px;text-wrap:pretty">Le serveur ne répond pas.</h2>
+  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 20px;text-wrap:pretty">{{ loadError }}</p>
+  <button class="btn btn-primary" onClick="{{ retryLoad }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px"><span>Réessayer</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"></path><path d="M21 3v5h-5"></path></svg></button>
+  <button class="btn btn-secondary" onClick="{{ useLocal }}" style="width:100%;justify-content:flex-start;padding:14px;font-size:14px;margin-top:8px">Continuer sans compte</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ authForm }}">
+<div data-screen-label="Connexion" style="min-height:calc(100dvh - 40px);display:flex;flex-direction:column;padding:12px 20px max(env(safe-area-inset-bottom), 24px)">
+  <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600"><span>Révisions</span><span style="color:var(--color-neutral-700)">Répétition espacée</span></div>
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:54px;line-height:.92;letter-spacing:-.03em;margin:28px 0 12px">Ancre<br>tes cours.</div>
+  <p style="font-size:15px;color:var(--color-neutral-700);margin:0 0 24px;text-wrap:pretty">{{ authLead }}</p>
+  <sc-if value="{{ isEmailStep }}">
+    <div class="field"><label>E-mail</label><input class="input" type="email" inputmode="email" autocomplete="email" autocapitalize="off" value="{{ authEmail }}" onChange="{{ onAuthEmail }}" onKeyDown="{{ onEmailKey }}" placeholder="toi@exemple.fr" style="min-height:48px;font-size:16px"></div>
+    <sc-if value="{{ hasAuthError }}"><p style="font-size:14px;color:var(--color-accent-700);font-weight:600;margin:12px 0 0;text-wrap:pretty">{{ authError }}</p></sc-if>
+    <button class="btn btn-primary" onClick="{{ sendCode }}" disabled="{{ authBusy }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:20px"><span>{{ sendLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  </sc-if>
+  <sc-if value="{{ isCodeStep }}">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:10px 0;border-top:2px solid var(--color-text);border-bottom:1px solid var(--color-divider);margin-bottom:16px"><span style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ authEmailShown }}</span><button class="btn btn-ghost" onClick="{{ changeEmail }}" style="padding:4px;font-size:13px">Changer</button></div>
+    <div class="field"><label>Code reçu par e-mail</label><input class="input" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="10" value="{{ authCode }}" onChange="{{ onAuthCode }}" onKeyDown="{{ onCodeKey }}" placeholder="000000" style="min-height:68px;font-family:var(--font-heading);font-weight:800;font-size:34px;letter-spacing:.28em;padding:8px 14px"></div>
+    <sc-if value="{{ hasAuthInfo }}"><p style="font-size:13px;color:var(--color-neutral-700);margin:10px 0 0">{{ authInfo }}</p></sc-if>
+    <sc-if value="{{ hasAuthError }}"><p style="font-size:14px;color:var(--color-accent-700);font-weight:600;margin:10px 0 0;text-wrap:pretty">{{ authError }}</p></sc-if>
+    <button class="btn btn-primary" onClick="{{ verifyCode }}" disabled="{{ authBusy }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:20px"><span>{{ verifyLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></button>
+    <button class="btn btn-secondary" onClick="{{ sendCode }}" disabled="{{ resendDisabled }}" style="width:100%;justify-content:flex-start;padding:14px;font-size:14px;margin-top:8px">{{ resendLabel }}</button>
+  </sc-if>
+  <div style="flex:1;min-height:28px"></div>
+  <button class="btn btn-secondary" onClick="{{ useLocal }}" style="width:100%;justify-content:flex-start;padding:14px;font-size:14px">Continuer sans compte (sur cet appareil)</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ authSetup }}">
+<div data-screen-label="Configuration" style="padding:12px 20px 32px">
+  <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Configuration · une seule fois</div>
+  <h2 style="font-size:30px;margin:20px 0 8px;text-wrap:pretty">Branche ta base de données.</h2>
+  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 16px;text-wrap:pretty">Les comptes et la sauvegarde passent par Supabase (gratuit). Cinq minutes, une seule fois.</p>
+  <div style="border-top:2px solid var(--color-text)">
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">1</strong><span>Crée un projet gratuit sur supabase.com.</span></div>
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">2</strong><span>SQL Editor : colle le fichier <strong>supabase-setup.sql</strong>, puis Run.</span></div>
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">3</strong><span>Authentication → URL Configuration : mets l'adresse de ton appli en Site URL.</span></div>
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">4</strong><span>Authentication → Emails : dans les modèles « Confirm signup » et « Magic Link », ajoute la ligne <strong>Ton code : {{ tokenVar }}</strong>.</span></div>
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">5</strong><span>Project Settings → API : copie l'URL et la clé « anon public » ci-dessous.</span></div>
+  </div>
+  <div class="field" style="margin:16px 0 12px"><label>URL du projet</label><input class="input" value="{{ setupUrl }}" onChange="{{ onSetupUrl }}" placeholder="https://xxxx.supabase.co" autocapitalize="off" autocomplete="off" style="min-height:46px;font-size:16px"></div>
+  <div class="field"><label>Clé publique (anon)</label><input class="input" value="{{ setupKey }}" onChange="{{ onSetupKey }}" placeholder="eyJhbGciOi…" autocapitalize="off" autocomplete="off" style="min-height:46px;font-size:16px"></div>
+  <sc-if value="{{ hasSetupError }}"><p style="font-size:13px;color:var(--color-accent-700);font-weight:600;margin:10px 0 0">{{ setupError }}</p></sc-if>
+  <button class="btn btn-primary" onClick="{{ saveSetup }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:20px"><span>Enregistrer et continuer</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  <button class="btn btn-secondary" onClick="{{ useLocal }}" style="width:100%;justify-content:flex-start;padding:14px;font-size:14px;margin-top:8px">Continuer sans compte pour l'instant</button>
+  <p style="font-size:12px;color:var(--color-neutral-700);margin:14px 0 0;line-height:1.45;text-wrap:pretty">La clé « anon » est faite pour être publique. La sécurité vient des règles du script SQL : chaque compte ne peut lire et modifier que ses propres données.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Aujourd'hui" style="padding:12px 20px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">
+    <span>{{ dateLabel }}</span><span style="color:var(--color-neutral-700)">{{ streakLabel }}</span>
+  </div>
+  <sc-if value="{{ noCards }}">
+    <h2 style="font-size:34px;margin:28px 0 8px;text-wrap:pretty">Ta mémoire t'attend.</h2>
+    <p style="font-size:15px;color:var(--color-neutral-700);margin:0 0 24px;text-wrap:pretty">Ajoute ton premier cours : je fabrique les questions et je te les ressors pile au moment où tu allais oublier.</p>
+    <button class="btn btn-primary" onClick="{{ goAdd }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px"><span>Ajouter un cours</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+    <button class="btn btn-secondary" onClick="{{ loadDemo }}" style="width:100%;justify-content:flex-start;padding:16px;font-size:15px;margin-top:8px">Essayer avec un exemple</button>
+  </sc-if>
+  <sc-if value="{{ hasCards }}" hint-placeholder-val="{{ true }}">
+    <div style="padding:22px 0 18px">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:120px;line-height:.82;letter-spacing:-.06em;color:var(--color-accent)">{{ dueCountPad }}</div>
+      <h2 style="font-size:28px;margin:14px 0 0;text-wrap:pretty">{{ todayTitle }}</h2>
+      <p style="margin:8px 0 0;color:var(--color-neutral-700);font-size:14px;text-wrap:pretty">{{ todaySub }}</p>
+    </div>
+    <button onClick="{{ goPlan }}" style="width:100%;display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:14px 0;border:0;border-top:2px solid var(--color-divider);border-bottom:1px solid var(--color-divider);background:transparent;text-align:left;font:inherit;color:inherit;cursor:pointer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square;color:{{ savateIconColor }}"><path d="M14.4 14.4 9.6 9.6"></path><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"></path><path d="m21.5 21.5-1.4-1.4"></path><path d="M3.9 3.9 2.5 2.5"></path><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"></path></svg>
+      <span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:15px">{{ savateTitle }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ savateLine }}</span></span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg>
+    </button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--color-divider)">
+      <div style="padding:14px 12px 14px 0;border-right:1px solid var(--color-divider)"><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">Durée</div><div style="font-family:var(--font-heading);font-weight:800;font-size:24px;margin-top:4px">{{ durationLabel }}</div></div>
+      <div style="padding:14px 0 14px 12px"><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">Demain</div><div style="font-family: var(--font-heading); font-weight: 800; font-size: 24px; margin-top: 4px; width: 202px; height: 37px">{{ tomorrowLabel }}</div></div>
+    </div>
+    <sc-if value="{{ hasDue }}">
+      <button class="btn btn-primary" onClick="{{ startSession }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:20px"><span>{{ startLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    </sc-if>
+    <sc-if value="{{ showAhead }}">
+      <button class="btn btn-secondary" onClick="{{ startAhead }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:20px"><span>{{ aheadLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+      <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">Rien n'est dû aujourd'hui. Tu peux avancer les prochaines questions, les plus proches d'abord.</p>
+    </sc-if>
+    <button class="btn btn-ghost" onClick="{{ goPick }}" style="width:100%;justify-content:space-between;padding:14px 4px;font-size:15px;margin-top:6px;border-bottom:1px solid var(--color-divider)"><span>Choisir ce que je révise</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
+    <sc-if value="{{ hasNextExam }}">
+      <button onClick="{{ goPlan }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:20px;padding:14px 16px;border:0;background:var(--color-text);color:var(--color-bg);text-align:left;font:inherit;cursor:pointer">
+        <span style="display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-heading);font-weight:800;font-size:17px">{{ nextExam }}</span><span style="font-size:12px">{{ nextExamSub }}</span></span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg>
+      </button>
+    </sc-if>
+    <div style="margin-top:28px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">
+        <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Ton programme · {{ weekBadge }}</span>
+        <button class="btn btn-ghost" onClick="{{ goPlan }}" style="padding:4px 2px;font-size:13px">Emploi du temps</button>
+      </div>
+      <sc-if value="{{ hasTodayPlan }}">
+    <sc-for list="{{ todayPlanRows }}" as="r" hint-placeholder-count="4">
+      <div style="display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:52px;padding:8px 10px;border-bottom:1px solid var(--color-divider);background:{{ r.bg }};opacity:{{ r.op }}">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:13px;color:{{ r.tc }};font-variant-numeric:tabular-nums">{{ r.time }}</span>
+        <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;color:{{ r.fg }};text-wrap:pretty">{{ r.title }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ r.sub }}</span></span>
+        <sc-if value="{{ r.hasAct }}"><button class="btn btn-secondary" onClick="{{ r.onAct }}" style="padding:8px 10px;font-size:13px;min-height:44px">{{ r.actLabel }}</button></sc-if>
+      </div>
+    </sc-for>
+      </sc-if>
+      <sc-if value="{{ noTodayPlan }}"><p style="font-size:14px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">{{ todayPlanEmpty }}</p></sc-if>
+      <sc-if value="{{ hasTodayPlanLeft }}"><p style="font-size:12px;color:var(--color-accent-700);margin:8px 0 0;text-wrap:pretty">{{ todayPlanLeft }}</p></sc-if>
+    </div>
+    <div style="margin-top:28px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">
+        <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;white-space:nowrap">Ta courbe de l'oubli</span>
+        <button onClick="{{ clearScope }}" style="border:0;background:transparent;padding:0;font:inherit;font-size:12px;font-weight:600;color:var(--color-accent-700);cursor:pointer;text-align:right">{{ curveScopeLabel }}</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--color-divider)">
+        <div style="padding:12px 12px 12px 0;border-right:1px solid var(--color-divider)"><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">Toi, aujourd'hui</div><div style="font-family:var(--font-heading);font-weight:800;font-size:30px;color:var(--color-accent);margin-top:2px">{{ curveYou }}</div></div>
+        <div style="padding:12px 0 12px 12px"><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700)">Sans révision (Ebbinghaus)</div><div style="font-family:var(--font-heading);font-weight:800;font-size:30px;color:var(--color-neutral-600);margin-top:2px">{{ curveEbb }}</div></div>
+      </div>
+      <div style="position:relative;margin-top:14px;height:180px;border-left:2px solid var(--color-text);border-bottom:2px solid var(--color-text)">
+        <svg viewBox="0 0 340 170" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible">
+          <line x1="0" x2="340" y1="6" y2="6" stroke="var(--color-neutral-300)" vector-effect="non-scaling-stroke" style="stroke-width:1"></line>
+          <line x1="0" x2="340" y1="83" y2="83" stroke="var(--color-neutral-300)" vector-effect="non-scaling-stroke" style="stroke-width:1"></line>
+          <path d="{{ curveEbbPath }}" fill="none" stroke="var(--color-neutral-500)" vector-effect="non-scaling-stroke" style="stroke-width:2;stroke-dasharray:5 4"></path>
+          <path d="{{ curveFuturePath }}" fill="none" stroke="var(--color-accent)" vector-effect="non-scaling-stroke" style="stroke-width:2;stroke-dasharray:2 4"></path>
+          <path d="{{ curvePastPath }}" fill="none" stroke="var(--color-accent)" vector-effect="non-scaling-stroke" style="stroke-width:2.5"></path>
+        </svg>
+        <span style="position:absolute;left:{{ curveTodayX }};top:0;bottom:0;border-left:1px solid var(--color-text)"></span>
+        <sc-for list="{{ curveTicks }}" as="k" hint-placeholder-count="4"><span style="position:absolute;left:{{ k.x }};bottom:0;width:2px;height:8px;background:var(--color-text);transform:translateX(-1px)"></span></sc-for>
+        <span style="position:absolute;left:{{ curveTodayX }};top:{{ curveTodayY }};width:14px;height:14px;background:var(--color-accent);border:3px solid var(--color-bg);transform:translate(-50%,-50%)"></span>
+        <span style="position:absolute;left:6px;top:0;font-size:10px;color:var(--color-neutral-700)">100 %</span>
+        <span style="position:absolute;left:6px;top:42%;font-size:10px;color:var(--color-neutral-700)">50 %</span>
+      </div>
+      <div style="position:relative;height:16px;margin-top:4px;font-size:10px;color:var(--color-neutral-700)">
+        <span style="position:absolute;left:0">{{ curveStartLabel }}</span>
+        <span style="position:absolute;left:{{ curveTodayX }};transform:translateX(-50%);font-weight:600;color:var(--color-text)">auj.</span>
+        <span style="position:absolute;right:0">+10 j</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:11px;color:var(--color-neutral-700)">
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:16px;height:3px;background:var(--color-accent)"></span>Toi</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:16px;border-top:2px dotted var(--color-accent)"></span>Si tu arrêtes</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:16px;border-top:2px dashed var(--color-neutral-500)"></span>Sans aucune révision</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:2px;height:8px;background:var(--color-text)"></span>Tes révisions</span>
+      </div>
+      <p style="font-size:14px;line-height:1.45;margin:12px 0 0;text-wrap:pretty">{{ curveText }}</p>
+      <p style="font-size:11px;line-height:1.4;color:var(--color-neutral-700);margin:6px 0 0;text-wrap:pretty">Référence : Ebbinghaus (1885). Sans révision, environ deux tiers d'un cours s'oublient en 24 h. Chaque révision fait remonter la courbe et ralentit la chute suivante.</p>
+    </div>
+    <div style="margin-top:28px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">
+        <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Par chapitre</span>
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:20px;color:var(--color-accent)">{{ retGlobal }}</span>
+      </div>
+      <sc-for list="{{ chapRows }}" as="r" hint-placeholder-count="4">
+        <button onClick="{{ r.onClick }}" style="width:100%;display:grid;grid-template-columns:1fr 84px 36px;gap:10px;align-items:center;padding:{{ r.pad }};border:0;border-bottom:1px solid var(--color-divider);background:{{ r.bg }};font:inherit;color:inherit;text-align:left;cursor:pointer">
+          <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:15px;font-weight:600">{{ r.name }} <span style="font-weight:400;color:var(--color-accent-700)">{{ r.tag }}</span></span><span style="font-size:12px;color:var(--color-neutral-700)">{{ r.subj }}</span></span>
+          <span style="height:6px;background:var(--color-neutral-300);display:block"><span style="display:block;height:6px;width:{{ r.w }};background:{{ r.color }}"></span></span>
+          <span style="font-family:var(--font-heading);font-weight:800;font-size:15px;text-align:right">{{ r.ret }}</span>
+        </button>
+      </sc-for>
+      <p style="font-size:12px;color:var(--color-neutral-700);margin:10px 0 0">Touche un chapitre pour voir sa courbe. Sous 65 %, il passe en priorité.</p>
+    </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSession }}">
+<div data-screen-label="Séance" style="min-height:100%;display:flex;flex-direction:column">
+  <div style="display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:6px 20px 12px;border-bottom:2px solid var(--color-divider)">
+    <button class="btn btn-icon" onClick="{{ quitSession }}" style="width:36px;height:36px;margin-left:-8px" aria-label="Quitter"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+    <div style="display:flex;gap:3px"><sc-for list="{{ progressSegs }}" as="p" hint-placeholder-count="6"><span style="flex:1;height:4px;background:{{ p.bg }}"></span></sc-for></div>
+    <span style="font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">{{ progressLabel }}</span>
+  </div>
+  <sc-if value="{{ sessActive }}">
+  <div style="flex:1;padding:20px 20px 16px;display:flex;flex-direction:column;gap:16px">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">{{ cq.subj }} · {{ cq.chap }}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-neutral" style="white-space:nowrap;flex:none">{{ cq.typeLabel }}</span><span class="tag tag-outline" style="white-space:nowrap;flex:none">{{ cq.ivLabel }}</span></div>
+    <h3 style="font-size:23px;margin:0;text-wrap:pretty;line-height:1.22">{{ cq.qM }}</h3>
+    <sc-if value="{{ showTextArea }}">
+      <textarea class="input" value="{{ sessText }}" onChange="{{ onSessText }}" placeholder="Réponds de mémoire, même approximativement. C'est l'effort de rappel qui ancre." style="min-height:150px;font-size:16px;line-height:1.5;padding:12px"></textarea>
+    </sc-if>
+    <sc-if value="{{ showGap }}">
+      <div class="field"><label>Le mot manquant</label><input class="input" value="{{ sessText }}" onChange="{{ onSessText }}" placeholder="…" autocapitalize="off" style="font-size:16px;min-height:46px"></div>
+    </sc-if>
+    <sc-if value="{{ isQcm }}">
+      <div style="display:flex;flex-direction:column;border-top:1px solid var(--color-divider)">
+        <sc-for list="{{ qcmOpts }}" as="o" hint-placeholder-count="4">
+          <button onClick="{{ o.onClick }}" style="display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:8px;min-height:52px;padding:8px 12px;border:0;border-bottom:1px solid var(--color-divider);background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-size:16px;text-align:left;cursor:pointer;text-decoration:{{ o.deco }}"><span style="font-weight:800;font-family:var(--font-heading)">{{ o.letter }}</span><span>{{ o.label }}</span><span style="font-size:12px;font-weight:600">{{ o.mark }}</span></button>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isVF }}">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <sc-for list="{{ vfOpts }}" as="o" hint-placeholder-count="2">
+          <button onClick="{{ o.onClick }}" style="min-height:56px;padding:0 14px;border:2px solid {{ o.border }};background:{{ o.bg }};color:{{ o.fg }};font-family:var(--font-heading);font-weight:800;font-size:18px;text-align:left;cursor:pointer">{{ o.label }}</button>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ phaseCorrecting }}">
+      <div style="display:grid;grid-template-columns:16px 1fr;gap:10px;align-items:center;padding:14px 0;border-top:2px solid var(--color-text)">
+        <span style="width:12px;height:12px;background:var(--color-accent)"></span>
+        <span style="font-size:15px;font-weight:600">L'IA corrige ta réponse…</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ phaseResult }}">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <sc-if value="{{ showMyAnswer }}">
+          <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:4px">Ta réponse</div><div style="font-size:15px;line-height:1.5;color:var(--color-neutral-800);white-space:pre-wrap">{{ sessText }}</div></div>
+        </sc-if>
+        <sc-if value="{{ showVerdict }}"><div style="font-family:var(--font-heading);font-weight:800;font-size:22px;color:{{ verdictColor }}">{{ verdict }}</div></sc-if>
+        <sc-if value="{{ hasFeedback }}">
+          <div style="border-top:2px solid var(--color-text);padding-top:10px;display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">{{ feedbackKicker }}</div>
+            <div style="font-size:15px;line-height:1.5;text-wrap:pretty">{{ aiFeedback }}</div>
+            <sc-for list="{{ attendus }}" as="t" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+                <span style="width:20px;height:20px;background:{{ t.box }};border:2px solid {{ t.border }};color:{{ t.mark }};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800">{{ t.sym }}</span>
+                <span style="font-size:14px;line-height:1.4">{{ t.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasAiError }}"><div style="font-size:13px;color:var(--color-accent-700)">{{ aiError }}</div></sc-if>
+        <div class="card" style="padding:14px 16px;gap:6px"><div class="card-kicker" style="color:var(--color-accent-700)">Correction du cours</div><div style="font-size:15px;line-height:1.55;text-wrap:pretty;overflow-x:auto">{{ cq.aM }}</div></div>
+      </div>
+    </sc-if>
+  </div>
+  <div style="position:sticky;bottom:0;background:var(--color-bg);border-top:2px solid var(--color-divider);padding:12px 20px max(env(safe-area-inset-bottom), 16px)">
+    <sc-if value="{{ phaseAnswer }}">
+      <div style="display:grid;grid-template-columns:{{ revealCols }};gap:8px">
+        <sc-if value="{{ showRevealBtn }}">
+          <button class="btn btn-primary" onClick="{{ reveal }}" style="justify-content:space-between;padding:16px;font-size:16px"><span>{{ revealLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+        </sc-if>
+        <button class="btn btn-secondary" onClick="{{ dontKnow }}" style="justify-content:flex-start;padding:16px;font-size:15px;white-space:nowrap">Je ne sais pas</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ phaseResult }}">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:8px">{{ evalLabel }}</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+        <sc-for list="{{ levelOpts }}" as="e" hint-placeholder-count="4">
+          <button onClick="{{ e.onClick }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 8px 10px;border:2px solid {{ e.border }};background:{{ e.bg }};color:{{ e.fg }};font:inherit;text-align:left;cursor:pointer">
+            <span style="font-family:var(--font-heading);font-weight:800;font-size:14px">{{ e.label }}</span>
+            <span style="font-size:13px;font-weight:600">{{ e.iv }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <button class="btn btn-primary" onClick="{{ confirmEval }}" disabled="{{ confirmDisabled }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:8px"><span>{{ confirmLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></button>
+    </sc-if>
+  </div>
+  </sc-if>
+  <sc-if value="{{ sessDone }}">
+  <div style="padding:24px 20px 40px;display:flex;flex-direction:column">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">Séance terminée</div>
+    <div style="font-family:var(--font-heading);font-weight:800;font-size:96px;line-height:.85;letter-spacing:-.05em;color:var(--color-accent);margin-top:16px">{{ doneScore }}</div>
+    <h2 style="font-size:28px;margin:14px 0 0;text-wrap:pretty">{{ doneTitle }}</h2>
+    <p style="font-size:14px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">{{ doneSub }}</p>
+    <div style="margin-top:24px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">Prochaines révisions</div>
+    <sc-for list="{{ doneRows }}" as="d" hint-placeholder-count="4">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid var(--color-divider)">
+        <div style="min-width:0"><div style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ d.q }}</div><div style="font-size:12px;color:var(--color-neutral-700)">{{ d.chap }} · {{ d.level }}</div></div>
+        <div style="text-align:right"><div style="font-family:var(--font-heading);font-weight:800;font-size:16px;color:{{ d.ivColor }}">{{ d.iv }}</div><div style="font-size:11px;color:var(--color-neutral-700)">{{ d.date }}</div></div>
+      </div>
+    </sc-for>
+    <button class="btn btn-primary" onClick="{{ goToday }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:24px"><span>Terminé</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></button>
+  </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAdd }}">
+<div data-screen-label="Ajouter un cours" style="padding:12px 20px 28px">
+  <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Nouveau cours · {{ addStepLabel }}</div>
+  <sc-if value="{{ addForm }}">
+    <h2 style="font-size:30px;margin:20px 0 6px">Balance ton cours.</h2>
+    <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 20px;text-wrap:pretty">{{ aiStatusLine }}</p>
+    <div class="field" style="margin-bottom:16px">
+      <label>Matière</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--color-divider)">
+        <sc-for list="{{ subjOpts }}" as="s" hint-placeholder-count="8">
+          <button onClick="{{ s.onClick }}" style="min-height:44px;padding:0 12px;border:0;border-right:{{ s.br }};border-bottom:{{ s.bb }};background:{{ s.bg }};color:{{ s.fg }};font:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer">{{ s.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:16px"><label>Chapitre</label><input class="input" value="{{ addChap }}" onChange="{{ onAddChap }}" placeholder="ex. Ondes mécaniques" style="min-height:46px;font-size:16px"></div>
+    <div class="field" style="margin-bottom:16px">
+      <label>Importer un fichier</label>
+      <input type="file" ref="{{ fileRef }}" accept=".txt,.md,.docx,.pdf,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange="{{ onFilePick }}" style="display:none">
+      <div onClick="{{ openPicker }}" onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}" role="button" tabIndex="0" style="display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:center;padding:16px 14px;border:2px dashed {{ dropBorder }};background:{{ dropBg }};cursor:pointer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square;color:var(--color-accent)"><path d="M12 3v12"></path><path d="m17 8-5-5-5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>
+        <span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:15px">{{ dropTitle }}</span><span style="font-size:12px;color:{{ dropSubColor }}">{{ dropSub }}</span></span>
+      </div>
+      <input type="file" ref="{{ photoRef }}" accept="image/*" capture="environment" multiple onChange="{{ onPhotoPick }}" style="display:none">
+      <button class="btn btn-secondary" onClick="{{ openCamera }}" style="width:100%;justify-content:space-between;padding:14px 16px;margin-top:8px"><span>Prendre mon cours en photo</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></button>
+      <p style="font-size:12px;color:var(--color-neutral-700);margin:6px 0 0;text-wrap:pretty">Une photo par page, bien à plat. Avec une clé Gemini, les formules sont reconnues.</p>
+      <sc-if value="{{ hasImported }}">
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--color-divider)">
+          <span style="font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span class="tag tag-neutral" style="padding:1px 6px;margin-right:6px">{{ importKind }}</span>{{ importName }}</span>
+          <button class="btn btn-ghost" onClick="{{ clearImport }}" style="padding:4px;font-size:13px">Effacer</button>
+        </div>
+      </sc-if>
+    </div>
+    <div class="field">
+      <label style="display:flex;justify-content:space-between"><span>Contenu du cours — colle ou importe</span><span>{{ addTextCount }}</span></label>
+      <textarea class="input" value="{{ addText }}" onChange="{{ onAddText }}" placeholder="Colle ici le texte de ton cours…" style="min-height:200px;font-size:16px;line-height:1.5;padding:12px"></textarea>
+    </div>
+    <sc-if value="{{ hasAddError }}"><p style="font-size:13px;color:var(--color-accent-700);margin:10px 0 0">{{ addError }}</p></sc-if>
+    <div style="margin:4px 0 14px">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">Ce cours, tu le connais déjà ?</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--color-divider);border-top:0">
+        <sc-for list="{{ k0Opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="min-height:56px;padding:6px 10px;border:0;border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:2px"><span style="font-weight:800;font-family:var(--font-heading);font-size:14px">{{ o.label }}</span><span style="font-size:11px">{{ o.sub }}</span></button></sc-for>
+      </div>
+      <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">{{ k0Note }}</p>
+    </div>
+    <button class="btn btn-primary" onClick="{{ generate }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:20px"><span>{{ generateLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    <button class="btn btn-ghost" onClick="{{ goManual }}" style="margin-top:8px;padding:8px 4px">Écrire mes questions moi-même</button>
+  </sc-if>
+  <sc-if value="{{ addLoading }}">
+    <h2 style="font-size:30px;margin:20px 0 24px">Je lis ton cours…</h2>
+    <sc-for list="{{ loadSteps }}" as="l" hint-placeholder-count="3">
+      <div style="display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:center;padding:14px 0;border-bottom:1px solid var(--color-divider);opacity:{{ l.opacity }}"><span style="width:14px;height:14px;background:{{ l.dot }};border:2px solid var(--color-text)"></span><span style="font-size:15px;font-weight:{{ l.weight }}">{{ l.label }}</span></div>
+    </sc-for>
+  </sc-if>
+  <sc-if value="{{ addReview }}">
+    <h2 style="font-size:30px;margin:20px 0 6px">{{ genTitle }}</h2>
+    <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 16px">Décoche celles qui ne te servent pas.</p>
+    <sc-if value="{{ hasAddNotice }}"><p style="font-size:13px;line-height:1.45;margin:0 0 16px;padding:10px 12px;background:var(--color-surface);border-top:2px solid var(--color-text);text-wrap:pretty">{{ addNotice }}</p></sc-if>
+    <div style="border-top:2px solid var(--color-divider)">
+      <sc-for list="{{ genItems }}" as="g" hint-placeholder-count="6">
+        <button onClick="{{ g.onClick }}" style="width:100%;display:grid;grid-template-columns:28px 1fr;gap:10px;padding:14px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer;opacity:{{ g.opacity }}">
+          <span style="width:20px;height:20px;border:2px solid var(--color-text);background:{{ g.box }};display:flex;align-items:center;justify-content:center;color:var(--color-bg);margin-top:2px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:3.5;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></span>
+          <span style="display:flex;flex-direction:column;gap:6px"><span class="tag tag-neutral" style="align-self:flex-start">{{ g.typeLabel }}</span><span style="font-size:15px;font-weight:600;line-height:1.35;text-wrap:pretty">{{ g.q }}</span><span style="font-size:12px;color:var(--color-neutral-700);line-height:1.4">→ {{ g.a }}</span></span>
+        </button>
+      </sc-for>
+    </div>
+    <button class="btn btn-primary" onClick="{{ confirmAdd }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:20px"><span>{{ addBtnLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+    <button class="btn btn-ghost" onClick="{{ backToForm }}" style="margin-top:8px;padding:8px 4px">Modifier le cours</button>
+  </sc-if>
+  <sc-if value="{{ addManual }}">
+    <h2 style="font-size:30px;margin:20px 0 6px">Écris tes questions.</h2>
+    <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 16px;text-wrap:pretty">C'est toi le prof : une question, sa correction.</p>
+    <sc-for list="{{ manualRows }}" as="m" hint-placeholder-count="2">
+      <div style="border-top:2px solid var(--color-text);padding:12px 0 16px;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Question {{ m.n }}</span><button class="btn btn-ghost" onClick="{{ m.onRemove }}" style="padding:4px;font-size:13px">Retirer</button></div>
+        <textarea class="input" value="{{ m.q }}" onChange="{{ m.onQ }}" placeholder="La question" style="min-height:64px;font-size:16px;padding:10px"></textarea>
+        <textarea class="input" value="{{ m.a }}" onChange="{{ m.onA }}" placeholder="La correction attendue" style="min-height:64px;font-size:16px;padding:10px"></textarea>
+      </div>
+    </sc-for>
+    <button class="btn btn-secondary" onClick="{{ addManualRow }}" style="width:100%;justify-content:flex-start;padding:14px;font-size:15px">+ Une question</button>
+    <button class="btn btn-primary" onClick="{{ confirmManual }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:12px"><span>{{ manualBtnLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></button>
+    <button class="btn btn-ghost" onClick="{{ backToForm }}" style="margin-top:8px;padding:8px 4px">Retour</button>
+  </sc-if>
+  <sc-if value="{{ addDone }}">
+    <div style="font-family:var(--font-heading);font-weight:800;font-size:96px;line-height:.85;letter-spacing:-.05em;color:var(--color-accent);margin-top:24px">+{{ addedCount }}</div>
+    <h2 style="font-size:28px;margin:14px 0 6px">Questions planifiées.</h2>
+    <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 20px;text-wrap:pretty">Première révision demain. Ensuite les intervalles s'allongent à chaque bonne réponse.</p>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid var(--color-text)">
+      <sc-for list="{{ firstDates }}" as="f" hint-placeholder-count="5">
+        <div style="padding:10px 0 0 6px;border-left:{{ f.bl }}"><div style="font-family:var(--font-heading);font-weight:800;font-size:15px;color:{{ f.color }}">{{ f.iv }}</div><div style="font-size:11px;color:var(--color-neutral-700)">{{ f.date }}</div></div>
+      </sc-for>
+    </div>
+    <button class="btn btn-primary" onClick="{{ goLib }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:28px"><span>Voir mes cours</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    <button class="btn btn-secondary" onClick="{{ newCourse }}" style="width:100%;justify-content:flex-start;padding:16px;font-size:15px;margin-top:8px">Ajouter un autre cours</button>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLib }}">
+<div data-screen-label="Cours" style="padding:12px 20px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600"><span>Mes cours</span><span style="color:var(--color-neutral-700)">{{ libTotal }} questions</span></div>
+  <sc-if value="{{ noCards }}">
+    <h2 style="font-size:28px;margin:24px 0 8px">Rien pour l'instant.</h2>
+    <button class="btn btn-primary" onClick="{{ goAdd }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:12px"><span>Ajouter un cours</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+  </sc-if>
+  <sc-for list="{{ library }}" as="s" hint-placeholder-count="3">
+    <div style="margin-top:22px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2px solid var(--color-text)"><h4 style="margin:0;font-size:20px">{{ s.name }}</h4><span style="font-size:12px;color:var(--color-neutral-700)">{{ s.total }} q.</span></div>
+      <sc-for list="{{ s.chapters }}" as="c" hint-placeholder-count="2">
+        <div style="border-bottom:1px solid var(--color-divider)">
+          <button onClick="{{ c.onClick }}" style="width:100%;display:grid;grid-template-columns:1fr 64px;gap:12px;align-items:center;padding:12px 0;border:0;background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer">
+            <span style="display:flex;flex-direction:column;gap:3px"><span style="font-weight:600;font-size:15px">{{ c.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ c.n }} q. · prochaine : {{ c.next }}</span></span>
+            <span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span style="font-family:var(--font-heading);font-weight:800;font-size:15px">{{ c.ret }}</span><span style="width:64px;height:4px;background:var(--color-neutral-300);display:block"><span style="display:block;height:4px;width:{{ c.w }};background:{{ c.color }}"></span></span></span>
+          </button>
+          <sc-if value="{{ c.open }}">
+            <div style="padding:0 0 12px;display:flex;flex-direction:column">
+              <sc-for list="{{ c.questions }}" as="q" hint-placeholder-count="3">
+                <div style="display:grid;grid-template-columns:1fr auto;gap:10px;padding:8px 0;border-top:1px solid var(--color-neutral-300)"><span style="font-size:13px;line-height:1.35">{{ q.q }}</span><span style="font-size:11px;color:var(--color-neutral-700);white-space:nowrap">{{ q.next }}</span></div>
+              </sc-for>
+              <button class="btn btn-ghost" onClick="{{ c.onDelete }}" style="align-self:flex-start;margin-top:6px;padding:6px 4px;font-size:13px">Supprimer ce chapitre</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPick }}">
+<div data-screen-label="Choisir" style="padding:12px 20px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">
+    <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Révision à la carte</span>
+    <button class="btn btn-ghost" onClick="{{ goToday }}" style="padding:4px 2px;font-size:13px">Annuler</button>
+  </div>
+  <h2 style="font-size:30px;margin:20px 0 6px">Qu'est-ce que tu révises ?</h2>
+  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 16px;text-wrap:pretty">Coche des chapitres ou une matière entière. Tes réponses comptent normalement dans la répétition espacée.</p>
+  <sc-if value="{{ pickEmpty }}"><p style="font-size:14px;color:var(--color-neutral-700)">Ajoute d'abord un cours.</p></sc-if>
+  <sc-for list="{{ pickGroups }}" as="g" hint-placeholder-count="3">
+    <div style="margin-bottom:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:6px;border-bottom:2px solid var(--color-text)">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:18px">{{ g.subj }}</span>
+        <button class="btn btn-ghost" onClick="{{ g.onAll }}" style="padding:4px 2px;font-size:13px">{{ g.allLabel }}</button>
+      </div>
+      <sc-for list="{{ g.chaps }}" as="c" hint-placeholder-count="2">
+        <button onClick="{{ c.onClick }}" style="width:100%;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:center;min-height:52px;padding:8px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer">
+          <span style="width:20px;height:20px;border:2px solid var(--color-text);background:{{ c.box }};display:flex;align-items:center;justify-content:center;color:var(--color-bg)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:3.5;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ c.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ c.sub }}</span></span>
+        </button>
+      </sc-for>
+    </div>
+  </sc-for>
+  <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--color-divider);margin-top:8px">Quelles questions</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--color-divider);margin-top:10px">
+    <sc-for list="{{ pickModes }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="min-height:60px;padding:6px 10px;border:0;border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:2px"><span style="font-weight:800;font-family:var(--font-heading);font-size:13px">{{ o.label }}</span><span style="font-size:11px">{{ o.sub }}</span></button></sc-for>
+  </div>
+  <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--color-divider);margin-top:20px">Combien</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--color-divider);margin-top:10px">
+    <sc-for list="{{ pickNs }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.onClick }}" style="min-height:48px;padding:6px 10px;border:0;border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-weight:800;font-family:var(--font-heading);font-size:15px;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for>
+  </div>
+  <button class="btn btn-primary" onClick="{{ startCustom }}" disabled="{{ cantPick }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:22px"><span>{{ pickStartLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlan }}">
+<div data-screen-label="Planning" style="padding:12px 20px 28px">
+  <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Planning · 7 prochains jours</div>
+  <h2 style="font-size:30px;margin:20px 0 6px">Tes devoirs.</h2>
+  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">Programme un devoir : je répartis la préparation dans tes créneaux. Fiches au début, exercices la dernière semaine, devoir blanc à J-2, relecture légère la veille.</p>
+  <sc-if value="{{ hasExams }}">
+    <div style="border-top:2px solid var(--color-divider)">
+      <sc-for list="{{ examRows }}" as="x" hint-placeholder-count="2">
+        <div style="display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:56px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+          <span style="font-family:var(--font-heading);font-weight:800;font-size:22px;color:var(--color-accent);letter-spacing:-.03em">{{ x.count }}</span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ x.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ x.sub }}</span></span>
+          <button class="btn btn-ghost" onClick="{{ x.onDel }}" style="padding:8px 4px;font-size:13px;min-height:44px">Retirer</button>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+  <sc-if value="{{ examClosed }}">
+    <button class="btn btn-primary" onClick="{{ openExam }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px;margin-top:12px"><span>Programmer un devoir</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+  </sc-if>
+  <sc-if value="{{ examOpen }}">
+    <div style="margin-top:12px;padding:14px;background:var(--color-surface);border-top:2px solid var(--color-text)">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;margin-bottom:10px">Nouveau devoir</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--color-divider);margin-bottom:10px">
+        <sc-for list="{{ neSubjs }}" as="o" hint-placeholder-count="6"><button onClick="{{ o.onClick }}" style="min-height:44px;padding:6px 10px;border:0;border-right:{{ o.br }};border-bottom:1px solid var(--color-divider);background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-size:13px;font-weight:600;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for>
+      </div>
+      <div class="field" style="margin-bottom:10px"><label>Date du devoir</label><input class="input" type="date" min="{{ neMin }}" value="{{ neDate }}" onChange="{{ onNeDate }}" style="min-height:46px;font-size:16px"></div>
+      <div class="field" style="margin-bottom:10px"><label>Chapitres au programme (optionnel)</label><input class="input" value="{{ neTitle }}" onChange="{{ onNeTitle }}" placeholder="Ondes, mécanique" style="min-height:46px;font-size:16px"></div>
+      <sc-if value="{{ hasNeErr }}"><p style="font-size:13px;color:var(--color-accent-700);margin:0 0 10px">{{ neErr }}</p></sc-if>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary" onClick="{{ addExam }}" style="padding:12px 16px">Programmer</button>
+        <button class="btn btn-ghost" onClick="{{ closeExam }}" style="padding:12px 6px">Annuler</button>
+      </div>
+    </div>
+  </sc-if>
+  <h2 style="font-size:30px;margin:36px 0 6px">Ta semaine, heure par heure.</h2>
+  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 14px;text-wrap:pretty">Ton emploi du temps Pronote. Dans chaque créneau de révision, je place quoi travailler : révisions espacées, préparation des devoirs, cours du jour à rentrer, matières du lendemain, chapitres fragiles. Les langues sont ignorées.</p>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--color-divider)">
+    <sc-for list="{{ ttDays }}" as="d" hint-placeholder-count="7">
+      <button onClick="{{ d.onClick }}" style="min-height:44px;padding:6px 4px;border:0;border-left:{{ d.bl }};background:{{ d.bg }};color:{{ d.fg }};font:inherit;font-size:13px;font-weight:600;text-align:left;cursor:pointer">{{ d.label }}</button>
+    </sc-for>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0 8px;border-bottom:2px solid var(--color-divider)">
+    <span style="font-family:var(--font-heading);font-weight:800;font-size:17px">{{ ttDateLabel }}</span>
+    <button class="btn btn-ghost" onClick="{{ toggleTtEdit }}" style="padding:4px 2px;font-size:13px">{{ ttEditLabel }}</button>
+  </div>
+  <sc-if value="{{ ttNotEditing }}">
+    <sc-if value="{{ ttHasRows }}">
+    <sc-for list="{{ ttRows }}" as="r" hint-placeholder-count="4">
+      <div style="display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:52px;padding:8px 10px;border-bottom:1px solid var(--color-divider);background:{{ r.bg }};opacity:{{ r.op }}">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:13px;color:{{ r.tc }};font-variant-numeric:tabular-nums">{{ r.time }}</span>
+        <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;color:{{ r.fg }};text-wrap:pretty">{{ r.title }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ r.sub }}</span></span>
+        <sc-if value="{{ r.hasAct }}"><button class="btn btn-secondary" onClick="{{ r.onAct }}" style="padding:8px 10px;font-size:13px;min-height:44px">{{ r.actLabel }}</button></sc-if>
+      </div>
+    </sc-for>
+    </sc-if>
+    <sc-if value="{{ ttEmpty }}"><p style="font-size:14px;color:var(--color-neutral-700);margin:12px 0 0">Rien ce jour-là. Touche « Modifier » pour ajouter des créneaux de révision.</p></sc-if>
+    <sc-if value="{{ hasTtLeft }}"><p style="font-size:12px;color:var(--color-accent-700);margin:8px 0 0;text-wrap:pretty">{{ ttLeft }}</p></sc-if>
+  </sc-if>
+  <sc-if value="{{ ttEditing }}">
+    <sc-for list="{{ ttRaw }}" as="e" hint-placeholder-count="4">
+      <div style="display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:52px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:13px;font-variant-numeric:tabular-nums">{{ e.time }}</span>
+        <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600">{{ e.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ e.sub }}</span></span>
+        <button class="btn btn-ghost" onClick="{{ e.onDel }}" style="padding:8px 4px;font-size:13px;min-height:44px">Retirer</button>
+      </div>
+    </sc-for>
+    <sc-if value="{{ ttRawEmpty }}"><p style="font-size:14px;color:var(--color-neutral-700);margin:12px 0 0">Aucun créneau ce jour-là.</p></sc-if>
+    <div style="margin-top:16px;padding:14px;background:var(--color-surface);border-top:2px solid var(--color-text)">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;margin-bottom:10px">Ajouter un créneau</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--color-divider);margin-bottom:10px">
+        <sc-for list="{{ ttKinds }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="min-height:44px;padding:6px 8px;border:0;border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-size:13px;font-weight:600;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+        <div class="field"><label>Début</label><input class="input" type="time" value="{{ nfS }}" onChange="{{ onNfS }}" style="min-height:46px;font-size:16px"></div>
+        <div class="field"><label>Fin</label><input class="input" type="time" value="{{ nfE }}" onChange="{{ onNfE }}" style="min-height:46px;font-size:16px"></div>
+      </div>
+      <sc-if value="{{ nfIsCours }}"><div class="field" style="margin-bottom:10px"><label>Matière</label><input class="input" value="{{ nfL }}" onChange="{{ onNfL }}" placeholder="Physique-chimie" style="min-height:46px;font-size:16px"></div></sc-if>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--color-divider);margin-bottom:10px">
+        <sc-for list="{{ ttWeeks }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="min-height:44px;padding:6px 8px;border:0;border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-size:13px;font-weight:600;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for>
+      </div>
+      <sc-if value="{{ hasNfErr }}"><p style="font-size:13px;color:var(--color-accent-700);margin:0 0 10px">{{ nfErr }}</p></sc-if>
+      <button class="btn btn-primary" onClick="{{ addTt }}" style="width:100%;justify-content:space-between;padding:12px 14px">Ajouter</button>
+    </div>
+    <button class="btn btn-ghost" onClick="{{ resetTt }}" style="margin-top:8px;padding:6px 2px;font-size:13px">Remettre l'emploi du temps Pronote</button>
+  </sc-if>
+  <button class="btn btn-secondary" onClick="{{ toggleWeek }}" style="width:100%;justify-content:space-between;padding:12px 14px;margin-top:16px"><span>{{ weekLabel }}</span><span style="font-size:12px;font-weight:600">Inverser A/B</span></button>
+  <h2 style="font-size:30px;margin:36px 0 6px">Tes rappels.</h2>
+  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">Le calendrier sonne même appli fermée : c'est le plus fiable sur iPhone. Les notifications marchent quand l'appli est ouverte ou en arrière-plan.</p>
+  <button class="btn btn-primary" onClick="{{ exportCalendar }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>Ajouter mes révisions au calendrier</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><rect x="3" y="4" width="18" height="18" rx="0"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg></button>
+  <button class="btn btn-secondary" onClick="{{ toggleNotif }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px;margin-top:8px"><span>{{ notifLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></button>
+  <sc-if value="{{ hasRemMsg }}"><p style="font-size:13px;margin:10px 0 0;text-wrap:pretty">{{ remMsg }}</p></sc-if>
+  <h2 style="font-size:30px;margin:36px 0 6px">Tes jours de ring.</h2>
+  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 18px;text-wrap:pretty">Coche tes jours d'entraînement. Ces jours-là, la séance est plafonnée et les questions les plus fragiles passent d'abord ; le reste glisse au lendemain.</p>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--color-divider)">
+    <sc-for list="{{ dowOpts }}" as="d" hint-placeholder-count="7">
+      <button onClick="{{ d.onClick }}" style="min-height:52px;padding:6px 4px;border:0;border-left:{{ d.bl }};background:{{ d.bg }};color:{{ d.fg }};font:inherit;font-size:13px;font-weight:600;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between"><span>{{ d.label }}</span><span style="font-size:9px;letter-spacing:.06em;text-transform:uppercase">{{ d.tag }}</span></button>
+    </sc-for>
+  </div>
+  <div style="margin-top:24px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">Séance les jours de savate</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--color-divider);margin-top:12px">
+    <sc-for list="{{ capOpts }}" as="c" hint-placeholder-count="3">
+      <button onClick="{{ c.onClick }}" style="min-height:52px;padding:0 12px;border:0;border-left:{{ c.bl }};background:{{ c.bg }};color:{{ c.fg }};font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center"><span style="font-family:var(--font-heading);font-weight:800;font-size:16px">{{ c.label }}</span><span style="font-size:11px">{{ c.sub }}</span></button>
+    </sc-for>
+  </div>
+  <div style="margin-top:24px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">Charge prévue</div>
+  <sc-for list="{{ week }}" as="w" hint-placeholder-count="7">
+    <div style="display:grid;grid-template-columns:64px 1fr 30px;gap:8px;align-items:center;min-height:40px;border-bottom:1px solid var(--color-divider)">
+      <span style="display:flex;flex-direction:column"><span style="font-size:12px;font-weight:600;color:{{ w.fg }}">{{ w.label }}</span><span style="font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--color-accent-700)">{{ w.tag }}</span></span>
+      <span style="display:flex;height:12px"><span style="height:12px;width:{{ w.w }};background:{{ w.color }}"></span><span style="height:12px;width:{{ w.wDef }};border:1.5px dashed {{ w.dash }};border-left:0"></span></span>
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:14px;text-align:right">{{ w.n }}</span>
+    </div>
+  </sc-for>
+  <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--color-neutral-700)"><span style="display:flex;gap:6px;align-items:center"><span style="width:10px;height:10px;background:var(--color-accent)"></span>Jour de savate</span><span style="display:flex;gap:6px;align-items:center"><span style="width:10px;height:10px;border:1.5px dashed var(--color-neutral-600)"></span>Glisse au lendemain</span></div>
+  <div style="margin-top:28px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">Paliers de répétition</div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-top:12px">
+    <sc-for list="{{ ladder }}" as="l" hint-placeholder-count="7"><div style="border-left:2px solid var(--color-text);padding:0 0 0 5px;display:flex;flex-direction:column;justify-content:flex-end;height:{{ l.h }}"><span style="font-family:var(--font-heading);font-weight:800;font-size:13px">{{ l.label }}</span></div></sc-for>
+  </div>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">Méthode Ebbinghaus : chaque question revient quand ta mémoire tombe à 70 % sur la courbe de l'oubli. Chaque rappel réussi aplatit la courbe : Difficile ×1,1, Bien ×2, Facile ×2,8, avec un bonus si tu t'en souvenais malgré une longue pause. Raté : la question revient dans la séance et sa courbe repart presque de zéro. Avant un devoir, rien ne dépasse la veille.</p>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSet }}">
+<div data-screen-label="Réglages" style="padding:12px 20px 32px">
+  <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Réglages</div>
+  <sc-if value="{{ showInstall }}">
+    <div style="margin-top:20px;background:var(--color-accent);color:var(--color-bg);padding:16px">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:22px">Installe-la sur ton iPhone</div>
+      <div style="font-size:14px;line-height:1.5;margin-top:8px;font-weight:600">1. Ouvre cette page dans Safari<br>2. Touche Partager<br>3. « Sur l'écran d'accueil »</div>
+    </div>
+  </sc-if>
+  <h4 style="margin:24px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Compte</h4>
+  <sc-if value="{{ isSignedIn }}">
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:4px 0 12px;border-bottom:1px solid var(--color-divider)">
+      <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ accountEmail }}</span><span style="font-size:12px;color:{{ syncColor }}">{{ syncLabel }}</span></span>
+      <button class="btn btn-secondary" onClick="{{ signOut }}" style="justify-content:flex-start;padding:10px 12px;white-space:nowrap">Se déconnecter</button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ isLocalMode }}">
+    <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">Mode sans compte : tes données restent sur cet appareil, sans sauvegarde en ligne.</p>
+    <sc-if value="{{ serverReady }}">
+    <button class="btn btn-primary" onClick="{{ goAuth }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>Me connecter avec mon e-mail</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0">E-mail, code reçu, c'est fait. Tes données actuelles passent dans ton compte.</p>
+    </sc-if>
+  </sc-if>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Apparence</h4>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--color-divider)">
+    <sc-for list="{{ themeOpts }}" as="m" hint-placeholder-count="3">
+      <button onClick="{{ m.onClick }}" style="min-height:56px;padding:6px 10px;border:0;border-left:{{ m.bl }};background:{{ m.bg }};color:{{ m.fg }};font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center"><span style="font-weight:800;font-family:var(--font-heading);font-size:14px">{{ m.label }}</span><span style="font-size:11px">{{ m.sub }}</span></button>
+    </sc-for>
+  </div>
+  <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0">Auto : mode sombre quand ton appareil est en mode sombre.</p>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">IA gratuite</h4>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">L'IA tourne sur les serveurs gratuits de Google (Gemini) et de Groq : rien ne tourne sur ton appareil, donc aucun risque de plantage. Tes clés restent sur cet appareil.</p>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--color-divider)">
+    <sc-for list="{{ modeOpts }}" as="m" hint-placeholder-count="2">
+      <button onClick="{{ m.onClick }}" style="min-height:56px;padding:6px 10px;border:0;border-left:{{ m.bl }};background:{{ m.bg }};color:{{ m.fg }};font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center"><span style="font-weight:800;font-family:var(--font-heading);font-size:14px">{{ m.label }}</span><span style="font-size:11px">{{ m.sub }}</span></button>
+    </sc-for>
+  </div>
+  <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">{{ modeNote }}</p>
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;margin:22px 0 4px">Clé Gemini (Google)</div>
+  <div style="border-top:2px solid var(--color-text);margin-bottom:12px">
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">1</strong><span>Ouvre <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> et connecte-toi avec Google.</span></div>
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">2</strong><span>« Create API key », puis copie la clé (elle commence par AIza).</span></div>
+  </div>
+  <div class="field" style="margin-bottom:12px"><label>Clé API Gemini</label><input class="input" type="password" value="{{ apiKey }}" onChange="{{ onApiKey }}" placeholder="AIza…" autocomplete="off" autocapitalize="off" style="min-height:46px;font-size:16px"></div>
+  <div class="field" style="margin-bottom:12px"><label>Modèle Gemini (laisse par défaut)</label><input class="input" value="{{ model }}" onChange="{{ onModel }}" autocapitalize="off" style="min-height:46px;font-size:16px"></div>
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;margin:22px 0 4px">Clé Groq (secours, conseillée)</div>
+  <div style="border-top:2px solid var(--color-text);margin-bottom:12px">
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">1</strong><span>Ouvre <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> et connecte-toi avec Google.</span></div>
+    <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">2</strong><span>« Create API Key », donne-lui un nom, puis copie la clé (elle commence par gsk_).</span></div>
+  </div>
+  <div class="field" style="margin-bottom:12px"><label>Clé API Groq</label><input class="input" type="password" value="{{ groqKeyVal }}" onChange="{{ onGroqKey }}" placeholder="gsk_…" autocomplete="off" autocapitalize="off" style="min-height:46px;font-size:16px"></div>
+  <div style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center">
+    <button class="btn btn-secondary" onClick="{{ testAi }}" style="justify-content:flex-start;padding:12px 14px">Tester</button>
+    <span style="font-size:13px;color:{{ aiTestColor }}">{{ aiTestMsg }}</span>
+  </div>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Sauvegarde</h4>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 12px">{{ dataSummary }}</p>
+  <input type="file" ref="{{ backupRef }}" accept=".json,application/json" onChange="{{ onBackupPick }}" style="display:none">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <button class="btn btn-secondary" onClick="{{ exportData }}" style="justify-content:flex-start;padding:14px">Exporter</button>
+    <button class="btn btn-secondary" onClick="{{ importBackup }}" style="justify-content:flex-start;padding:14px">Importer</button>
+  </div>
+  <sc-if value="{{ hasSetMsg }}"><p style="font-size:13px;margin:10px 0 0;color:var(--color-accent-700)">{{ setMsg }}</p></sc-if>
+  <sc-if value="{{ hasDemo }}"><button class="btn btn-ghost" onClick="{{ removeDemo }}" style="margin-top:16px;padding:6px 4px">Supprimer les données d'exemple</button></sc-if>
+  <button class="btn btn-ghost" onClick="{{ resetAll }}" style="display:flex;margin-top:8px;padding:6px 4px">Tout effacer</button>
+  <sc-if value="{{ canEditCfg }}"><button class="btn btn-ghost" onClick="{{ goSetup }}" style="display:flex;margin-top:24px;padding:6px 4px;font-size:12px;color:var(--color-neutral-600)">Configuration du serveur (réservé à l'admin)</button></sc-if>
+</div>
+</sc-if>
+
+</div>
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid var(--color-divider);background:var(--color-bg);padding-bottom:max(env(safe-area-inset-bottom), 8px)">
+  <button onClick="{{ goToday }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.today }};margin-top:-2px;background:transparent;color:{{ tc.today }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span style="font-size:10px;font-weight:600">Auj.</span></button>
+  <button onClick="{{ goLib }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.lib }};margin-top:-2px;background:transparent;color:{{ tc.lib }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg><span style="font-size:10px;font-weight:600">Cours</span></button>
+  <button onClick="{{ goAdd }}" aria-label="Ajouter un cours" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:4px;padding:10px 10px 6px;border:0;margin-top:-2px;background:{{ addTabBg }};color:var(--color-bg);font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.6;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="font-size:10px;font-weight:600">Ajouter</span></button>
+  <button onClick="{{ goPlan }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.plan }};margin-top:-2px;background:transparent;color:{{ tc.plan }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg><span style="font-size:10px;font-weight:600">Planning</span></button>
+  <button onClick="{{ goSet }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.set }};margin-top:-2px;background:transparent;color:{{ tc.set }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M21 4h-7"></path><path d="M10 4H3"></path><path d="M21 12h-9"></path><path d="M8 12H3"></path><path d="M21 20h-5"></path><path d="M12 20H3"></path><path d="M14 2v4"></path><path d="M8 10v4"></path><path d="M16 18v4"></path></svg><span style="font-size:10px;font-weight:600">Réglages</span></button>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const IV = [1, 3, 7, 14, 30, 60, 120];
+const KEY = 'revisions.v1';
+const SUBJECTS = ['Physique-Chimie', 'SVT', 'Philosophie', 'Histoire-Géo', 'Maths', 'Ens. scientifique', 'SES', 'Anglais', 'Spé autre'];
+const PLAN_SUBJ = ['Physique-Chimie', 'SVT', 'Philosophie', 'Histoire-Géo', 'Maths', 'Ens. scientifique'];
+const EXAM_SUBJ = ['Physique-Chimie', 'SVT', 'Philosophie', 'Histoire-Géo', 'Maths', 'Ens. scientifique'];
+const EXO = {
+  'Physique-Chimie': ['Fais 2 exercices type bac en physique, chronomètre en main', 'Corrige-toi, puis refais seul celui que tu as raté'],
+  'Maths': ['Fais 3 exercices d’application sans regarder le cours', 'Refais l’exercice raté jusqu’au bout'],
+  'SVT': ['Exercice type bac : restitution de connaissances + analyse de document', 'Refais le schéma bilan de mémoire'],
+  'Philosophie': ['Problématise un sujet et fais un plan détaillé en 3 parties', 'Écris l’introduction complète au propre'],
+  'Histoire-Géo': ['Composition : plan + intro en temps limité', 'Refais le croquis ou la frise de mémoire'],
+  'Ens. scientifique': ['Fais un exercice sur documents, en temps limité', 'Résume chaque document en une phrase']
+};
+const TT_RAW = {
+  1: [['08:20','09:15','cours','Espagnol LV2','108'],['09:15','10:10','rev'],['10:20','12:10','cours','SVT','Labo SVT'],['12:10','13:05','off','Déjeuner'],['13:05','14:00','cours','Anglais LV1','SS1'],['14:05','18:00','rev'],['19:00','20:00','off','Repas'],['20:20','21:00','rev']],
+  2: [['08:20','09:15','cours','Enseign. scientifique','201'],['09:15','10:10','cours','Espagnol LV2','212'],['10:20','12:10','cours','EPS','Gymnase'],['12:10','13:05','cours','Maths complémentaires','110'],['13:05','14:00','off','Déjeuner'],['14:00','15:50','cours','Philosophie','311'],['16:00','17:50','cours','Physique-chimie','Labo PC'],['18:00','20:20','off','Pas dispo','Repas 19h–20h'],['20:20','21:30','rev']],
+  3: [['08:20','10:10','cours','SVT','Labo SVT'],['10:20','11:15','cours','Enseign. scientifique','304'],['11:15','12:10','cours','Accomp. orientation','201','A'],['11:15','12:10','rev','','','B'],['12:10','13:05','off','Déjeuner'],['13:30','18:00','rev'],['18:00','20:20','off','Pas dispo','Repas 19h–20h'],['20:20','21:00','rev']],
+  4: [['08:20','10:10','cours','Physique-chimie','Labo PC'],['10:20','11:15','cours','Histoire-géo','108'],['11:15','12:10','rev','','','A'],['11:15','12:10','cours','Enseign. scientifique','110','B'],['12:10','13:05','cours','Maths complémentaires','111'],['13:05','14:00','off','Déjeuner'],['14:00','15:50','cours','SVT','Labo SVT'],['16:00','16:55','cours','Anglais LV1','SS1'],['16:55','17:50','cours','EMC','108','A'],['19:00','20:00','off','Repas'],['20:20','21:30','rev']],
+  5: [['08:20','09:15','cours','Maths complémentaires','108'],['09:15','10:10','rev'],['10:20','12:10','cours','Physique-chimie','304'],['12:10','13:05','off','Déjeuner'],['13:05','14:00','rev'],['14:00','15:50','cours','Histoire-géo','108'],['16:00','17:50','cours','Philosophie','101'],['19:00','20:00','off','Repas']]
+};
+const DEFAULT_TT = Object.keys(TT_RAW).flatMap(d => TT_RAW[d].map(([s, e, k, l, r, w], i) => ({ id: 'd' + d + '-' + i, d: +d, s, e, k, l: l || '', r: r || '', w: w || '' })));
+const toMin = s => { const [h, m] = (s || '0:0').split(':').map(Number); return h * 60 + (m || 0); };
+const fmtM = m => Math.floor(m / 60) + 'h' + pad(m % 60);
+const isoWeek = k => { const d = pkey(k); d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7)); const w1 = new Date(d.getFullYear(), 0, 4); return 1 + Math.round(((d - w1) / 864e5 - 3 + ((w1.getDay() + 6) % 7)) / 7); };
+const subjOf = l => { const n = (l || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); if (/physique|chimie/.test(n)) return 'Physique-Chimie'; if (/math/.test(n)) return 'Maths'; if (/svt|vie et de la terre/.test(n)) return 'SVT'; if (/philo/.test(n)) return 'Philosophie'; if (/histoire|geo|emc/.test(n)) return 'Histoire-Géo'; if (/\bses\b|economi/.test(n)) return 'SES'; if (/anglais/.test(n)) return 'Anglais'; if (/espagnol/.test(n)) return 'Espagnol'; if (/scientifique/.test(n)) return 'Ens. scientifique'; return ''; };
+const TT_KIND = { cours: 'Cours', rev: 'Révision', off: 'Pas dispo' };
+const subjPlan = l => { const s = subjOf(l); return PLAN_SUBJ.includes(s) ? s : ''; };
+const TYPE_LABEL = { libre: 'Réponse libre', calcul: 'Calcul', trou: 'Texte à trous', qcm: 'QCM', vf: 'Vrai / Faux justifié', explique: 'Explique avec tes mots' };
+const LEVELS = [{ k: 'rate', label: 'Raté' }, { k: 'difficile', label: 'Difficile' }, { k: 'bien', label: 'Bien' }, { k: 'facile', label: 'Facile' }];
+const CAPQ = { 5: 3, 10: 6, 15: 9 };
+const DOW = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+const pad = n => String(n).padStart(2, '0');
+const dkey = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const pkey = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (k, n) => { const d = pkey(k); d.setDate(d.getDate() + n); return dkey(d); };
+const diff = (a, b) => Math.round((pkey(b) - pkey(a)) / 864e5);
+const fmtS = k => pkey(k).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const nextStage = (stage, k) => { const s = Math.max(stage, 0), fresh = stage < 0; const r = k === 'rate' ? 0 : k === 'difficile' ? s : k === 'bien' ? (fresh ? 1 : s + 1) : (fresh ? 2 : s + 2); return Math.min(Math.max(r, 0), IV.length - 1); };
+// Raté : la question revient dans la même séance (aujourd'hui), puis repart au premier palier.
+const gapDays = (stage, k) => (k === 'rate' ? 0 : IV[nextStage(stage, k)]);
+// Ebbinghaus (1885) savings data, days → share retained, used for never-reviewed material.
+const EBB = [[0, 1], [0.014, 0.58], [0.042, 0.44], [0.375, 0.36], [1, 0.34], [2, 0.28], [6, 0.25], [31, 0.21], [1000, 0.18]];
+const ebb = x => { if (x <= 0) return 1; for (let i = 1; i < EBB.length; i++) if (x <= EBB[i][0]) { const [x0, y0] = EBB[i - 1], [x1, y1] = EBB[i]; return y0 + (y1 - y0) * (x - x0) / (x1 - x0); } return 0.18; };
+// After a review at stage s, memory decays slower: ~70 % left when the next review is due.
+const decay = (el, s, S) => 0.2 + 0.8 * Math.exp(-Math.max(0, el) / ((S || IV[Math.max(s, 0)]) * 2.13));
+const events = c => {
+  if (Array.isArray(c.hist) && c.hist.length) return c.hist;
+  if (!c.last) return [];
+  const ev = []; let d = c.last, s = Math.max(c.stage, 0);
+  ev.unshift({ d, s });
+  while (s > 0) { s--; d = addDays(d, -IV[s]); if (d < c.createdAt) break; ev.unshift({ d, s }); }
+  return ev;
+};
+// Point de départ : ce que tu sais du cours quand tu le rentres (souvent peu).
+const K0 = { none: 0.1, some: 0.35, good: 0.7 };
+// Nouvelles questions : 15 max par jour, le surplus glisse aux jours suivants.
+const NEW_PER_DAY = 15;
+const spreadNew = (cards, t, max = NEW_PER_DAY) => {
+  const fresh = cards.filter(c => c.stage < 0 && !c.last && c.due >= t).sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : (a.createdAt < b.createdAt ? -1 : 1)));
+  const perDay = {}, moved = {};
+  fresh.forEach(c => { let d = c.due; while ((perDay[d] || 0) >= max) d = addDays(d, 1); perDay[d] = (perDay[d] || 0) + 1; if (d !== c.due) moved[c.id] = d; });
+  return Object.keys(moved).length ? cards.map(c => (moved[c.id] ? { ...c, due: moved[c.id] } : c)) : cards;
+};
+const k0Of = c => (typeof c.k0 === 'number' ? c.k0 : 0.3);
+// Après un rappel, le niveau atteint dépend de la réussite.
+const PEAK = { rate: 0.55, difficile: 0.8, bien: 0.95, facile: 1 };
+const rAt = (c, ev, x, t) => {
+  const c0 = diff(t, c.createdAt); if (x < c0) return null;
+  let o = null, s = 0, k = null, S = 0;
+  for (const e of ev) { const eo = diff(t, e.d); if (eo <= x) { o = eo; s = e.s; k = e.k; S = e.S || 0; } else break; }
+  return o === null ? k0Of(c) * ebb(x - c0) : decay(x - o, s, S) * (PEAK[k] || 0.95);
+};
+const retention = (c, t) => rAt(c, events(c), 0, t);
+// Planification Ebbinghaus : chaque question a une stabilité S (jours). La mémoire suit la courbe de l'oubli et
+// tombe à 70 % au bout de S jours : c'est là que la question revient. Chaque rappel réussi aplatit la courbe
+// (S grandit), d'autant plus que la réponse était facile et que le rappel était tardif (effet d'espacement).
+const stabOf = c => c.S || (c.stage >= 0 ? IV[c.stage] : 0);
+const stageOfS = S => { let i = 0; while (i + 1 < IV.length && IV[i + 1] <= S) i++; return i; };
+const ebbSched = (c, k, t, examGap) => {
+  const prevS = stabOf(c), el = c.last ? Math.max(0, diff(c.last, t)) : 0;
+  let S;
+  if (k === 'rate') S = Math.max(0.5, prevS * 0.3);
+  else if (!prevS) S = { difficile: 1, bien: 3, facile: 6 }[k];
+  else {
+    const R = Math.min(1, Math.max(0, retention(c, t) || 0));
+    const late = Math.max(0, 0.7 - R);
+    S = k === 'difficile' ? prevS * 1.1 : Math.max(prevS, el) * { bien: 2, facile: 2.8 }[k] * (1 + late * 1.5);
+  }
+  S = Math.min(180, S);
+  let gap = k === 'rate' ? 0 : Math.max(1, Math.round(S));
+  if (examGap && examGap > 1 && gap >= examGap) gap = examGap - 1;
+  return { S, gap, stage: stageOfS(S) };
+};
+const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+const emptyData = () => ({ courses: [], cards: [], exams: [], settings: { savateDays: [2, 4, 6], capMin: 15, tt: DEFAULT_TT, weekAPar: 0, apiKey: '', model: 'gemini-flash-latest' }, log: {}, deleted: {} });
+const normData = d => ({ ...emptyData(), ...(d || {}), courses: (d && d.courses) || [], cards: (d && d.cards) || [], exams: (d && d.exams) || [], log: (d && d.log) || {}, deleted: (d && d.deleted) || {}, settings: { ...emptyData().settings, ...((d && d.settings) || {}) } });
+const DEVICE_KEY = 'revisions.apikey', MODE_KEY = 'revisions.mode', LLM_KEY = 'revisions.llm';
+const GROQ_KEY = 'revisions.groqkey', THEME_KEY = 'revisions.theme';
+const applyTheme = th => {
+  const root = document.documentElement;
+  if (th === 'dark' || th === 'light') root.setAttribute('data-theme', th); else root.removeAttribute('data-theme');
+  const dark = th === 'dark' || (th !== 'light' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => { m.setAttribute('content', dark ? '#171514' : '#f3f2f2'); if (th === 'dark' || th === 'light') m.removeAttribute('media'); });
+};
+const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
+const frErr = e => {
+  const m = (e && (e.message || e.error_description)) || String(e || '');
+  if (/token has expired|otp.*(invalid|expired)|invalid.*(token|otp)/i.test(m)) return 'Code incorrect ou expiré. Redemande un code.';
+  if (/signups not allowed/i.test(m)) return 'Les inscriptions sont désactivées dans Supabase (Authentication → Sign In / Providers → Email).';
+  if (/invalid login|invalid credentials/i.test(m)) return 'E-mail ou mot de passe incorrect.';
+  if (/already registered|already exists/i.test(m)) return 'Un compte existe déjà avec cet e-mail. Connecte-toi.';
+  if (/not confirmed/i.test(m)) return 'Confirme d’abord ton e-mail : ouvre le lien reçu dans ta boîte.';
+  if (/rate limit|too many|security purposes/i.test(m)) return 'Trop de tentatives. Réessaie dans quelques minutes.';
+  if (/password/i.test(m) && /(least|short|weak|characters)/i.test(m)) return 'Mot de passe trop faible : 8 caractères minimum, mélange lettres et chiffres.';
+  if (/fetch|network|load failed|offline/i.test(m)) return 'Connexion au serveur impossible. Vérifie ton réseau.';
+  if (/relation .*user_data|does not exist/i.test(m)) return 'La base n’est pas prête : exécute supabase-setup.sql dans Supabase.';
+  return m || 'Erreur inconnue.';
+};
+const parseJSON0 = t => { const i = Math.min(...['[', '{'].map(c => { const x = t.indexOf(c); return x < 0 ? Infinity : x; })); const j = Math.max(t.lastIndexOf(']'), t.lastIndexOf('}')); return JSON.parse(t.slice(i, j + 1)); };
+const MATH_RE = /\$\$([\s\S]+?)\$\$|\\\[([\s\S]+?)\\\]|\\\(([\s\S]+?)\\\)|\$([^$\n]+?)\$/g;
+const escH = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fixTex = s => s.replace(/\t/g, '\\t').replace(/\u0008/g, '\\b').replace(/\f/g, '\\f').replace(/\r/g, '\\r').replace(/\n(?=[a-zA-Z])/g, '\\n');
+const hasMath = s => typeof s === 'string' && /\$|\\\(|\\\[/.test(s);
+const mathCache = new Map();
+const mathHTML = s => {
+  if (!window.katex) return null;
+  if (mathCache.has(s)) return mathCache.get(s);
+  let out = '', last = 0, m; MATH_RE.lastIndex = 0;
+  while ((m = MATH_RE.exec(s))) {
+    out += escH(s.slice(last, m.index));
+    const tex = fixTex(m[1] || m[2] || m[3] || m[4]), display = !!(m[1] || m[2]);
+    try { out += window.katex.renderToString(tex, { displayMode: display, throwOnError: false, strict: 'ignore' }); } catch (e) { out += escH(m[0]); }
+    last = m.index + m[0].length;
+  }
+  out += escH(s.slice(last));
+  if (mathCache.size > 500) mathCache.clear();
+  mathCache.set(s, out);
+  return out;
+};
+const mx = s => { s = s == null ? '' : String(s); if (!hasMath(s)) return s; const h = mathHTML(s); return h == null ? s : React.createElement('span', { dangerouslySetInnerHTML: { __html: h } }); };
+const parseJSON = t => { try { return parseJSON0(t); } catch (e) { return parseJSON0(t.replace(/\\(?!["\\/bfnrtu])/g, '\\\\')); } };
+const plural = (n, w) => n + ' ' + w + (n > 1 ? 's' : '');
+
+function demoData(today) {
+  const courses = [], cards = [];
+  const course = (subj, chap) => { const c = { id: uid(), subj, chap, createdAt: addDays(today, -21), demo: true }; courses.push(c); return c; };
+  const card = (c, type, q, a, stage, lastAgo, extra) => cards.push({ id: uid(), courseId: c.id, type, q, a, stage, last: addDays(today, -lastAgo), due: addDays(today, -lastAgo + IV[stage]), createdAt: c.createdAt, ...(extra || {}) });
+  const meca = course('Physique-Chimie', 'Mécanique'), elec = course('Physique-Chimie', 'Électricité'), exp = course('Maths', 'Fonction exponentielle'), suites = course('Maths', 'Suites'), meiose = course('SVT', 'Méiose'), bonheur = course('Philosophie', 'Le bonheur');
+  card(meca, 'libre', 'Énonce la deuxième loi de Newton. Dans quel type de référentiel s’applique-t-elle ?', 'Dans un référentiel galiléen : ΣF = m·a, avec a l’accélération du centre de masse (plus généralement ΣF = dp/dt).', 1, 3);
+  card(meca, 'explique', 'Explique le principe d’inertie avec un exemple de la vie courante.', 'Dans un référentiel galiléen, un corps soumis à des forces qui se compensent est immobile ou en mouvement rectiligne uniforme (ex. le passager projeté en avant quand le bus freine).', 2, 2);
+  card(exp, 'calcul', 'Calcule la dérivée de f(x) = x·e^(2x).', 'Produit u·v avec u = x et v = e^(2x) : f′(x) = e^(2x) + 2x·e^(2x) = (1 + 2x)·e^(2x).', 2, 7);
+  card(meiose, 'trou', 'En prophase I, le ____ échange des fragments entre chromatides de chromosomes homologues.', 'Crossing-over : c’est le brassage intrachromosomique, source de nouvelles combinaisons d’allèles.', 0, 2, { gap: 'crossing-over' });
+  card(meiose, 'libre', 'Quelle est la différence entre brassage intra- et interchromosomique ?', 'Intra : crossing-over entre homologues en prophase I. Inter : répartition aléatoire des homologues en anaphase I.', 1, 5);
+  card(elec, 'qcm', 'Un condensateur de capacité C se charge à travers une résistance R. La constante de temps τ vaut :', 'τ = R × C, en secondes. À t = τ, le condensateur est chargé à 63 %.', 1, 3, { options: ['R / C', 'R × C', '1 / (R × C)', 'C / R'], correct: 1 });
+  card(bonheur, 'explique', 'Pourquoi, selon Kant, le bonheur ne peut-il pas fonder la morale ?', 'Le bonheur est un idéal de l’imagination : indéterminé, il varie selon chacun. La morale doit reposer sur la raison — un impératif catégorique, universel et inconditionnel.', 2, 7);
+  card(suites, 'vf', 'Toute suite croissante et majorée converge.', 'Vrai — théorème de convergence monotone. Attention : la limite n’est pas forcément le majorant donné.', 3, 14, { correct: 0 });
+  card(suites, 'calcul', 'Calcule la limite de (3n² + 1) / (n² − 2) quand n → +∞.', 'On factorise par n² : (3 + 1/n²) / (1 − 2/n²) → 3.', 2, 3);
+  return { courses, cards };
+}
+
+class Component extends DCLogic {
+  scrollRef = React.createRef();
+  fileRef = React.createRef();
+  backupRef = React.createRef();
+  photoRef = React.createRef();
+  state = { screen: 'today', auth: 'checking', user: null, dataReady: false, loadError: '', sync: 'idle', syncMsg: '', migrated: false, authStep: 'email', authEmail: '', authCode: '', resendIn: 0, authBusy: false, authError: '', authInfo: '', setupUrl: '', setupKey: '', setupError: '', cfgFromFile: false, data: emptyData(), sess: null, addStep: 'form', addSubj: 'Physique-Chimie', addChap: '', addText: '', addError: '', gen: [], genSel: [], loadIdx: 0, added: 0, manual: [{ q: '', a: '' }], openCourse: null, importStatus: null, aiTest: null, setMsg: '' };
+
+  // ── Persistence ──────────────────────────────────────────────
+  // local mode: localStorage[KEY]. Signed in: Supabase row (source of truth) + per-user offline cache.
+  readLegacy() {
+    try {
+      const d = JSON.parse(lsGet(KEY));
+      if (d && Array.isArray(d.cards)) {
+        if (d.settings && d.settings.apiKey && !lsGet(DEVICE_KEY)) lsSet(DEVICE_KEY, d.settings.apiKey);
+        return normData(d);
+      }
+    } catch (e) {}
+    return null;
+  }
+  cacheKey(uid) { return KEY + '.u.' + uid; }
+  readCache(uid) { try { return JSON.parse(lsGet(this.cacheKey(uid))); } catch (e) { return null; } }
+  writeCache(data, dirty) { const u = this.state.user; if (u) lsSet(this.cacheKey(u.id), JSON.stringify({ data: this.strip(data), rev: this.rev || 0, dirty: !!dirty })); }
+  strip(d) { return { ...d, settings: { ...d.settings, apiKey: '' } }; }
+  withKey(d) { return { ...d, settings: { ...d.settings, apiKey: lsGet(DEVICE_KEY) || '' } }; }
+  save(d) {
+    const auth = this.state.auth;
+    if (auth === 'local') { lsSet(KEY, JSON.stringify(d)); return; }
+    if (auth !== 'signedIn' || !this.state.dataReady) return;
+    this.dirty = true; this.changeId = (this.changeId || 0) + 1;
+    this.writeCache(d, true);
+    clearTimeout(this.saveT);
+    this.saveT = setTimeout(() => this.cloudSave(), 700);
+    setTimeout(() => { if (!this.saving) this.setState({ sync: 'pending' }); }, 0);
+  }
+  async cloudSave() {
+    if (!this.dirty || this.state.auth !== 'signedIn' || !this.sb || !this.state.dataReady) return;
+    if (this.saving) { this.again = true; return; }
+    this.saving = true; clearTimeout(this.saveT); clearTimeout(this.retryT);
+    const cid = this.changeId, uid = this.state.user.id;
+    let ok = false;
+    this.setState({ sync: 'saving' });
+    try {
+      let newRev = await this.cloud.updateDoc(this.sb, uid, this.strip(this.state.data), this.rev || 0);
+      if (newRev === null) {
+        // Saved from another device in the meantime: merge both versions, then write.
+        const remote = await this.cloud.fetchDoc(this.sb, uid);
+        if (!remote) newRev = await this.cloud.createDoc(this.sb, uid, this.strip(this.state.data));
+        else {
+          const merged = this.withKey(normData(this.cloud.merge(this.strip(this.state.data), remote.data)));
+          this.rev = remote.rev;
+          await new Promise(r => this.setState({ data: merged }, r));
+          newRev = await this.cloud.updateDoc(this.sb, uid, this.strip(merged), this.rev);
+        }
+        if (newRev === null) throw new Error('Conflit de version, nouvel essai…');
+      }
+      this.rev = newRev;
+      if (this.changeId === cid) this.dirty = false;
+      this.writeCache(this.state.data, this.dirty);
+      this.retryDelay = 0; ok = true;
+      this.setState({ sync: this.dirty ? 'pending' : 'saved', syncMsg: '' });
+    } catch (e) {
+      const offline = (typeof navigator !== 'undefined' && navigator.onLine === false) || /fetch|network|load failed/i.test((e && e.message) || '');
+      this.setState({ sync: offline ? 'offline' : 'error', syncMsg: frErr(e) });
+      this.retryDelay = Math.min(60000, (this.retryDelay || 2500) * 2);
+      this.retryT = setTimeout(() => this.cloudSave(), this.retryDelay);
+    } finally {
+      this.saving = false;
+      if (ok && (this.again || this.dirty)) { this.again = false; this.saveT = setTimeout(() => this.cloudSave(), 300); }
+      else this.again = false;
+    }
+  }
+  async refreshRemote() {
+    if (this.state.auth !== 'signedIn' || !this.state.dataReady || this.dirty || this.saving || !this.sb) return;
+    try {
+      const r = await this.cloud.fetchDoc(this.sb, this.state.user.id);
+      if (r && r.rev > (this.rev || 0) && !this.dirty && !this.saving) {
+        this.rev = r.rev;
+        const data = this.withKey(normData(r.data));
+        this.setState({ data, sync: 'saved' });
+        this.writeCache(data, false);
+      }
+    } catch (e) {}
+  }
+
+  // ── Auth / session ───────────────────────────────────────────
+  async initAuth() {
+    this.setState({ auth: 'checking', loadError: '' });
+    try {
+      this.cloud = this.cloud || await import(new URL('./cloud.js', document.baseURI).href);
+      const cfg = this.cloud.getConfig();
+      this.setState({ setupUrl: cfg.url, setupKey: cfg.key, cfgFromFile: cfg.fromFile });
+      if (!cfg.url || !cfg.key) return this.enterLocal();
+      this.sb = await this.cloud.getClient();
+      if (this.authSub) this.authSub.unsubscribe();
+      const { data: sub } = this.sb.auth.onAuthStateChange((event, session) => setTimeout(() => this.onAuth(event, session), 0));
+      this.authSub = sub && sub.subscription;
+      const { data } = await this.sb.auth.getSession();
+      if (data && data.session) this.onAuth('INITIAL_SESSION', data.session);
+      else if (lsGet(MODE_KEY) === 'local' && !this.wantLogin) this.enterLocal();
+      else if (this.state.auth === 'checking') this.setState({ auth: 'signedOut' });
+      this.wantLogin = false;
+    } catch (e) {
+      if (lsGet(MODE_KEY) === 'local') return this.enterLocal();
+      this.setState({ auth: 'error', loadError: 'Impossible de joindre le serveur de comptes (' + frErr(e) + ').' });
+    }
+  }
+  onAuth(event, session) {
+    if (event === 'PASSWORD_RECOVERY') return;
+    if (event === 'SIGNED_OUT' || !session) { if (this.state.auth === 'signedIn') this.resetToSignedOut(); return; }
+    if (this.state.auth === 'recovery') return;
+    const u = session.user;
+    if (this.state.user && this.state.user.id === u.id && (this.state.dataReady || this.loadingUid === u.id)) return;
+    lsDel(MODE_KEY);
+    this.setState({ auth: 'signedIn', user: { id: u.id, email: u.email }, dataReady: false, loadError: '', screen: 'today' }, () => this.loadUserData());
+  }
+  async loadUserData() {
+    const uid = this.state.user && this.state.user.id;
+    if (!uid || this.loadingUid === uid) return;
+    this.loadingUid = uid;
+    const cached = this.readCache(uid);
+    if (cached && cached.data) {
+      this.rev = cached.rev || 0; this.dirty = !!cached.dirty;
+      this.setState({ data: this.withKey(normData(cached.data)), dataReady: true });
+    }
+    try {
+      let remote = await this.cloud.fetchDoc(this.sb, uid);
+      if (!remote) {
+        const legacy = lsGet('revisions.migrated.' + uid) ? null : this.readLegacy();
+        const useLegacy = !!(legacy && legacy.cards.length && !(cached && cached.data));
+        const base = cached && cached.data ? normData(cached.data) : useLegacy ? legacy : emptyData();
+        const rev = await this.cloud.createDoc(this.sb, uid, this.strip(base));
+        if (rev === null) remote = await this.cloud.fetchDoc(this.sb, uid);
+        else {
+          if (useLegacy) lsSet('revisions.migrated.' + uid, '1');
+          this.rev = rev; this.dirty = false;
+          const data = this.withKey(base);
+          this.setState({ data, dataReady: true, sync: 'saved', migrated: useLegacy });
+          this.writeCache(data, false);
+        }
+      }
+      if (remote) {
+        if (cached && cached.dirty) {
+          const merged = this.withKey(normData(cached.rev === remote.rev ? cached.data : this.cloud.merge(cached.data, remote.data)));
+          this.rev = remote.rev; this.dirty = true;
+          this.setState({ data: merged, dataReady: true }, () => this.cloudSave());
+        } else {
+          this.rev = remote.rev; this.dirty = false;
+          const data = this.withKey(normData(remote.data));
+          this.setState({ data, dataReady: true, sync: 'saved' });
+          this.writeCache(data, false);
+        }
+      }
+    } catch (e) {
+      if (cached && cached.data) this.setState({ sync: 'offline', syncMsg: frErr(e) });
+      else this.setState({ loadError: 'Impossible de récupérer tes données : ' + frErr(e) });
+    } finally { this.loadingUid = null; }
+  }
+  initAuthForLogin() {
+    // Leaving local mode: keep local data on the device (it gets imported on first sign-in to a new account).
+    this.wantLogin = true;
+    this.setState({ user: null, dataReady: false, data: emptyData() }, () => this.initAuth());
+  }
+  enterLocal() {
+    lsSet(MODE_KEY, 'local');
+    this.setState({ auth: 'local', user: null, data: this.readLegacy() || emptyData(), dataReady: true, screen: 'today', sync: 'idle' });
+  }
+  async sendCode() {
+    const email = this.state.authEmail.trim().toLowerCase();
+    if (!/^\S+@\S+\.\S+$/.test(email)) return this.setState({ authError: 'Adresse e-mail invalide.', authInfo: '' });
+    if (!this.sb) return this.setState({ authError: 'Serveur non configuré.' });
+    this.setState({ authBusy: true, authError: '', authInfo: '' });
+    try {
+      const { error } = await this.sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+      if (error) throw error;
+      this.setState({ authStep: 'code', authCode: '', authInfo: 'Code envoyé. Regarde aussi dans les spams.' });
+      this.startCooldown();
+    } catch (e) { this.setState({ authError: frErr(e) }); }
+    finally { this.setState({ authBusy: false }); }
+  }
+  startCooldown() {
+    clearInterval(this.cdT);
+    this.setState({ resendIn: 60 });
+    this.cdT = setInterval(() => this.setState(s => { if (s.resendIn <= 1) { clearInterval(this.cdT); return { resendIn: 0 }; } return { resendIn: s.resendIn - 1 }; }), 1000);
+  }
+  async verifyCode() {
+    const token = this.state.authCode.replace(/\D/g, '');
+    if (token.length < 6) return this.setState({ authError: 'Le code fait 6 chiffres.', authInfo: '' });
+    this.setState({ authBusy: true, authError: '' });
+    try {
+      const { error } = await this.sb.auth.verifyOtp({ email: this.state.authEmail.trim().toLowerCase(), token, type: 'email' });
+      if (error) throw error;
+      clearInterval(this.cdT);
+      this.setState({ authCode: '', authInfo: '', authStep: 'email', resendIn: 0 });
+    } catch (e) { this.setState({ authError: frErr(e), authInfo: '' }); }
+    finally { this.setState({ authBusy: false }); }
+  }
+  async signOut() {
+    if (this.dirty && !window.confirm('Des modifications ne sont pas encore enregistrées en ligne. Se déconnecter quand même ?')) return;
+    try { if (this.sb) await this.sb.auth.signOut(); } catch (e) {}
+    this.resetToSignedOut();
+  }
+  resetToSignedOut() {
+    const u = this.state.user;
+    if (u && !this.dirty) lsDel(this.cacheKey(u.id));
+    this.dirty = false; this.rev = 0; clearTimeout(this.saveT); clearTimeout(this.retryT);
+    this.setState({ auth: 'signedOut', user: null, dataReady: false, data: emptyData(), sess: null, screen: 'today', sync: 'idle', authPass: '', authError: '', authInfo: '' });
+  }
+  saveSetup() {
+    const url = this.state.setupUrl.trim(), key = this.state.setupKey.trim();
+    if (!/^https:\/\/[^\s/]+/.test(url)) return this.setState({ setupError: 'L’URL doit commencer par https:// (ex. https://abcd.supabase.co).' });
+    if (key.length < 20) return this.setState({ setupError: 'Clé trop courte : copie la clé « anon public » en entier.' });
+    this.cloud.setConfig(url, key);
+    this.sb = null;
+    lsDel(MODE_KEY);
+    this.setState({ setupError: '' }, () => this.initAuth());
+  }
+  updData(fn, cb) { this.setState(s => { const data = fn(s.data); this.save(data); return { data }; }, cb); }
+  setSetting(patch) {
+    if (patch.apiKey !== undefined) lsSet(DEVICE_KEY, patch.apiKey);
+    this.updData(d => ({ ...d, settings: { ...d.settings, ...patch } }));
+  }
+  today() { return dkey(new Date()); }
+
+  componentDidMount() {
+    applyTheme(lsGet(THEME_KEY) || 'auto');
+    if (window.matchMedia) { this.onScheme = () => { if ((lsGet(THEME_KEY) || 'auto') === 'auto') applyTheme('auto'); }; matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.onScheme); }
+    if (!window.katex) { const kt = setInterval(() => { if (window.katex) { clearInterval(kt); this.forceUpdate(); } }, 300); setTimeout(() => clearInterval(kt), 20000); }
+    this.minTick = setInterval(() => { this.forceUpdate(); this.checkReminders(); }, 30000);
+    setTimeout(() => this.checkReminders(), 3000);
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+    try { if ('serviceWorker' in navigator && window.top === window && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js'); } catch (e) {}
+    this.onVis = () => {
+      if (document.visibilityState === 'visible') { this.forceUpdate(); this.refreshRemote(); }
+      else this.cloudSave();
+    };
+    this.onOnline = () => this.cloudSave();
+    this.onHide = () => this.cloudSave();
+    document.addEventListener('visibilitychange', this.onVis);
+    window.addEventListener('online', this.onOnline);
+    window.addEventListener('pagehide', this.onHide);
+    this.initAuth();
+    if (lsGet(LLM_KEY)) {
+      lsDel(LLM_KEY); lsDel('revisions.llmBusy'); lsDel('revisions.llmCrash');
+      try { if (window.caches) caches.keys().then(ks => ks.filter(k => /webllm|mlc/i.test(k)).forEach(k => caches.delete(k))); } catch (e) {}
+    }
+  }
+  componentDidUpdate() {
+    const st = this.state;
+    if (st.dataReady && st.data && !st.data.settings.spread1 && !this.spreading) {
+      this.spreading = true;
+      this.updData(d => ({ ...d, cards: spreadNew(d.cards, this.today()), settings: { ...d.settings, spread1: true } }), () => { this.spreading = false; });
+    }
+  }
+  componentWillUnmount() {
+    document.removeEventListener('visibilitychange', this.onVis);
+    window.removeEventListener('online', this.onOnline);
+    window.removeEventListener('pagehide', this.onHide);
+    if (this.authSub) this.authSub.unsubscribe();
+    (this.timers || []).forEach(clearTimeout); clearTimeout(this.saveT); clearTimeout(this.retryT); clearInterval(this.cdT);
+  }
+
+  go(screen, extra) { this.setState({ screen, ...(extra || {}) }, () => { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; }); }
+
+  aiPref() { return this.state.data.settings.aiMode === 'rules' ? 'rules' : 'auto'; }
+  groqKey() { return (lsGet(GROQ_KEY) || '').trim(); }
+  aiMode() { return this.aiPref() === 'rules' ? 'rules' : (this.geminiKey() || this.groqKey()) ? 'cloud' : 'rules'; }
+  aiAvailable() { return this.aiMode() !== 'rules'; }
+  qgen() { return import(new URL('./local-qgen.js', document.baseURI).href); }
+  geminiKey() { const k = (this.state.data.settings.apiKey || '').trim(); return /^sk-ant/.test(k) ? '' : k; }
+  async callGemini(system, user, maxTokens, json) {
+    const st = this.state.data.settings, key = this.geminiKey();
+    {
+      const wanted = (st.model || '').trim();
+      const models = [...new Set([wanted && !/^claude/i.test(wanted) ? wanted : 'gemini-flash-latest', 'gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'])];
+      let lastErr;
+      for (const model of models) {
+        const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: system }] },
+            contents: [{ role: 'user', parts: [{ text: user }] }],
+            generationConfig: { temperature: 0.4, maxOutputTokens: Math.max(2048, maxTokens * 4), ...(json ? { responseMimeType: 'application/json' } : {}) }
+          })
+        });
+        const j = await r.json().catch(() => ({}));
+        if (r.ok) {
+          const parts = (j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts) || [];
+          const text = parts.filter(p => !p.thought).map(p => p.text || '').join('');
+          if (!text) throw new Error('Réponse vide de Gemini, réessaie.');
+          return text;
+        }
+        const msg = (j.error && j.error.message) || ('Erreur ' + r.status);
+        if (r.status === 404) { lastErr = new Error('Modèle « ' + model + ' » introuvable.'); continue; }
+        if (r.status === 503 || r.status === 500 || /high demand|overloaded|unavailable|try again later/i.test(msg)) { lastErr = new Error('Gemini est surchargé en ce moment'); await new Promise(res => setTimeout(res, 1200)); continue; }
+        if (r.status === 429) throw new Error('Quota gratuit Gemini atteint : attends une minute (ou demain si c’est la limite du jour).');
+        if (r.status === 400 && /api key/i.test(msg)) throw new Error('Clé Gemini invalide : vérifie-la dans Réglages.');
+        if (r.status === 403) throw new Error('Clé Gemini refusée : vérifie-la sur aistudio.google.com.');
+        throw new Error(msg);
+      }
+      throw lastErr || new Error('Aucun modèle Gemini disponible.');
+    }
+  }
+  async callGroq(system, user, maxTokens, json) {
+    const key = this.groqKey();
+    let lastErr;
+    for (const model of ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'llama-3.3-70b-versatile']) {
+      const oss = /gpt-oss/.test(model);
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', authorization: 'Bearer ' + key },
+        body: JSON.stringify({
+          model, temperature: 0.4,
+          messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
+          max_completion_tokens: Math.min(6000, Math.max(oss ? 1500 : 600, maxTokens * (oss ? 3 : 2))),
+          ...(oss ? { reasoning_effort: 'low' } : {}),
+          ...(json ? { response_format: { type: 'json_object' } } : {})
+        })
+      });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok) {
+        const t = (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '';
+        if (t) return t;
+        lastErr = new Error('réponse vide'); continue;
+      }
+      const msg = (j.error && j.error.message) || ('Erreur ' + r.status);
+      if (r.status === 401) throw new Error('clé Groq invalide');
+      if (r.status === 404 || /decommissioned|does not exist|not found|access to model/i.test(msg)) { lastErr = new Error('modèle indisponible'); continue; }
+      if (r.status === 413 || /too large/i.test(msg)) { lastErr = new Error('cours trop long pour le quota gratuit : coupe-le en deux'); continue; }
+      if (r.status === 429) { lastErr = new Error('limite gratuite atteinte, réessaie dans une minute'); continue; }
+      if (r.status >= 500 || r.status === 498) { lastErr = new Error('surchargé'); continue; }
+      if (r.status === 400 && json && /json/i.test(msg)) { lastErr = new Error('réponse mal formée'); continue; }
+      throw new Error(msg);
+    }
+    throw lastErr || new Error('indisponible');
+  }
+  async ai(system, user, maxTokens, json) {
+    if (this.aiPref() === 'rules') throw new Error('IA désactivée');
+    const list = [this.geminiKey() && ['Gemini', () => this.callGemini(system, user, maxTokens, json)], this.groqKey() && ['Groq', () => this.callGroq(system, user, maxTokens, json)]].filter(Boolean);
+    if (!list.length) throw new Error('aucune clé IA');
+    const errs = [];
+    for (const [name, call] of list) {
+      try { return await call(); } catch (e) { errs.push(name + ' : ' + e.message); }
+    }
+    throw new Error(errs.join(' · '));
+  }
+
+  curve(data, scope, t) {
+    const key = scope + '|' + t;
+    if (this._curve && this._curve.data === data && this._curve.key === key) return this._curve.val;
+    const cards = scope ? data.cards.filter(c => c.courseId === scope) : data.cards;
+    const empty = { curvePastPath: '', curveFuturePath: '', curveEbbPath: '', curveTodayX: '0%', curveTodayY: '0%', curveTicks: [], curveYou: '—', curveEbb: '—', curveStartLabel: '', curveText: '' };
+    if (!cards.length) return empty;
+    const evs = cards.map(c => [c, events(c), diff(t, c.createdAt)]);
+    let xs = Math.max(-60, Math.min(...evs.map(e => e[2]))); if (xs > -3) xs = -3;
+    const xe = 10, W = 340;
+    const X = x => ((x - xs) / (xe - xs) * W).toFixed(1), Y = r => (6 + (1 - r) * 154).toFixed(1);
+    const avgAt = (x, fn) => { let sum = 0, n = 0; for (const e of evs) { const r = fn(e, x); if (r !== null) { sum += r; n++; } } return n ? sum / n : null; };
+    const you = (e, x) => rAt(e[0], e[1], x, t);
+    const ref = (e, x) => (x < e[2] ? null : k0Of(e[0]) * ebb(x - e[2]));
+    const pts = new Set([0]);
+    for (let x = xs; x <= xe + 1e-9; x += 0.1) pts.add(+x.toFixed(2));
+    const reviewDays = new Set();
+    evs.forEach(e => { pts.add(e[2]); pts.add(e[2] - 0.001); pts.add(e[2] + 0.02); e[1].forEach(ev => { const o = diff(t, ev.d); pts.add(o - 0.001); pts.add(o); if (o >= xs && o <= 0) reviewDays.add(o); }); });
+    const xsArr = [...pts].filter(x => x >= xs && x <= xe).sort((a, b) => a - b);
+    const path = (fn, from, to) => { let d = '', pen = false; for (const x of xsArr) { if (x < from || x > to) continue; const r = avgAt(x, fn); if (r === null) { pen = false; continue; } d += (pen ? 'L' : 'M') + X(x) + ' ' + Y(r); pen = true; } return d; };
+    const r0 = avgAt(0, you), e0 = avgAt(0, ref);
+    const nRev = evs.reduce((a, e) => a + e[1].filter(ev => diff(t, ev.d) <= 0).length, 0);
+    const you0 = Math.round(r0 * 100), ebb0 = Math.round(e0 * 100);
+    const val = {
+      curvePastPath: path(you, xs, 0), curveFuturePath: path(you, 0, xe), curveEbbPath: path(ref, xs, xe),
+      curveTodayX: ((0 - xs) / (xe - xs) * 100).toFixed(2) + '%',
+      curveTodayY: ((6 + (1 - r0) * 154) / 170 * 100).toFixed(2) + '%',
+      curveTicks: [...reviewDays].map(o => ({ x: ((o - xs) / (xe - xs) * 100).toFixed(2) + '%' })),
+      curveYou: you0 + ' %', curveEbb: ebb0 + ' %',
+      curveStartLabel: fmtS(addDays(t, xs)),
+      curveText: nRev === 0
+        ? 'Tu es pile sur la courbe d’Ebbinghaus : sans révision, ça chute vite. Ta première séance va casser la pente.'
+        : `Sans révision, tu serais à ${ebb0} %. Avec tes ${plural(nRev, 'révision')}, tu es à ${you0} %${you0 > ebb0 ? ` : +${you0 - ebb0} points gagnés sur la courbe.` : '.'}`
+    };
+    this._curve = { data, key, val };
+    return val;
+  }
+  weekOf(k) { return isoWeek(k) % 2 === (this.state.data.settings.weekAPar || 0) ? 'A' : 'B'; }
+  ttFor(k) { const dw = pkey(k).getDay(), wk = this.weekOf(k); return (this.state.data.settings.tt || []).filter(e => e.d === dw && (!e.w || e.w === wk)).sort((a, b) => toMin(a.s) - toMin(b.s) || (a.k === 'rev') - (b.k === 'rev')); }
+  planDay(k, nowMin) {
+    const data = this.state.data, t = this.today(), cm = this.courseMap(), ents = this.ttFor(k), sv = this.isSavate(k);
+    const subjHas = {}; data.cards.forEach(c => { const s = (cm[c.courseId] || {}).subj; if (s) subjHas[s] = true; });
+    const tasks = [];
+    const dueN = data.cards.filter(c => c.due <= k).length;
+    if (dueN) {
+      const n = sv ? Math.min(dueN, this.capQ()) : dueN;
+      tasks.push({ title: 'Révisions espacées', sub: plural(n, 'question') + ' à ressortir avant l’oubli' + (sv ? ' · séance courte (savate)' : ''), min: Math.min(50, Math.max(5, Math.ceil(n * 1.7))), onAct: k === t ? () => this.startSession() : null, actLabel: 'Go' });
+    }
+    const uniq = a => [...new Set(a.filter(Boolean))];
+    const subjCount = {}; data.cards.forEach(c => { const s = (cm[c.courseId] || {}).subj; if (s) subjCount[s] = (subjCount[s] || 0) + 1; });
+    (data.exams || []).filter(x => x.date >= k).sort((a, b) => (a.date < b.date ? -1 : 1)).forEach(x => {
+      const n = diff(k, x.date), name = x.subj + (x.title ? ' (' + x.title + ')' : ''), ex = EXO[x.subj] || EXO['Ens. scientifique'];
+      const quiz = subjCount[x.subj] && k === t ? { onAct: () => this.startSession(x.subj), actLabel: 'Questions' } : {};
+      const cap = m => (sv ? Math.min(m, 30) : m);
+      if (n === 0) return tasks.push({ title: 'Jour du devoir : ' + name, sub: 'Relis seulement ta fiche, 10 minutes max. Tu es prêt.', min: 10 });
+      if (n === 1) return tasks.push({ title: 'Veille du devoir : ' + name, sub: 'Relecture légère de tes fiches et dernières questions. Couche-toi tôt.', min: 25, ...quiz });
+      if (n === 2) return tasks.push({ title: 'Devoir blanc : ' + name, sub: 'Conditions réelles : un sujet complet, sans cours, chrono. Corrige-toi après.', min: cap(55) });
+      if (n <= 7) {
+        tasks.push({ title: 'Exos pour le devoir : ' + x.subj, sub: (n % 2 ? ex[0] : ex[1]) + ' · J-' + n, min: cap(40) });
+        if (subjCount[x.subj]) tasks.push({ title: 'Questions du devoir : ' + x.subj, sub: 'Toutes tes questions de ' + x.subj + ', les plus fragiles d’abord', min: 15, ...quiz });
+        return;
+      }
+      if (n <= 21 && n % 2 === 0) tasks.push({ title: 'Prépare le devoir : ' + name, sub: 'Relis un chapitre au programme et fais sa fiche (définitions, formules, schémas) · J-' + n, min: cap(30) });
+    });
+    const todaySubs = uniq(ents.filter(e => e.k === 'cours').map(e => subjPlan(e.l)));
+    todaySubs.forEach(s => tasks.push({ title: 'Rentre ton cours de ' + s, sub: 'Vu aujourd’hui : je le transforme en questions pour J+1', min: 15, onAct: k === t ? () => this.go('add', { addStep: 'form', addSubj: s, addChap: '', addText: '', addError: '' }) : null, actLabel: 'Ajouter' }));
+    const tomSubs = uniq(this.ttFor(addDays(k, 1)).filter(e => e.k === 'cours').map(e => subjPlan(e.l))).filter(s => !todaySubs.includes(s));
+    tomSubs.forEach(s => tasks.push({ title: 'Prépare ' + s + ' pour demain', sub: subjHas[s] ? 'Repasse tes questions et relis le dernier chapitre' : 'Relis ton dernier cours, note ce qui coince', min: 20 }));
+    if (!sv) {
+      const byC = {}; data.cards.forEach(c => { (byC[c.courseId] = byC[c.courseId] || []).push(retention(c, t)); });
+      data.courses.map(c => ({ c, r: byC[c.id] ? byC[c.id].reduce((a, b) => a + b, 0) / byC[c.id].length : 1 })).filter(x => x.r < 0.7).sort((a, b) => a.r - b.r).slice(0, 2)
+        .forEach(x => tasks.push({ title: 'Renforce : ' + x.c.chap, sub: x.c.subj + ' · rétention ' + Math.round(x.r * 100) + ' %. Relis puis réexplique sans regarder', min: 20 }));
+    }
+    const items = []; let qi = 0;
+    const lastRev = ents.reduce((a, e, i) => (e.k === 'rev' && !(nowMin != null && toMin(e.e) <= nowMin) ? i : a), -1);
+    ents.forEach((e, ei) => {
+      const s0 = toMin(e.s), en = toMin(e.e), past = nowMin != null && en <= nowMin;
+      if (e.k !== 'rev') return items.push({ kind: e.k, past, time: fmtM(s0) + '–' + fmtM(en), title: e.l || TT_KIND[e.k], sub: [e.r, e.w ? 'Sem. ' + e.w : ''].filter(Boolean).join(' · ') });
+      if (past) return items.push({ kind: 'free', past, time: fmtM(s0) + '–' + fmtM(en), title: 'Créneau de révision', sub: 'Passé' });
+      let cur = nowMin != null && s0 < nowMin ? Math.ceil(nowMin / 5) * 5 : s0, run = 0;
+      while (qi < tasks.length) {
+        const tk = tasks[qi]; let d = tk.min;
+        if (run >= 40) { if (cur + 10 + Math.min(d, 15) > en) break; items.push({ kind: 'pause', time: fmtM(cur) + '–' + fmtM(cur + 10), title: 'Pause', sub: 'Lève-toi, bois de l’eau, pas d’écran' }); cur += 10; run = 0; }
+        if (cur + d > en) { const room = en - cur, minOk = ei === lastRev ? Math.min(15, d) : Math.max(Math.min(15, d), Math.ceil(d * 0.7)); if (room >= minOk) d = room; else break; }
+        items.push({ kind: 'task', time: fmtM(cur) + '–' + fmtM(cur + d), title: tk.title, sub: tk.sub, onAct: tk.onAct, actLabel: tk.actLabel });
+        cur += d; run += d; qi++;
+      }
+      if (en - cur >= 15) items.push({ kind: 'free', time: fmtM(cur) + '–' + fmtM(en), title: 'Temps libre', sub: 'Rien d’urgent. Avance un chapitre ou souffle' });
+    });
+    return { items, left: tasks.slice(qi).map(x => x.title) };
+  }
+  planVals(t) {
+    const st = this.state, S = st.data.settings, tt = S.tt || [];
+    const now = new Date(), nowMin = now.getHours() * 60 + now.getMinutes();
+    const row = i => ({ time: i.time, title: i.title, sub: i.sub || '', fg: i.kind === 'task' || i.kind === 'cours' ? 'var(--color-text)' : 'var(--color-neutral-700)', tc: i.kind === 'task' ? 'var(--color-accent-700)' : 'var(--color-neutral-700)', bg: i.kind === 'task' ? 'var(--color-surface)' : 'transparent', op: i.past ? '.45' : '1', hasAct: !!i.onAct, onAct: i.onAct || null, actLabel: i.actLabel || '' });
+    const tp = this.planDay(t, nowMin);
+    const up = tp.items.filter(i => !i.past && (i.kind === 'task' || i.kind === 'pause' || i.kind === 'free'));
+    let nk = addDays(t, 1), nItems = [];
+    for (let i = 0; i < 7; i++) { nItems = this.planDay(nk, null).items.filter(x => x.kind === 'task'); if (nItems.length) break; nk = addDays(nk, 1); }
+    const selDw = st.ttDay != null ? st.ttDay : pkey(t).getDay();
+    let k = t; for (let i = 0; i < 7 && pkey(k).getDay() !== selDw; i++) k = addDays(k, 1);
+    const sel = this.planDay(k, k === t ? nowMin : null);
+    const nf = st.nf || { s: '', e: '', k: 'rev', l: '', w: '' };
+    const setNf = p => this.setState(s => ({ nf: { ...(s.nf || { s: '', e: '', k: 'rev', l: '', w: '' }), ...p }, nfErr: '' }));
+    const seg = (list, cur, set) => list.map((o, i) => { const on = cur === o.v; return { label: o.label, bg: on ? 'var(--color-text)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)', bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => set(o.v) }; });
+    const exams = (st.data.exams || []).filter(x => x.date >= t).sort((a, b) => (a.date < b.date ? -1 : 1));
+    const ne = st.ne || { subj: 'Physique-Chimie', date: '', title: '' };
+    const setNe = p => this.setState(s => ({ ne: { ...(s.ne || { subj: 'Physique-Chimie', date: '', title: '' }), ...p }, neErr: '' }));
+    const exLabel = x => { const n = diff(t, x.date); return n === 0 ? 'aujourd’hui' : n === 1 ? 'demain' : 'dans ' + n + ' j'; };
+    return {
+      examRows: exams.map(x => ({ title: x.subj + (x.title ? ' · ' + x.title : ''), sub: fmtS(x.date) + ' · ' + exLabel(x), count: diff(t, x.date) === 0 ? 'J' : 'J-' + diff(t, x.date), onDel: () => { if (window.confirm('Supprimer ce devoir ?')) this.updData(d => ({ ...d, exams: (d.exams || []).filter(y => y.id !== x.id) })); } })),
+      hasExams: exams.length > 0, noExams: !exams.length,
+      nextExam: exams[0] ? 'Devoir de ' + exams[0].subj + ' ' + exLabel(exams[0]) : '', hasNextExam: exams.length > 0,
+      nextExamSub: exams[0] ? fmtS(exams[0].date) + (exams.length > 1 ? ' · ' + plural(exams.length - 1, 'autre devoir') + ' prévu' + (exams.length > 2 ? 's' : '') : '') : '',
+      neSubjs: EXAM_SUBJ.map((s, i) => { const on = ne.subj === s; return { label: s, bg: on ? 'var(--color-accent)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)', br: i % 2 === 0 ? '1px solid var(--color-divider)' : '0', onClick: () => setNe({ subj: s }) }; }),
+      neDate: ne.date, neTitle: ne.title, neMin: addDays(t, 1),
+      onNeDate: e => setNe({ date: e.target.value }), onNeTitle: e => setNe({ title: e.target.value }),
+      neErr: st.neErr || '', hasNeErr: !!st.neErr,
+      addExam: () => {
+        if (!ne.date || ne.date < t) return this.setState({ neErr: 'Choisis la date du devoir.' });
+        this.updData(d => ({ ...d, exams: [...(d.exams || []), { id: uid(), subj: ne.subj, date: ne.date, title: ne.title.trim(), createdAt: t }] }));
+        this.setState({ ne: { subj: ne.subj, date: '', title: '' }, examOpen: false });
+      },
+      examOpen: !!st.examOpen, examClosed: !st.examOpen, openExam: () => this.setState({ examOpen: true, neErr: '' }), closeExam: () => this.setState({ examOpen: false }),
+      todayPlanRows: up.slice(0, 6).map(row), hasTodayPlan: up.length > 0, noTodayPlan: !up.length,
+      todayPlanEmpty: nItems.length ? 'Plus de créneau de révision aujourd’hui. Prochain : ' + (nk === addDays(t, 1) ? 'demain' : fmtS(nk)) + ' à ' + nItems[0].time.split('–')[0] + ', ' + nItems[0].title.toLowerCase() + '.' : 'Aucun créneau de révision prévu. Ajoute-les dans ton emploi du temps.',
+      todayPlanLeft: tp.left.length ? 'Pas casé aujourd’hui : ' + tp.left.join(', ') + '.' : '', hasTodayPlanLeft: tp.left.length > 0,
+      weekBadge: 'Semaine ' + this.weekOf(t),
+      ttDays: [1, 2, 3, 4, 5, 6, 0].map((dw, i) => { const on = dw === selDw; return { label: DOW[dw], bg: on ? 'var(--color-accent)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)', bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => this.setState({ ttDay: dw }) }; }),
+      ttDateLabel: (k === t ? 'Aujourd’hui' : fmtS(k)) + ' · semaine ' + this.weekOf(k),
+      ttRows: sel.items.map(row), ttHasRows: sel.items.length > 0, ttEmpty: !sel.items.length,
+      ttLeft: sel.left.length ? 'Pas casé ce jour-là : ' + sel.left.join(', ') + '.' : '', hasTtLeft: sel.left.length > 0,
+      weekLabel: 'Cette semaine : semaine ' + this.weekOf(t), toggleWeek: () => this.setSetting({ weekAPar: 1 - (S.weekAPar || 0) }),
+      ttEditing: !!st.ttEdit, ttNotEditing: !st.ttEdit, ttEditLabel: st.ttEdit ? 'Terminé' : 'Modifier', toggleTtEdit: () => this.setState({ ttEdit: !st.ttEdit, nfErr: '' }),
+      ttRaw: tt.filter(e => e.d === selDw).sort((a, b) => toMin(a.s) - toMin(b.s)).map(e => ({ time: fmtM(toMin(e.s)) + '–' + fmtM(toMin(e.e)), title: e.k === 'rev' ? 'Révision' : e.l || TT_KIND[e.k], sub: [TT_KIND[e.k], e.r, e.w ? 'Sem. ' + e.w : ''].filter(Boolean).join(' · '), onDel: () => this.setSetting({ tt: tt.filter(x => x.id !== e.id) }) })),
+      ttRawEmpty: !tt.some(e => e.d === selDw),
+      nfS: nf.s, nfE: nf.e, nfL: nf.l, nfIsCours: nf.k === 'cours',
+      onNfS: e => setNf({ s: e.target.value }), onNfE: e => setNf({ e: e.target.value }), onNfL: e => setNf({ l: e.target.value }),
+      ttKinds: seg([{ v: 'rev', label: 'Révision' }, { v: 'cours', label: 'Cours' }, { v: 'off', label: 'Pas dispo' }], nf.k, v => setNf({ k: v })),
+      ttWeeks: seg([{ v: '', label: 'Toutes' }, { v: 'A', label: 'Sem. A' }, { v: 'B', label: 'Sem. B' }], nf.w, v => setNf({ w: v })),
+      nfErr: st.nfErr || '', hasNfErr: !!st.nfErr,
+      addTt: () => {
+        if (!nf.s || !nf.e || toMin(nf.e) <= toMin(nf.s)) return this.setState({ nfErr: 'Indique une heure de début et une heure de fin après le début.' });
+        if (nf.k === 'cours' && !nf.l.trim()) return this.setState({ nfErr: 'Indique la matière du cours.' });
+        this.setSetting({ tt: [...tt, { id: uid(), d: selDw, s: nf.s, e: nf.e, k: nf.k, l: nf.k === 'rev' ? '' : nf.l.trim(), r: '', w: nf.w }] });
+        this.setState({ nf: { s: nf.e, e: '', k: nf.k, l: '', w: '' } });
+      },
+      resetTt: () => { if (window.confirm('Remettre l’emploi du temps Pronote d’origine ?')) this.setSetting({ tt: DEFAULT_TT }); }
+    };
+  }
+  courseMap() { const m = {}; this.state.data.courses.forEach(c => { m[c.id] = c; }); return m; }
+  dueList() {
+    const t = this.today();
+    return this.state.data.cards.filter(c => c.due <= t).sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : retention(a, t) - retention(b, t)));
+  }
+  isSavate(k) { return this.state.data.settings.savateDays.includes(pkey(k).getDay()); }
+  capQ() { return CAPQ[this.state.data.settings.capMin] || 9; }
+  sessionList() { const due = this.dueList(); return this.isSavate(this.today()) ? due.slice(0, this.capQ()) : due.slice(0, 60); }
+
+  updSess(patch, idx) { this.setState(s => (s.sess && (idx === undefined || s.sess.idx === idx) ? { sess: { ...s.sess, ...patch } } : null)); }
+  startSession(subj, ahead) {
+    const cm = this.courseMap(), t = this.today();
+    const src = ahead ? this.state.data.cards.filter(c => c.due > t).sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : retention(a, t) - retention(b, t))).slice(0, 15) : subj ? this.state.data.cards.filter(c => (cm[c.courseId] || {}).subj === subj).sort((a, b) => retention(a, t) - retention(b, t)).slice(0, 15) : this.sessionList();
+    const list = src.map(c => ({ ...c, subj: (cm[c.courseId] || {}).subj || '', chap: (cm[c.courseId] || {}).chap || '' }));
+    if (list.length) this.go('session', { sess: { list, idx: 0, results: [], ...this.blankQ() } });
+  }
+  pickCards() {
+    const st = this.state, t = this.today(), sel = new Set(st.pickSel || []), mode = st.pickMode || 'weak', n = st.pickN === undefined ? 15 : st.pickN;
+    let cs = st.data.cards.filter(c => sel.has(c.courseId));
+    const byDue = (a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : retention(a, t) - retention(b, t));
+    if (mode === 'due') cs = cs.filter(c => c.due <= t).sort(byDue);
+    else if (mode === 'weak') cs = cs.sort((a, b) => retention(a, t) - retention(b, t));
+    else cs = cs.sort(byDue);
+    return n ? cs.slice(0, n) : cs;
+  }
+  startCustom() {
+    const cm = this.courseMap();
+    const list = this.pickCards().map(c => ({ ...c, subj: (cm[c.courseId] || {}).subj || '', chap: (cm[c.courseId] || {}).chap || '' }));
+    if (list.length) this.go('session', { sess: { list, idx: 0, results: [], ...this.blankQ() } });
+  }
+  blankQ() { return { text: '', pick: null, phase: 'answer', proposal: null, sel: null, feedback: '', attendus: [], aiError: '', verdict: null, done: false }; }
+
+  async reveal(dontKnow) {
+    const s = this.state.sess; if (!s) return;
+    const card = s.list[s.idx], idx = s.idx;
+    const text = dontKnow ? '' : s.text;
+    if (!text.trim()) return this.updSess({ phase: 'result', text: '', proposal: 'rate', sel: 'rate', verdict: null }, idx);
+    if (card.type === 'trou' && card.gap) {
+      const a = norm(text), g = norm(card.gap);
+      const cmp = x => (x || '').toLowerCase().replace(/[\s*×·⋅]/g, '').replace(/[÷:]/g, '/');
+      const ok = (a.length > 1 && (a === g || a.includes(g) || (g.includes(a) && a.length >= g.length * 0.6))) || (cmp(text) !== '' && cmp(text) === cmp(card.gap));
+      return this.updSess({ phase: 'result', proposal: ok ? 'bien' : 'rate', sel: ok ? 'bien' : 'rate', verdict: ok }, idx);
+    }
+    if (!this.aiAvailable()) {
+      try {
+        const g = (await this.qgen()).gradeAnswer(text, card.a, card.q);
+        return this.updSess({ phase: 'result', text, proposal: g.level, sel: g.level, feedback: g.feedback, attendus: g.attendus }, idx);
+      } catch (e) { return this.updSess({ phase: 'result', text, proposal: null, sel: null }, idx); }
+    }
+    this.updSess({ phase: 'correcting', text }, idx);
+    try {
+      const out = await this.ai(
+        'Tu corriges la réponse d’un élève de Terminale (bac français). Bienveillant mais exigeant, tu tutoies, ton de coach motivant, phrases courtes. Réponds UNIQUEMENT en JSON valide.',
+        `Question : ${card.q}\nRéponse attendue : ${card.a}\nRéponse de l’élève : ${text}\n\nRenvoie {"level":"rate|difficile|bien|facile","feedback":"1 à 2 phrases","attendus":[{"label":"élément attendu, court","ok":true}]}.\nrate = faux ou hors sujet ; difficile = partiel, l’essentiel manque ; bien = juste avec de petits oublis ; facile = complet et précis. 2 à 4 attendus.`,
+        700, true);
+      const j = parseJSON(out);
+      const lv = LEVELS.some(l => l.k === j.level) ? j.level : 'difficile';
+      this.updSess({ phase: 'result', proposal: lv, sel: lv, feedback: String(j.feedback || ''), attendus: Array.isArray(j.attendus) ? j.attendus.slice(0, 5) : [] }, idx);
+    } catch (e) {
+      try {
+        const g = (await this.qgen()).gradeAnswer(text, card.a, card.q);
+        this.updSess({ phase: 'result', proposal: g.level, sel: g.level, feedback: g.feedback, attendus: g.attendus, aiError: 'IA indisponible (' + e.message + ') : correction par mots-clés.' }, idx);
+      } catch (e2) {
+        this.updSess({ phase: 'result', proposal: null, sel: null, aiError: 'Correction IA indisponible (' + e.message + '). Évalue-toi toi-même.' }, idx);
+      }
+    }
+  }
+  examGapFor(subj, t) {
+    const ex = (this.state.data.exams || []).filter(x => x.subj === subj && x.date > t).sort((a, b) => (a.date < b.date ? -1 : 1))[0];
+    return ex ? diff(t, ex.date) : 0;
+  }
+  schedFor(card, k) { const t = this.today(); return ebbSched(card, k, t, this.examGapFor(card.subj, t)); }
+  confirmEval() {
+    const s = this.state.sess; if (!s || !s.sel) return;
+    const card = s.list[s.idx], k = s.sel, t = this.today();
+    const sc = this.schedFor(card, k), ns = sc.stage, gap = sc.gap, due = addDays(t, gap);
+    this.updData(d => ({ ...d, cards: d.cards.map(c => (c.id === card.id ? { ...c, hist: [...events(c), { d: t, s: ns, k, S: sc.S }], stage: ns, S: sc.S, due, last: t, reps: (c.reps || 0) + 1, lapses: (c.lapses || 0) + (k === 'rate' ? 1 : 0) } : c)), log: { ...d.log, [t]: (d.log[t] || 0) + 1 } }));
+    const results = [...s.results, { card, k, n: gap, due }];
+    const idx = s.idx + 1;
+    const list = k === 'rate' && (card.requeue || 0) < 2 ? [...s.list, { ...card, stage: ns, S: sc.S, last: t, hist: [...events(card), { d: t, s: ns, k, S: sc.S }], requeue: (card.requeue || 0) + 1 }] : s.list;
+    this.setState({ sess: { ...s, ...this.blankQ(), list, results, idx, done: idx >= list.length } }, () => { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; });
+  }
+
+  async shrinkImage(file) {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('Image illisible.')); i.src = url; });
+      const k = Math.min(1, 1800 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+      return c.toDataURL('image/jpeg', 0.85);
+    } finally { URL.revokeObjectURL(url); }
+  }
+  async ocrImage(dataUrl) {
+    const prompt = 'Transcris fidèlement tout le texte de cette photo de cours (cahier ou polycopié de Terminale), en français. Garde les titres sur leur propre ligne et l’ordre de lecture. Écris chaque formule, unité ou notation scientifique en LaTeX entre $ et $ (indices avec _, exposants avec ^). Décris un schéma en une ligne entre crochets. Ne commente pas, ne résume pas : rends uniquement le texte.';
+    const b64 = dataUrl.split(',')[1], errs = [];
+    if (this.geminiKey()) {
+      for (const model of ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-flash-lite-latest']) {
+        try {
+          const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent', { method: 'POST', headers: { 'content-type': 'application/json', 'x-goog-api-key': this.geminiKey() }, body: JSON.stringify({ contents: [{ role: 'user', parts: [{ inline_data: { mime_type: 'image/jpeg', data: b64 } }, { text: prompt }] }], generationConfig: { temperature: 0.1, maxOutputTokens: 8192 } }) });
+          const j = await r.json().catch(() => ({}));
+          if (r.ok) { const txt = ((j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts) || []).filter(p => !p.thought).map(p => p.text || '').join('').trim(); if (txt) return txt; }
+          errs.push('Gemini ' + r.status); if (r.status === 400 || r.status === 403) break;
+        } catch (e) { errs.push('Gemini réseau'); break; }
+      }
+    }
+    if (this.groqKey()) {
+      try {
+        const r = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + this.groqKey() }, body: JSON.stringify({ model: 'meta-llama/llama-4-scout-17b-16e-instruct', temperature: 0.1, max_completion_tokens: 4000, messages: [{ role: 'user', content: [{ type: 'text', text: prompt }, { type: 'image_url', image_url: { url: dataUrl } }] }] }) });
+        const j = await r.json().catch(() => ({}));
+        const txt = (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content || '').trim();
+        if (r.ok && txt) return txt;
+        errs.push('Groq ' + r.status);
+      } catch (e) { errs.push('Groq réseau'); }
+    }
+    this.setState({ importProgress: 'Lecture hors IA (formules non reconnues)…' });
+    if (!window.Tesseract) await new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'; s.onload = res; s.onerror = () => rej(new Error('Lecture de photo indisponible hors ligne. ' + errs.join(', '))); document.head.appendChild(s); });
+    const out = await window.Tesseract.recognize(dataUrl, 'fra');
+    const txt = (out && out.data && out.data.text || '').trim();
+    if (!txt) throw new Error('Aucun texte lisible sur la photo. Prends-la bien à plat, avec de la lumière.');
+    return txt;
+  }
+  async importPhotos(files) {
+    files = [...files].filter(x => /^image\//.test(x.type) || /\.(jpe?g|png|heic|webp)$/i.test(x.name));
+    if (!files.length) return;
+    this.setState({ importStatus: 'busy', importName: plural(files.length, 'photo'), importProgress: '', importError: '' });
+    try {
+      const parts = [];
+      for (let i = 0; i < files.length; i++) {
+        this.setState({ importProgress: 'Lecture de la photo ' + (i + 1) + ' / ' + files.length + '…' });
+        parts.push(await this.ocrImage(await this.shrinkImage(files[i])));
+      }
+      const text = parts.join('\n\n');
+      this.setState(s => ({ importStatus: 'done', importKind: 'photo', importName: plural(files.length, 'photo'), addText: s.addText.trim() ? s.addText.trim() + '\n\n' + text : text, addError: '' }));
+    } catch (err) {
+      this.setState({ importStatus: 'error', importError: err.message || 'Impossible de lire la photo.' });
+    }
+  }
+  slotGroups(k) {
+    const groups = []; let cur = null;
+    const hm = s => { const m = s.match(/(\d+)h(\d+)/); return m ? [+m[1], +m[2]] : [0, 0]; };
+    this.planDay(k, null).items.forEach(i => {
+      if (i.kind === 'task' || (i.kind === 'pause' && cur)) {
+        const [a, b] = i.time.split('–');
+        if (!cur) { cur = { start: hm(a), end: hm(b), tasks: [] }; groups.push(cur); }
+        cur.end = hm(b); if (i.kind === 'task') cur.tasks.push(i);
+      } else cur = null;
+    });
+    return groups.filter(g => g.tasks.length);
+  }
+  exportCalendar() {
+    const t = this.today(), stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    const esc = s => String(s).replace(/[\\;,]/g, m => '\\' + m).replace(/\n/g, '\\n');
+    const dt = (k, [h, m]) => k.replace(/-/g, '') + 'T' + pad(h) + pad(m) + '00';
+    const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Revisions//FR', 'CALSCALE:GREGORIAN', 'X-WR-CALNAME:Révisions'];
+    let n = 0;
+    for (let d = 0; d < 14; d++) {
+      const k = addDays(t, d);
+      this.slotGroups(k).forEach((g, gi) => {
+        const title = g.tasks.length > 1 ? g.tasks[0].title + ' + ' + (g.tasks.length - 1) : g.tasks[0].title;
+        lines.push('BEGIN:VEVENT', 'UID:rev-' + k + '-' + gi + '@revisions', 'DTSTAMP:' + stamp, 'DTSTART:' + dt(k, g.start), 'DTEND:' + dt(k, g.end), 'SUMMARY:' + esc('Révision · ' + title), 'DESCRIPTION:' + esc(g.tasks.map(x => x.time + ' ' + x.title).join('\n')), 'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + esc(title), 'TRIGGER:-PT0M', 'END:VALARM', 'END:VEVENT');
+        n++;
+      });
+    }
+    lines.push('END:VCALENDAR');
+    if (!n) return this.setState({ remMsg: 'Aucun créneau de révision planifié sur 14 jours.' });
+    const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar' }), url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = 'revisions-rappels.ics'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
+    this.setState({ remMsg: plural(n, 'rappel') + ' sur 14 jours. Ouvre le fichier et choisis « Tout ajouter ». Refais-le dans 2 semaines.' });
+  }
+  async toggleNotif() {
+    if (lsGet('revisions.notif') === '1') { lsDel('revisions.notif'); return this.setState({ remMsg: 'Notifications coupées.' }); }
+    if (!('Notification' in window)) return this.setState({ remMsg: 'Cet appareil ne gère pas les notifications ici. Sur iPhone, installe d’abord l’appli sur l’écran d’accueil. Sinon, utilise le calendrier.' });
+    const p = await Notification.requestPermission();
+    if (p !== 'granted') return this.setState({ remMsg: 'Notifications refusées. Tu peux les autoriser dans les réglages de ton appareil.' });
+    lsSet('revisions.notif', '1');
+    this.notify('Rappels activés', 'Je te préviendrai au début de chaque créneau de révision.');
+    this.setState({ remMsg: 'Notifications activées.' });
+  }
+  notify(title, body) {
+    try {
+      if (navigator.serviceWorker && navigator.serviceWorker.controller) navigator.serviceWorker.ready.then(r => r.showNotification(title, { body, icon: 'icon-192.png', badge: 'icon-192.png', tag: title }));
+      else new Notification(title, { body, icon: 'icon-192.png' });
+    } catch (e) {}
+  }
+  checkReminders() {
+    if (lsGet('revisions.notif') !== '1' || !('Notification' in window) || Notification.permission !== 'granted' || !this.state.dataReady) return;
+    const t = this.today(), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
+    let sent = {}; try { sent = JSON.parse(lsGet('revisions.notifSent') || '{}'); } catch (e) {}
+    this.slotGroups(t).forEach(g => {
+      const sm = g.start[0] * 60 + g.start[1], key = t + ' ' + sm;
+      if (nm >= sm && nm <= sm + 5 && !sent[key]) {
+        sent[key] = 1;
+        this.notify(fmtM(sm) + ' : ' + g.tasks[0].title, g.tasks.map(x => x.title).join(' · '));
+      }
+    });
+    Object.keys(sent).forEach(k => { if (k.slice(0, 10) < t) delete sent[k]; });
+    lsSet('revisions.notifSent', JSON.stringify(sent));
+  }
+  async importFile(file) {
+    if (file && (/^image\//.test(file.type) || /\.(jpe?g|png|heic|webp)$/i.test(file.name))) return this.importPhotos([file]);
+    this.setState({ importStatus: 'busy', importName: file.name, importProgress: '', importError: '' });
+    try {
+      const mod = await import(new URL('./course-import.js', document.baseURI).href);
+      const text = await mod.extractText(file, (i, n) => this.setState({ importProgress: `Page ${i} / ${n}` }));
+      if (!text) throw new Error('Fichier vide.');
+      const chap = file.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ').trim();
+      this.setState(s => ({ importStatus: 'done', importKind: mod.kindOf(file), addText: text, addChap: s.addChap || chap, addError: '' }));
+    } catch (err) {
+      this.setState({ importStatus: 'error', importError: err.message || 'Impossible de lire ce fichier.' });
+    }
+  }
+  async generate() {
+    const st = this.state;
+    if (st.addText.trim().length < 60) return this.setState({ addError: 'Colle ou importe un peu plus de cours (au moins quelques phrases).' });
+    this.setState({ addStep: 'loading', loadIdx: 0, addError: '', addNotice: '' });
+    this.timers = [700, 1800].map((t, i) => setTimeout(() => this.setState(s => (s.addStep === 'loading' ? { loadIdx: i + 1 } : null)), t));
+    if (!this.aiAvailable()) {
+      try {
+        const mod = await this.qgen();
+        const gen = mod.generateQuestions(st.addText);
+        await new Promise(r => setTimeout(r, 1900));
+        if (!gen.length) throw new Error('aucune définition, formule ou notion repérée');
+        return this.go('add', { addStep: 'review', gen, genSel: gen.map(() => true) });
+      } catch (e) {
+        return this.go('add', { addStep: 'form', addError: 'Je n’ai pas réussi à tirer des questions de ce texte (' + e.message + '). Écris-les toi-même avec le lien sous le bouton.' });
+      }
+    }
+    try {
+      const text = st.addText, chunks = [];
+      for (let p = 0; p < text.length && chunks.length < 6;) {
+        let q = Math.min(text.length, p + 6000);
+        if (q < text.length) { const br = text.lastIndexOf('\n', q); if (br > p + 3000) q = br; }
+        chunks.push(text.slice(p, q)); p = q;
+      }
+      const arr = [];
+      for (let ci = 0; ci < chunks.length; ci++) {
+        const chunk = chunks[ci], want = Math.max(6, Math.min(25, Math.round(chunk.length / 300)));
+        if (ci) this.setState({ loadIdx: 1 });
+        const out = await this.ai(
+        'Tu es professeur de Terminale (programme du bac français). Tu crées des questions de rappel actif à partir d’un cours. Écris toute formule, unité ou notation scientifique en LaTeX entre $ et $ (indices avec _, exposants avec ^, \\text{} pour le texte), et double chaque antislash dans le JSON. Réponds UNIQUEMENT avec un objet JSON valide de la forme {"questions": [ ... ]}, en français.',
+        `Matière : ${st.addSubj}\nChapitre : ${st.addChap || 'sans titre'}\n\nCours :\n"""\n${chunk}\n"""\n\nCrée ${want} questions${chunks.length > 1 ? ' (partie ' + (ci + 1) + '/' + chunks.length + ' du cours)' : ''}. Couvre TOUTES les notions de ce texte : chaque définition, formule, propriété, date, mécanisme, auteur ou exemple important doit avoir au moins une question. N’en saute aucune, en variant les types : "libre", "calcul" (si le cours contient des formules), "trou", "qcm", "vf", "explique".\nChaque objet : {"type": "...", "q": "énoncé", "a": "correction concise, 1 à 3 phrases", "options": ["4 choix"] (qcm uniquement), "correct": index (qcm : 0-3 ; vf : 0 = Vrai, 1 = Faux), "gap": "mot(s) attendu(s)" (trou uniquement — l’énoncé contient ____)}.\nÉvite les détails inutiles : vise ce qui tombe au bac.`,
+        Math.max(4000, want * 260), true);
+        const arr0 = parseJSON(out);
+        arr.push(...(Array.isArray(arr0) ? arr0 : (arr0 && (arr0.questions || arr0.items)) || []));
+      }
+      const gen = (Array.isArray(arr) ? arr : []).filter(x => x && x.q && x.a).map(x => {
+        let type = TYPE_LABEL[x.type] ? x.type : 'libre';
+        if (type === 'qcm' && !(Array.isArray(x.options) && x.options.length >= 2 && Number.isInteger(x.correct))) type = 'libre';
+        if (type === 'vf' && !(x.correct === 0 || x.correct === 1)) type = 'libre';
+        const c = { type, q: String(x.q), a: String(x.a) };
+        if (type === 'qcm') { c.options = x.options.map(String); c.correct = x.correct; }
+        if (type === 'vf') c.correct = x.correct;
+        if (type === 'trou' && x.gap) c.gap = String(x.gap);
+        return c;
+      });
+      if (!gen.length) throw new Error('Aucune question exploitable.');
+      this.go('add', { addStep: 'review', gen, genSel: gen.map(() => true) });
+    } catch (e) {
+      try {
+        const gen = (await this.qgen()).generateQuestions(st.addText);
+        if (gen.length) return this.go('add', { addStep: 'review', gen, genSel: gen.map(() => true), addNotice: 'IA indisponible (' + e.message + ') : ces questions viennent du générateur intégré. Tu pourras réessayer plus tard.' });
+      } catch (e2) {}
+      this.go('add', { addStep: 'form', addError: 'La génération a échoué : ' + e.message });
+    }
+  }
+  saveCourse(qs) {
+    const t = this.today();
+    const course = { id: uid(), subj: this.state.addSubj, chap: this.state.addChap.trim() || 'Chapitre sans titre', createdAt: t };
+    const lvl = this.state.addK0 || 'none', k0 = K0[lvl];
+    const cards = qs.map(q => ({ id: uid(), courseId: course.id, ...q, k0, stage: -1, last: null, due: lvl === 'good' ? addDays(t, 1) : t, createdAt: t }));
+    this.updData(d => ({ ...d, courses: [...d.courses, course], cards: spreadNew([...d.cards, ...cards], t) }));
+    this.go('add', { addStep: 'done', added: cards.length });
+  }
+  exportData() {
+    const d = this.state.data;
+    const blob = new Blob([JSON.stringify({ ...d, settings: { ...d.settings, apiKey: '' } }, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = 'revisions-' + this.today() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+  async importBackupFile(f) {
+    try {
+      const d = JSON.parse(await f.text());
+      if (!d || !Array.isArray(d.cards) || !Array.isArray(d.courses)) throw new Error();
+      if (!window.confirm(`Remplacer tes données par cette sauvegarde (${plural(d.cards.length, 'question')}) ?`)) return;
+      const key = this.state.data.settings.apiKey;
+      this.updData(() => ({ ...emptyData(), ...d, settings: { ...emptyData().settings, ...(d.settings || {}), apiKey: key } }));
+      this.setState({ setMsg: 'Sauvegarde importée.' });
+    } catch (e) { this.setState({ setMsg: 'Fichier de sauvegarde invalide.' }); }
+  }
+
+  renderVals() {
+    const st = this.state, data = st.data, scr = st.screen, t = this.today();
+    const auth = st.auth;
+    const appReady = (auth === 'signedIn' && st.dataReady) || auth === 'local';
+    const syncInfo = {
+      idle: { label: 'Synchronisé avec ton compte ✓', color: 'var(--color-neutral-700)' },
+      saved: { label: 'Tout est enregistré en ligne ✓', color: 'var(--color-neutral-700)' },
+      pending: { label: 'Enregistrement…', color: 'var(--color-neutral-700)' },
+      saving: { label: 'Enregistrement…', color: 'var(--color-neutral-700)' },
+      offline: { label: 'Hors ligne : envoi au retour du réseau', color: 'var(--color-accent-700)' },
+      error: { label: 'Erreur d’enregistrement, nouvel essai auto', color: 'var(--color-accent-700)' }
+    }[st.sync] || { label: '', color: 'var(--color-neutral-700)' };
+    const accent = 'var(--color-accent)', ink = 'var(--color-text)', bg = 'var(--color-bg)';
+    const cm = this.courseMap();
+    const hasCards = data.cards.length > 0;
+    const savate = this.isSavate(t);
+    const due = this.dueList();
+    const list = this.sessionList();
+    const deferred = due.length - list.length;
+    const mins = n => '~' + Math.max(1, Math.round(n * 1.6)) + ' min';
+    const tomorrow = data.cards.filter(c => c.due === addDays(t, 1)).length + deferred;
+    const nextDue = data.cards.filter(c => c.due > t).map(c => c.due).sort()[0];
+    let streak = 0, k = data.log[t] ? t : addDays(t, -1);
+    while (data.log[k]) { streak++; k = addDays(k, -1); }
+
+    // retention per chapter
+    const byCourse = {};
+    data.cards.forEach(c => { (byCourse[c.courseId] = byCourse[c.courseId] || []).push(c); });
+    const chapStats = Object.entries(byCourse).map(([id, cs]) => {
+      const r = cs.reduce((a, c) => a + retention(c, t), 0) / cs.length;
+      return { id, course: cm[id] || { subj: '', chap: '?' }, cards: cs, r };
+    });
+    const avg = data.cards.length ? data.cards.reduce((a, c) => a + retention(c, t), 0) / data.cards.length : 0;
+    const scope = st.curveScope && byCourse[st.curveScope] ? st.curveScope : null;
+    const chapRows = chapStats.slice().sort((a, b) => a.r - b.r).slice(0, 10).map(x => {
+      const p = Math.round(x.r * 100), on = scope === x.id;
+      return { name: x.course.chap, subj: x.course.subj, ret: p, w: p + '%', color: p < 65 ? accent : ink, tag: p < 65 ? '· décroche' : '', bg: on ? 'var(--color-accent-100)' : 'transparent', pad: on ? '11px 8px' : '11px 0', onClick: () => this.setState({ curveScope: on ? null : x.id }) };
+    });
+    const curve = this.curve(data, scope, t);
+
+    // session
+    const s = st.sess;
+    const sessActive = !!(s && !s.done);
+    const card = sessActive ? s.list[s.idx] : null;
+    const phase = s ? s.phase : null;
+    const cq = card ? { ...card, qM: mx(card.q), aM: mx(card.a), typeLabel: TYPE_LABEL[card.type] || 'Question', ivLabel: card.stage < 0 ? '1re révision' : 'Mémoire stable ~' + Math.max(1, Math.round(stabOf(card))) + ' j' } : {};
+    const isText = !!card && ['libre', 'calcul', 'explique'].includes(card.type);
+    const isGap = !!card && card.type === 'trou';
+    const isQcm = !!card && card.type === 'qcm';
+    const isVF = !!card && card.type === 'vf';
+    const result = phase === 'result';
+    const pickFor = (i, ok) => () => { if (s.phase === 'answer') this.updSess({ pick: i, phase: 'result', proposal: ok ? 'bien' : 'rate', sel: ok ? 'bien' : 'rate', verdict: ok }); };
+    const qcmOpts = isQcm ? card.options.map((label, i) => {
+      const ok = i === card.correct, picked = i === s.pick;
+      return { letter: 'ABCDEF'[i], label: mx(label), bg: result && ok ? accent : picked ? 'var(--color-neutral-300)' : 'transparent', fg: result && ok ? bg : ink, deco: result && picked && !ok ? 'line-through' : 'none', mark: result && ok ? 'Bonne réponse' : result && picked ? 'Ton choix' : '', onClick: pickFor(i, ok) };
+    }) : [];
+    const vfOpts = isVF ? ['Vrai', 'Faux'].map((label, i) => {
+      const ok = i === card.correct, picked = i === s.pick;
+      return { label, border: result && ok ? accent : picked ? ink : 'var(--color-divider)', bg: result && ok ? accent : 'transparent', fg: result && ok ? bg : ink, onClick: pickFor(i, ok) };
+    }) : [];
+    const levelOpts = card ? LEVELS.map(l => {
+      const n = this.schedFor(card, l.k).gap, on = s.sel === l.k;
+      return { label: l.label, iv: n === 0 ? 'Revient tout de suite' : 'J+' + n, border: on ? ink : 'var(--color-divider)', bg: on ? ink : 'transparent', fg: on ? bg : ink, onClick: () => this.updSess({ sel: l.k }) };
+    }) : [];
+    const selL = s && s.sel ? LEVELS.find(l => l.k === s.sel) : null;
+    const propL = s && s.proposal ? LEVELS.find(l => l.k === s.proposal) : null;
+    const auto = isQcm || isVF || (isGap && card.gap);
+    const results = s ? s.results : [];
+    const good = results.filter(r => r.k !== 'rate').length;
+
+    // add
+    const genSelCount = st.genSel.filter(Boolean).length;
+    const manualOk = st.manual.filter(m => m.q.trim() && m.a.trim());
+
+    // library
+    const subjOrder = {}; SUBJECTS.forEach((x, i) => { subjOrder[x] = i; });
+    const libMap = {};
+    chapStats.forEach(x => {
+      const p = Math.round(x.r * 100);
+      const next = x.cards.map(c => c.due).sort()[0];
+      (libMap[x.course.subj] = libMap[x.course.subj] || []).push({
+        id: x.id, name: x.course.chap, n: x.cards.length, next: next <= t ? "aujourd'hui" : fmtS(next),
+        ret: p + ' %', w: p + '%', color: p < 65 ? accent : ink, open: st.openCourse === x.id,
+        questions: x.cards.map(c => ({ q: mx(c.q), next: c.due <= t ? 'à revoir' : fmtS(c.due) })),
+        onClick: () => this.setState(z => ({ openCourse: z.openCourse === x.id ? null : x.id })),
+        onDelete: () => { if (window.confirm(`Supprimer « ${x.course.chap} » et ses ${plural(x.cards.length, 'question')} ?`)) this.updData(d => ({ ...d, courses: d.courses.filter(c => c.id !== x.id), cards: d.cards.filter(c => c.courseId !== x.id), deleted: { ...(d.deleted || {}), [x.id]: t } })); }
+      });
+    });
+    const library = Object.keys(libMap).sort((a, b) => (subjOrder[a] ?? 99) - (subjOrder[b] ?? 99)).map(name => ({ name, chapters: libMap[name], total: libMap[name].reduce((a, c) => a + c.n, 0) }));
+
+    // planning
+    const capQ = this.capQ();
+    let carry = 0;
+    const days = Array.from({ length: 7 }, (_, i) => {
+      const dk = addDays(t, i), sv = this.isSavate(dk);
+      const load = i === 0 ? due.length : data.cards.filter(c => c.due === dk).length;
+      const total = load + carry, shown = sv ? Math.min(total, capQ) : total;
+      carry = total - shown;
+      return { dk, sv, total, shown, over: total - shown };
+    });
+    const maxT = Math.max(10, ...days.map(d => d.total));
+    const week = days.map((d, i) => ({ label: i === 0 ? "Auj." : fmtS(d.dk).replace(/\.$/, ''), tag: d.sv ? 'savate' : '', w: (d.shown / maxT * 100) + '%', wDef: (d.over / maxT * 100) + '%', dash: d.over ? 'var(--color-neutral-600)' : 'transparent', color: d.sv ? accent : ink, n: d.shown, fg: d.sv ? 'var(--color-accent-800)' : ink }));
+    const sd = data.settings.savateDays;
+    const dowOpts = [1, 2, 3, 4, 5, 6, 0].map((dw, i) => {
+      const on = sd.includes(dw);
+      return { label: DOW[dw], tag: on ? 'savate' : '', bg: on ? accent : 'transparent', fg: on ? bg : ink, bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => this.setSetting({ savateDays: on ? sd.filter(x => x !== dw) : [...sd, dw] }) };
+    });
+
+    const tab = x => scr === x;
+    const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+    const at = st.aiTest;
+
+    return {
+      scrollRef: this.scrollRef, fileRef: this.fileRef, backupRef: this.backupRef, photoRef: this.photoRef,
+      isToday: appReady && scr === 'today', isSession: appReady && scr === 'session', isAdd: appReady && scr === 'add', isLib: appReady && scr === 'lib', isPlan: appReady && scr === 'plan', isSet: appReady && scr === 'set',
+      showTabs: appReady && scr !== 'session',
+      // auth screens
+      authChecking: auth === 'checking' || (auth === 'signedIn' && !st.dataReady && !st.loadError),
+      checkingLabel: auth === 'checking' ? 'Ouverture…' : 'Récupération de tes données…',
+      authFailed: auth === 'error' || (auth === 'signedIn' && !st.dataReady && !!st.loadError),
+      loadError: st.loadError,
+      retryLoad: () => (auth === 'signedIn' ? this.setState({ loadError: '' }, () => this.loadUserData()) : this.initAuth()),
+      authSetup: auth === 'setup', authForm: auth === 'signedOut',
+      setupUrl: st.setupUrl, setupKey: st.setupKey,
+      onSetupUrl: e => this.setState({ setupUrl: e.target.value }), onSetupKey: e => this.setState({ setupKey: e.target.value }),
+      hasSetupError: !!st.setupError, setupError: st.setupError,
+      saveSetup: () => this.saveSetup(),
+      useLocal: () => this.enterLocal(),
+      canEditCfg: !st.cfgFromFile,
+      serverReady: !!(st.setupUrl && st.setupKey),
+      goSetup: () => this.setState({ auth: 'setup', setupError: '' }),
+      isEmailStep: st.authStep !== 'code', isCodeStep: st.authStep === 'code',
+      authLead: st.authStep === 'code' ? 'Colle le code à 6 chiffres reçu par e-mail.' : 'Entre ton e-mail : je t’envoie un code. Pas de mot de passe à retenir, et tes cours te suivent sur tous tes appareils.',
+      authEmail: st.authEmail, authCode: st.authCode, authEmailShown: st.authEmail.trim().toLowerCase(),
+      onAuthEmail: e => this.setState({ authEmail: e.target.value }),
+      onAuthCode: e => { const v = e.target.value.replace(/\D/g, '').slice(0, 10); this.setState({ authCode: v }, () => { if (v.length === 6 && !this.state.authBusy) this.verifyCode(); }); },
+      onEmailKey: e => { if (e.key === 'Enter') this.sendCode(); },
+      onCodeKey: e => { if (e.key === 'Enter') this.verifyCode(); },
+      hasAuthError: !!st.authError, authError: st.authError, hasAuthInfo: !!st.authInfo, authInfo: st.authInfo,
+      authBusy: st.authBusy,
+      sendLabel: st.authBusy ? 'Envoi…' : 'Recevoir mon code',
+      verifyLabel: st.authBusy ? 'Vérification…' : 'Valider',
+      sendCode: () => this.sendCode(), verifyCode: () => this.verifyCode(),
+      resendLabel: st.resendIn ? 'Renvoyer le code (' + st.resendIn + ' s)' : 'Renvoyer le code',
+      resendDisabled: st.resendIn > 0 || st.authBusy,
+      changeEmail: () => this.setState({ authStep: 'email', authCode: '', authError: '', authInfo: '' }),
+      tokenVar: '{{ .Token }}',
+      // account & sync
+      isSignedIn: auth === 'signedIn', isLocalMode: auth === 'local',
+      accountEmail: st.user ? st.user.email : '',
+      syncLabel: syncInfo.label, syncColor: syncInfo.color,
+      signOut: () => this.signOut(),
+      goAuth: () => this.setState({ auth: 'checking' }, () => this.initAuthForLogin()),
+      showSyncBanner: appReady && (st.migrated || (auth === 'signedIn' && (st.sync === 'offline' || st.sync === 'error'))),
+      syncBannerText: st.migrated ? 'Les données de cet appareil ont été importées dans ton compte.' : st.sync === 'offline' ? 'Hors ligne : tes modifs sont gardées sur l’appareil et partiront au retour du réseau.' : 'Enregistrement en ligne impossible : ' + st.syncMsg,
+      syncBannerBtn: st.migrated ? 'OK' : 'Réessayer',
+      syncBannerAction: () => (st.migrated ? this.setState({ migrated: false }) : this.cloudSave()),
+      syncBannerBg: st.sync === 'error' && !st.migrated ? 'var(--color-accent-700)' : 'var(--color-surface)',
+      syncBannerFg: st.sync === 'error' && !st.migrated ? bg : ink,
+      hasCards, noCards: !hasCards,
+      dateLabel: new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }),
+      streakLabel: streak ? 'Série · ' + streak + ' j' : 'Série · 0',
+      dueCountPad: String(list.length).padStart(2, '0'),
+      todayTitle: list.length ? (list.length > 1 ? 'questions à réviser aujourd’hui' : 'question à réviser aujourd’hui') : 'Rien à réviser aujourd’hui. Bien joué.',
+      todaySub: list.length
+        ? (savate ? (deferred ? `Savate aujourd’hui : on fait court. Les ${list.length} plus fragiles d’abord, ${deferred} glisse${deferred > 1 ? 'nt' : ''} à demain.` : 'Savate aujourd’hui : séance express, tout tient dedans.') : 'Chaque bonne réponse repousse la prochaine révision. On ancre.')
+        : (nextDue ? `Prochaine séance ${fmtS(nextDue)}. Profites-en, ou ajoute un cours.` : 'Ajoute un cours pour continuer.'),
+      savateTitle: savate ? 'Jour de savate' : 'Pas d’entraînement',
+      savateLine: savate ? `Séance plafonnée à ${data.settings.capMin} min` : 'Séance complète · modifier mes jours',
+      savateIconColor: savate ? accent : 'var(--color-neutral-600)',
+      durationLabel: list.length ? mins(list.length) : '—',
+      tomorrowLabel: plural(tomorrow, 'question'),
+      hasDue: list.length > 0,
+      startLabel: 'Commencer · ' + plural(list.length, 'question'),
+      retGlobal: Math.round(avg * 100) + ' %', chapRows,
+      ...curve,
+      curveScopeLabel: scope ? (cm[scope] || {}).chap + '  ✕' : 'Tous tes cours',
+      clearScope: () => this.setState({ curveScope: null }),
+      loadDemo: () => { const d = demoData(t); this.updData(x => ({ ...x, courses: [...x.courses, ...d.courses], cards: [...x.cards, ...d.cards] })); },
+      ...this.planVals(t),
+      exportCalendar: () => this.exportCalendar(), toggleNotif: () => this.toggleNotif(),
+      notifLabel: lsGet('revisions.notif') === '1' ? 'Couper les notifications' : 'Activer les notifications',
+      remMsg: st.remMsg || '', hasRemMsg: !!st.remMsg,
+      startSession: () => this.startSession(),
+      startAhead: () => this.startSession(null, true),
+      isPick: appReady && scr === 'pick',
+      goPick: () => this.go('pick', {}),
+      ...(scr === 'pick' ? (() => {
+        const sel = new Set(st.pickSel || []), toggle = ids => this.setState(s => { const cur = new Set(s.pickSel || []); const all = ids.every(id => cur.has(id)); ids.forEach(id => (all ? cur.delete(id) : cur.add(id))); return { pickSel: [...cur] }; });
+        const groups = {};
+        data.courses.forEach(c => {
+          const cards = data.cards.filter(x => x.courseId === c.id); if (!cards.length) return;
+          const r = Math.round(cards.reduce((a, x) => a + retention(x, t), 0) / cards.length * 100), due = cards.filter(x => x.due <= t).length;
+          (groups[c.subj] = groups[c.subj] || []).push({ id: c.id, name: c.chap, sub: plural(cards.length, 'question') + ' · ' + r + ' %' + (due ? ' · ' + due + ' à revoir' : ''), on: sel.has(c.id) });
+        });
+        const pickGroups = SUBJECTS.filter(s => groups[s]).concat(Object.keys(groups).filter(s => !SUBJECTS.includes(s))).map(s => {
+          const ids = groups[s].map(x => x.id), all = ids.every(id => sel.has(id));
+          return { subj: s, allLabel: all ? 'Tout retirer' : 'Tout prendre', onAll: () => toggle(ids), chaps: groups[s].map(x => ({ ...x, box: x.on ? ink : 'transparent', onClick: () => toggle([x.id]) })) };
+        });
+        const mode = st.pickMode || 'weak', n = st.pickN === undefined ? 15 : st.pickN, cnt = this.pickCards().length;
+        const seg = (list, cur, key) => list.map((o, i) => { const on = cur === o.v; return { label: o.label, sub: o.sub || '', bg: on ? ink : 'transparent', fg: on ? bg : ink, bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => this.setState({ [key]: o.v }) }; });
+        return {
+          pickGroups, pickEmpty: !pickGroups.length,
+          pickModes: seg([{ v: 'weak', label: 'Les plus fragiles', sub: 'rétention la plus basse' }, { v: 'due', label: 'Dû aujourd’hui', sub: 'seulement l’urgent' }, { v: 'all', label: 'Tout', sub: 'dans l’ordre' }], mode, 'pickMode'),
+          pickNs: seg([{ v: 10, label: '10' }, { v: 15, label: '15' }, { v: 25, label: '25' }, { v: 0, label: 'Tout' }], n, 'pickN'),
+          pickCount: cnt, canPick: cnt > 0, cantPick: !cnt,
+          pickStartLabel: cnt ? 'Commencer · ' + plural(cnt, 'question') : sel.size ? 'Rien à réviser avec ce choix' : 'Choisis au moins un chapitre',
+          startCustom: () => this.startCustom()
+        };
+      })() : {}),
+      showAhead: data.cards.length > 0 && !list.length,
+      aheadLabel: 'Commencer maintenant · ' + plural(Math.min(15, data.cards.filter(c => c.due > t).length), 'question'),
+      quitSession: () => this.go('today', { sess: null }),
+      progressSegs: s ? s.list.map((_, i) => ({ bg: i < s.idx || s.done ? accent : i === s.idx ? ink : 'var(--color-neutral-300)' })) : [],
+      progressLabel: s ? Math.min(s.idx + 1, s.list.length) + '/' + s.list.length : '',
+      sessActive, sessDone: !!(s && s.done), cq,
+      phaseAnswer: sessActive && phase === 'answer', phaseCorrecting: sessActive && phase === 'correcting', phaseResult: sessActive && result,
+      showTextArea: isText && phase === 'answer', showGap: isGap && phase === 'answer', isQcm, isVF, qcmOpts, vfOpts,
+      showRevealBtn: isText || isGap, revealCols: isText || isGap ? '1fr auto' : '1fr',
+      revealLabel: isGap ? 'Vérifier' : 'Corriger',
+      feedbackKicker: this.aiAvailable() ? 'Correction IA' : 'Correction auto',
+      modeOpts: [
+        { k: 'auto', label: 'IA gratuite', sub: this.geminiKey() && this.groqKey() ? 'Gemini + Groq' : this.geminiKey() ? 'Gemini' : this.groqKey() ? 'Groq' : 'clé à ajouter' },
+        { k: 'rules', label: 'Sans IA', sub: 'instantané, hors ligne' }
+      ].map((m, i) => { const on = this.aiPref() === m.k; return { ...m, bg: on ? accent : 'transparent', fg: on ? bg : ink, bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => this.setSetting({ aiMode: m.k }) }; }),
+      modeNote: this.aiPref() === 'rules' ? 'Règles intégrées : définitions, formules, textes à trous. Instantané et hors ligne.' : !this.geminiKey() && !this.groqKey() ? 'Ajoute au moins une clé ci-dessous (gratuit, 2 minutes). En attendant, le générateur intégré prend le relais.' : this.geminiKey() && this.groqKey() ? 'Gemini d’abord, Groq si Gemini sature, générateur intégré en dernier recours. Ça ne tombe plus en panne.' : 'Ajoute aussi l’autre clé : si une IA est surchargée, l’appli bascule toute seule sur l’autre.',
+      groqKeyVal: this.groqKey(),
+      themeOpts: [{ k: 'auto', label: 'Auto', sub: 'comme l’appareil' }, { k: 'light', label: 'Clair', sub: 'toujours' }, { k: 'dark', label: 'Sombre', sub: 'toujours' }].map((o, i) => { const on = (lsGet(THEME_KEY) || 'auto') === o.k; return { ...o, bg: on ? accent : 'transparent', fg: on ? bg : ink, bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => { lsSet(THEME_KEY, o.k); applyTheme(o.k); this.setState({ themeTick: Date.now() }); } }; }),
+      onGroqKey: e => { lsSet(GROQ_KEY, e.target.value.trim()); this.setState({ groqTick: Date.now(), aiTest: null }); },
+      goManual: () => this.go('add', { addStep: 'manual', addError: '' }),
+      sessText: s ? s.text : '',
+      onSessText: e => this.updSess({ text: e.target.value }),
+      reveal: () => this.reveal(false), dontKnow: () => this.reveal(true),
+      showMyAnswer: !!(s && s.text && s.text.trim() && result),
+      showVerdict: !!(s && result && s.verdict !== null && s.verdict !== undefined),
+      verdict: s && s.verdict ? 'Juste.' : 'Pas tout à fait.', verdictColor: s && s.verdict ? ink : 'var(--color-accent-700)',
+      hasFeedback: !!(s && s.feedback), aiFeedback: s ? mx(s.feedback) : '',
+      attendus: (s ? s.attendus : []).map(a => ({ label: mx(String(a.label || '')), box: a.ok ? ink : 'transparent', border: a.ok ? ink : accent, mark: a.ok ? bg : accent, sym: a.ok ? '✓' : '✗' })),
+      hasAiError: !!(s && s.aiError), aiError: s ? s.aiError : '',
+      evalLabel: propL ? (auto || !this.aiAvailable() ? 'Correction auto : ' : 'L’IA propose : ') + propL.label + ' — tu confirmes ?' : 'Comment c’était ?',
+      levelOpts,
+      confirmDisabled: !selL,
+      confirmLabel: selL ? (() => { const g = this.schedFor(card, selL.k).gap; return `Valider · ${selL.label} · ${g ? 'J+' + g : 'revient tout de suite'}`; })() : 'Choisis un niveau',
+      confirmEval: () => this.confirmEval(),
+      doneScore: good + '/' + results.length,
+      doneTitle: results.length && good === results.length ? 'Tout est revenu. Solide.' : 'C’est en train de rentrer.',
+      doneSub: savate ? 'Bon entraînement ce soir. Le reste attendra demain.' : 'Les ratées reviennent demain ; les autres s’éloignent.',
+      doneRows: results.map(r => ({ q: r.card.q, chap: r.card.chap, level: LEVELS.find(l => l.k === r.k).label, iv: 'J+' + r.n, date: fmtS(r.due), ivColor: r.n === 1 ? 'var(--color-accent-700)' : ink })),
+      goToday: () => this.go('today', { sess: null }), goLib: () => this.go('lib'), goPlan: () => this.go('plan'), goSet: () => this.go('set', { setMsg: '', aiTest: null }),
+      goAdd: () => this.go('add', st.addStep === 'done' || st.addStep === 'loading' ? { addStep: 'form' } : {}),
+      tb: { today: tab('today') ? accent : 'transparent', lib: tab('lib') ? accent : 'transparent', plan: tab('plan') ? accent : 'transparent', set: tab('set') ? accent : 'transparent' },
+      tc: { today: tab('today') ? accent : ink, lib: tab('lib') ? accent : ink, plan: tab('plan') ? accent : ink, set: tab('set') ? accent : ink },
+      addTabBg: scr === 'add' ? 'var(--color-accent-700)' : accent,
+      addStepLabel: { form: '1/3', loading: '2/3', review: '2/3', manual: '2/3', done: '3/3' }[st.addStep],
+      addForm: st.addStep === 'form', addLoading: st.addStep === 'loading', addReview: st.addStep === 'review', addManual: st.addStep === 'manual', addDone: st.addStep === 'done',
+      aiStatusLine: this.aiAvailable() ? 'L’IA en tire des questions à rappel actif. Pas de fiches à relire.' : 'Le générateur intégré tire des questions de ton cours : gratuit, instantané. Pour une IA, ajoute une clé gratuite dans Réglages.',
+      subjOpts: SUBJECTS.map((label, i) => { const on = st.addSubj === label; return { label, bg: on ? accent : 'transparent', fg: on ? bg : ink, br: i % 2 === 0 ? '1px solid var(--color-divider)' : '0', bb: i < 6 ? '1px solid var(--color-divider)' : '0', onClick: () => this.setState({ addSubj: label }) }; }),
+      addChap: st.addChap, addText: st.addText,
+      k0Opts: [{ k: 'none', label: 'Pas encore', sub: 'je découvre' }, { k: 'some', label: 'Un peu', sub: 'vu en classe' }, { k: 'good', label: 'Bien', sub: 'déjà appris' }].map((o, i) => { const on = (st.addK0 || 'none') === o.k; return { ...o, bg: on ? accent : 'transparent', fg: on ? bg : ink, bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => this.setState({ addK0: o.k }) }; }),
+      k0Note: (st.addK0 || 'none') === 'good' ? 'Ta courbe part de 70 %. Premier rappel demain.' : 'Ta courbe part de ' + Math.round(K0[st.addK0 || 'none'] * 100) + ' % : tu n’as pas encore appris. Premier rappel dès aujourd’hui, c’est lui qui fait monter la courbe.',
+      onAddChap: e => this.setState({ addChap: e.target.value }),
+      onAddText: e => this.setState({ addText: e.target.value }),
+      openCamera: () => { if (st.importStatus !== 'busy' && this.photoRef.current) this.photoRef.current.click(); },
+      onPhotoPick: e => { const fs = e.target.files ? [...e.target.files] : []; e.target.value = ''; if (fs.length) this.importPhotos(fs); },
+      openPicker: () => { if (st.importStatus !== 'busy' && this.fileRef.current) this.fileRef.current.click(); },
+      onFilePick: e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) this.importFile(f); },
+      onDragOver: e => { e.preventDefault(); if (!st.dragOver) this.setState({ dragOver: true }); },
+      onDragLeave: () => this.setState({ dragOver: false }),
+      onDrop: e => { e.preventDefault(); this.setState({ dragOver: false }); const f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) this.importFile(f); },
+      dropBorder: st.dragOver ? accent : st.importStatus === 'error' ? 'var(--color-accent-700)' : 'var(--color-neutral-500)',
+      dropBg: st.dragOver ? 'var(--color-accent-100)' : 'var(--color-surface)',
+      dropTitle: st.importStatus === 'busy' ? 'Extraction du texte…' : st.dragOver ? 'Lâche, je lis ton cours' : 'Dépose un fichier ou touche pour choisir',
+      dropSub: st.importStatus === 'busy' ? (st.importProgress || st.importName) : st.importStatus === 'error' ? st.importError : '.txt, Word .docx, PDF ou photo — texte extrait automatiquement',
+      dropSubColor: st.importStatus === 'error' ? 'var(--color-accent-700)' : 'var(--color-neutral-700)',
+      hasImported: st.importStatus === 'done', importName: st.importName || '', importKind: (st.importKind || '').toUpperCase(),
+      clearImport: () => this.setState({ importStatus: null, importName: '', addText: '' }),
+      addTextCount: st.addText.trim() ? plural(st.addText.trim().split(/\s+/).length, 'mot') : '',
+      hasAddError: !!st.addError, addError: st.addError, hasAddNotice: !!st.addNotice, addNotice: st.addNotice || '',
+      generateLabel: 'Générer les questions',
+      generate: () => this.generate(),
+      loadSteps: ['Repérage des notions clés', 'Choix du type de question', 'Formulation et corrections'].map((label, i) => ({ label, opacity: i <= st.loadIdx ? 1 : 0.35, dot: i < st.loadIdx ? ink : 'transparent', weight: i === st.loadIdx ? 600 : 400 })),
+      genTitle: plural(st.gen.length, 'question') + ' générée' + (st.gen.length > 1 ? 's' : ''),
+      genItems: st.gen.map((g, i) => ({ typeLabel: TYPE_LABEL[g.type], q: mx(g.q), a: mx(g.a), box: st.genSel[i] ? ink : 'transparent', opacity: st.genSel[i] ? 1 : 0.45, onClick: () => this.setState(x => { const a = [...x.genSel]; a[i] = !a[i]; return { genSel: a }; }) })),
+      addBtnLabel: genSelCount ? 'Ajouter ' + plural(genSelCount, 'question') : 'Sélectionne au moins une question',
+      confirmAdd: () => { if (genSelCount) this.saveCourse(st.gen.filter((_, i) => st.genSel[i])); },
+      manualRows: st.manual.map((m, i) => ({
+        n: i + 1, q: m.q, a: m.a,
+        onQ: e => { const v = e.target.value; this.setState(x => ({ manual: x.manual.map((r, j) => (j === i ? { ...r, q: v } : r)) })); },
+        onA: e => { const v = e.target.value; this.setState(x => ({ manual: x.manual.map((r, j) => (j === i ? { ...r, a: v } : r)) })); },
+        onRemove: () => this.setState(x => ({ manual: x.manual.length > 1 ? x.manual.filter((_, j) => j !== i) : [{ q: '', a: '' }] }))
+      })),
+      addManualRow: () => this.setState(x => ({ manual: [...x.manual, { q: '', a: '' }] })),
+      manualBtnLabel: manualOk.length ? 'Enregistrer ' + plural(manualOk.length, 'question') : 'Remplis au moins une question',
+      confirmManual: () => { if (manualOk.length) { this.saveCourse(manualOk.map(m => ({ type: 'libre', q: m.q.trim(), a: m.a.trim() }))); this.setState({ manual: [{ q: '', a: '' }] }); } },
+      backToForm: () => this.go('add', { addStep: 'form' }),
+      newCourse: () => this.go('add', { addStep: 'form', addChap: '', addText: '', importStatus: null }),
+      addedCount: st.added,
+      firstDates: [1, 3, 7, 14, 30].map((n, i) => ({ iv: 'J+' + n, date: fmtS(addDays(t, [1, 4, 11, 25, 55][i])), color: i ? ink : accent, bl: i ? '1px solid var(--color-divider)' : '0' })),
+      library, libTotal: data.cards.length,
+      dowOpts, week,
+      capOpts: [5, 10, 15].map((m, i) => { const on = data.settings.capMin === m; return { label: m + ' min', sub: '≈ ' + CAPQ[m] + ' questions', bg: on ? accent : 'transparent', fg: on ? bg : ink, bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => this.setSetting({ capMin: m }) }; }),
+      ladder: IV.map((n, i) => ({ label: 'J+' + n, h: (22 + i * 8) + 'px' })),
+      showInstall: !standalone,
+      apiKey: data.settings.apiKey, model: /^claude/i.test(data.settings.model || '') ? 'gemini-flash-latest' : data.settings.model,
+      onApiKey: e => this.setSetting({ apiKey: e.target.value }),
+      onModel: e => this.setSetting({ model: e.target.value }),
+      testAi: async () => {
+        this.setState({ aiTest: { busy: true } });
+        const out = []; let ok = true;
+        for (const [name, key, call] of [['Gemini', this.geminiKey(), this.callGemini.bind(this)], ['Groq', this.groqKey(), this.callGroq.bind(this)]]) {
+          if (!key) continue;
+          try { await call('Réponds uniquement : OK', 'Test', 16, false); out.push(name + ' OK'); } catch (e) { ok = false; out.push(name + ' : ' + e.message); }
+        }
+        this.setState({ aiTest: out.length ? { ok, msg: out.join(' · ') } : { ok: false, msg: 'aucune clé' } });
+      },
+      aiTestMsg: !at ? [this.geminiKey() && 'Clé Gemini enregistrée', this.groqKey() && 'Clé Groq enregistrée'].filter(Boolean).join(' · ') || 'Aucune clé' : at.busy ? 'Test en cours…' : at.ok ? at.msg : 'Échec : ' + at.msg,
+      aiTestColor: at && !at.busy && !at.ok ? 'var(--color-accent-700)' : 'var(--color-neutral-700)',
+      dataSummary: plural(data.courses.length, 'chapitre') + ' · ' + plural(data.cards.length, 'question') + (auth === 'signedIn' ? ' · sauvegardé dans ton compte. L’export reste utile comme copie de secours.' : ' · stocké sur cet appareil uniquement. Exporte de temps en temps.'),
+      exportData: () => this.exportData(),
+      importBackup: () => { if (this.backupRef.current) this.backupRef.current.click(); },
+      onBackupPick: e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) this.importBackupFile(f); },
+      hasSetMsg: !!st.setMsg, setMsg: st.setMsg,
+      hasDemo: data.courses.some(c => c.demo),
+      removeDemo: () => this.updData(d => { const ids = new Set(d.courses.filter(c => c.demo).map(c => c.id)); const deleted = { ...(d.deleted || {}) }; ids.forEach(id => { deleted[id] = t; }); return { ...d, courses: d.courses.filter(c => !c.demo), cards: d.cards.filter(c => !ids.has(c.courseId)), deleted }; }),
+      resetAll: () => { if (window.confirm('Tout effacer ? Tes cours et ton historique seront supprimés.')) { const key = data.settings.apiKey; this.updData(d => { const deleted = { ...(d.deleted || {}) }; d.courses.forEach(c => { deleted[c.id] = t; }); return { ...emptyData(), deleted, settings: { ...emptyData().settings, apiKey: key } }; }); this.go('today'); } }
+    };
+  }
+}
+</script>
+</body>
+</html>
