@@ -1,9 +1,9 @@
-const CACHE = 'revisions-v7';
+const CACHE = 'revisions-v8';
 const SHELL = [
   './', './index.html', './Revisions.dc.html', './support.js', './course-import.js', './local-qgen.js', './cloud.js', './config.js',
   './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png',
-  './_ds/modernist-d64977b1-82be-4a06-bb24-112bd60a1c1d/styles.css',
-  './_ds/modernist-d64977b1-82be-4a06-bb24-112bd60a1c1d/_ds_bundle.js'
+  './ds/styles.css',
+  './ds/ds_bundle.js'
 ];
 
 self.addEventListener('install', e => {
