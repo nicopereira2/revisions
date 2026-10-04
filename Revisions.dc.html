@@ -31,9 +31,37 @@
 --color-accent-100:#4d170e;--color-accent-200:#7c1405;--color-accent-300:#ae1800;--color-accent-400:#dd2b0f;--color-accent-500:#ff563c;--color-accent-600:#ff9783;--color-accent-700:#ff9783;--color-accent-800:#ffe0d9;--color-accent-900:#fff2ef;
 --color-accent-2-100:#471d16;--color-accent-2-200:#71261b;--color-accent-2-300:#9e3526;--color-accent-2-400:#c94b39;--color-accent-2-500:#ef6853;--color-accent-2-600:#ff9784;--color-accent-2-700:#ff9784;--color-accent-2-800:#ffe0da;--color-accent-2-900:#fff2ef;
 --shadow-sm:0 0 0 1px color-mix(in srgb,#f3f2f2 10%,transparent);--shadow-md:0 0 0 1px color-mix(in srgb,#f3f2f2 12%,transparent),0 4px 14px rgba(0,0,0,.5);--shadow-lg:0 0 0 1px color-mix(in srgb,#f3f2f2 14%,transparent),0 14px 36px rgba(0,0,0,.6);color-scheme:dark}}</style>
+<style>
+@media (min-width:640px){
+[data-r=shell]{max-width:none!important}
+[data-r=screen],[data-r=screen-narrow]{width:100%;max-width:720px;box-sizing:border-box;margin-left:auto!important;margin-right:auto!important;padding-left:32px!important;padding-right:32px!important}
+[data-r=cols]{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px;align-items:start}
+[data-r=screen] p,[data-r=screen-narrow] p{max-width:68ch}
+}
+@media (min-width:1024px){
+[data-r=shell]{flex-direction:row!important}
+[data-r=main]{min-width:0}
+[data-r=tabs]{order:-1;display:flex!important;flex-direction:column;flex:none;width:232px;box-sizing:border-box;gap:2px;border-top:0!important;border-right:2px solid var(--color-divider);padding:max(env(safe-area-inset-top),20px) 12px 20px!important}
+[data-r=brand]{display:flex!important}
+[data-r=tab]{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;min-height:48px;padding:10px 14px!important;margin-top:0!important;border-top-width:0!important;border-left-width:3px!important}
+[data-r=tab] span{font-size:15px!important}
+[data-r=tab][aria-label]{margin-top:10px!important;margin-bottom:10px!important}
+[data-r=screen]{max-width:1120px}
+[data-r=screen],[data-r=screen-narrow]{padding-top:28px!important}
+[data-r=today-grid]{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:56px;align-items:start}
+[data-r=today-b]>div:first-child{margin-top:22px!important}
+}
+@media (min-width:1440px){[data-r=cols]{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (hover:hover) and (pointer:fine){
+[data-r=main] button:not(.btn):not(:disabled):hover{box-shadow:inset 0 0 0 2px var(--color-neutral-400)}
+[data-r=tab]:not([aria-label]):hover{background-color:var(--color-neutral-100)!important}
+[data-r=tab][aria-label]:hover{filter:brightness(1.1)}
+}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+</style>
 </helmet>
-<div style="height:100dvh;max-width:520px;margin:0 auto;display:flex;flex-direction:column;background:var(--color-bg);font-family:var(--font-body);color:var(--color-text)">
-<div ref="{{ scrollRef }}" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:max(env(safe-area-inset-top), 12px)">
+<div data-r="shell" style="height:100dvh;max-width:520px;margin:0 auto;display:flex;flex-direction:column;background:var(--color-bg);font-family:var(--font-body);color:var(--color-text)">
+<div data-r="main" ref="{{ scrollRef }}" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:max(env(safe-area-inset-top), 12px)">
 
 <sc-if value="{{ showSyncBanner }}">
   <div style="margin:0 20px 4px;padding:10px 12px;background:{{ syncBannerBg }};color:{{ syncBannerFg }};font-size:13px;font-weight:600;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><span style="text-wrap:pretty">{{ syncBannerText }}</span><button onClick="{{ syncBannerAction }}" style="border:0;background:transparent;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0">{{ syncBannerBtn }}</button></div>
@@ -47,7 +75,7 @@
 </sc-if>
 
 <sc-if value="{{ authFailed }}">
-<div data-screen-label="Erreur de connexion" style="padding:12px 20px 28px">
+<div data-screen-label="Erreur de connexion" data-r="screen-narrow" style="padding:12px 20px 28px">
   <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Connexion</div>
   <h2 style="font-size:30px;margin:20px 0 8px;text-wrap:pretty">Le serveur ne répond pas.</h2>
   <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 20px;text-wrap:pretty">{{ loadError }}</p>
@@ -57,7 +85,7 @@
 </sc-if>
 
 <sc-if value="{{ authForm }}">
-<div data-screen-label="Connexion" style="min-height:calc(100dvh - 40px);display:flex;flex-direction:column;padding:12px 20px max(env(safe-area-inset-bottom), 24px)">
+<div data-screen-label="Connexion" data-r="screen-narrow" style="min-height:calc(100dvh - 40px);display:flex;flex-direction:column;padding:12px 20px max(env(safe-area-inset-bottom), 24px)">
   <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600"><span>Révisions</span><span style="color:var(--color-neutral-700)">Répétition espacée</span></div>
   <div style="font-family:var(--font-heading);font-weight:800;font-size:54px;line-height:.92;letter-spacing:-.03em;margin:28px 0 12px">Ancre<br>tes cours.</div>
   <p style="font-size:15px;color:var(--color-neutral-700);margin:0 0 24px;text-wrap:pretty">{{ authLead }}</p>
@@ -82,7 +110,7 @@
 </sc-if>
 
 <sc-if value="{{ authSetup }}">
-<div data-screen-label="Configuration" style="padding:12px 20px 32px">
+<div data-screen-label="Configuration" data-r="screen-narrow" style="padding:12px 20px 32px">
   <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Configuration · une seule fois</div>
   <h2 style="font-size:30px;margin:20px 0 8px;text-wrap:pretty">Branche ta base de données.</h2>
   <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 16px;text-wrap:pretty">Les comptes et la sauvegarde passent par Supabase (gratuit). Cinq minutes, une seule fois.</p>
@@ -103,7 +131,7 @@
 </sc-if>
 
 <sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
-<div data-screen-label="Aujourd'hui" style="padding:12px 20px 28px">
+<div data-screen-label="Aujourd'hui" data-r="screen" style="padding:12px 20px 28px">
   <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">
     <span>{{ dateLabel }}</span><span style="color:var(--color-neutral-700)">{{ streakLabel }}</span>
   </div>
@@ -114,6 +142,7 @@
     <button class="btn btn-secondary" onClick="{{ loadDemo }}" style="width:100%;justify-content:flex-start;padding:16px;font-size:15px;margin-top:8px">Essayer avec un exemple</button>
   </sc-if>
   <sc-if value="{{ hasCards }}" hint-placeholder-val="{{ true }}">
+    <div data-r="today-grid"><div data-r="today-a">
     <div style="padding:22px 0 18px">
       <div style="font-family:var(--font-heading);font-weight:800;font-size:120px;line-height:.82;letter-spacing:-.06em;color:var(--color-accent)">{{ dueCountPad }}</div>
       <h2 style="font-size:28px;margin:14px 0 0;text-wrap:pretty">{{ todayTitle }}</h2>
@@ -159,6 +188,7 @@
       <sc-if value="{{ noTodayPlan }}"><p style="font-size:14px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">{{ todayPlanEmpty }}</p></sc-if>
       <sc-if value="{{ hasTodayPlanLeft }}"><p style="font-size:12px;color:var(--color-accent-700);margin:8px 0 0;text-wrap:pretty">{{ todayPlanLeft }}</p></sc-if>
     </div>
+    </div><div data-r="today-b">
     <div style="margin-top:28px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">
         <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;white-space:nowrap">Ta courbe de l'oubli</span>
@@ -210,12 +240,13 @@
       </sc-for>
       <p style="font-size:12px;color:var(--color-neutral-700);margin:10px 0 0">Touche un chapitre pour voir sa courbe. Sous 65 %, il passe en priorité.</p>
     </div>
+    </div></div>
   </sc-if>
 </div>
 </sc-if>
 
 <sc-if value="{{ isSession }}">
-<div data-screen-label="Séance" style="min-height:100%;display:flex;flex-direction:column">
+<div data-screen-label="Séance" data-r="screen-narrow" style="min-height:100%;display:flex;flex-direction:column">
   <div style="display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:6px 20px 12px;border-bottom:2px solid var(--color-divider)">
     <button class="btn btn-icon" onClick="{{ quitSession }}" style="width:36px;height:36px;margin-left:-8px" aria-label="Quitter"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
     <div style="display:flex;gap:3px"><sc-for list="{{ progressSegs }}" as="p" hint-placeholder-count="6"><span style="flex:1;height:4px;background:{{ p.bg }}"></span></sc-for></div>
@@ -318,7 +349,7 @@
 </sc-if>
 
 <sc-if value="{{ isAdd }}">
-<div data-screen-label="Ajouter un cours" style="padding:12px 20px 28px">
+<div data-screen-label="Ajouter un cours" data-r="screen-narrow" style="padding:12px 20px 28px">
   <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Nouveau cours · {{ addStepLabel }}</div>
   <sc-if value="{{ addForm }}">
     <h2 style="font-size:30px;margin:20px 0 6px">Balance ton cours.</h2>
@@ -415,12 +446,13 @@
 </sc-if>
 
 <sc-if value="{{ isLib }}">
-<div data-screen-label="Cours" style="padding:12px 20px 28px">
+<div data-screen-label="Cours" data-r="screen" style="padding:12px 20px 28px">
   <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600"><span>Mes cours</span><span style="color:var(--color-neutral-700)">{{ libTotal }} questions</span></div>
   <sc-if value="{{ noCards }}">
     <h2 style="font-size:28px;margin:24px 0 8px">Rien pour l'instant.</h2>
     <button class="btn btn-primary" onClick="{{ goAdd }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:12px"><span>Ajouter un cours</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
   </sc-if>
+  <div data-r="cols">
   <sc-for list="{{ library }}" as="s" hint-placeholder-count="3">
     <div style="margin-top:22px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2px solid var(--color-text)"><h4 style="margin:0;font-size:20px">{{ s.name }}</h4><span style="font-size:12px;color:var(--color-neutral-700)">{{ s.total }} q.</span></div>
@@ -442,11 +474,12 @@
       </sc-for>
     </div>
   </sc-for>
+  </div>
 </div>
 </sc-if>
 
 <sc-if value="{{ isPick }}">
-<div data-screen-label="Choisir" style="padding:12px 20px 28px">
+<div data-screen-label="Choisir" data-r="screen" style="padding:12px 20px 28px">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">
     <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Révision à la carte</span>
     <button class="btn btn-ghost" onClick="{{ goToday }}" style="padding:4px 2px;font-size:13px">Annuler</button>
@@ -454,6 +487,7 @@
   <h2 style="font-size:30px;margin:20px 0 6px">Qu'est-ce que tu révises ?</h2>
   <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 16px;text-wrap:pretty">Coche des chapitres ou une matière entière. Tes réponses comptent normalement dans la répétition espacée.</p>
   <sc-if value="{{ pickEmpty }}"><p style="font-size:14px;color:var(--color-neutral-700)">Ajoute d'abord un cours.</p></sc-if>
+  <div data-r="cols">
   <sc-for list="{{ pickGroups }}" as="g" hint-placeholder-count="3">
     <div style="margin-bottom:18px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:6px;border-bottom:2px solid var(--color-text)">
@@ -468,6 +502,7 @@
       </sc-for>
     </div>
   </sc-for>
+  </div>
   <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:8px;border-bottom:2px solid var(--color-divider);margin-top:8px">Quelles questions</div>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--color-divider);margin-top:10px">
     <sc-for list="{{ pickModes }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="min-height:60px;padding:6px 10px;border:0;border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:2px"><span style="font-weight:800;font-family:var(--font-heading);font-size:13px">{{ o.label }}</span><span style="font-size:11px">{{ o.sub }}</span></button></sc-for>
@@ -481,7 +516,7 @@
 </sc-if>
 
 <sc-if value="{{ isPlan }}">
-<div data-screen-label="Planning" style="padding:12px 20px 28px">
+<div data-screen-label="Planning" data-r="screen-narrow" style="padding:12px 20px 28px">
   <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Planning · 7 prochains jours</div>
   <h2 style="font-size:30px;margin:20px 0 6px">Tes devoirs.</h2>
   <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">Programme un devoir : je répartis la préparation dans tes créneaux. Fiches au début, exercices la dernière semaine, devoir blanc à J-2, relecture légère la veille.</p>
@@ -602,7 +637,7 @@
 </sc-if>
 
 <sc-if value="{{ isSet }}">
-<div data-screen-label="Réglages" style="padding:12px 20px 32px">
+<div data-screen-label="Réglages" data-r="screen-narrow" style="padding:12px 20px 32px">
   <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Réglages</div>
   <sc-if value="{{ showInstall }}">
     <div style="margin-top:20px;background:var(--color-accent);color:var(--color-bg);padding:16px">
@@ -672,12 +707,13 @@
 
 </div>
 <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
-<div style="display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid var(--color-divider);background:var(--color-bg);padding-bottom:max(env(safe-area-inset-bottom), 8px)">
-  <button onClick="{{ goToday }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.today }};margin-top:-2px;background:transparent;color:{{ tc.today }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span style="font-size:10px;font-weight:600">Auj.</span></button>
-  <button onClick="{{ goLib }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.lib }};margin-top:-2px;background:transparent;color:{{ tc.lib }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg><span style="font-size:10px;font-weight:600">Cours</span></button>
-  <button onClick="{{ goAdd }}" aria-label="Ajouter un cours" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:4px;padding:10px 10px 6px;border:0;margin-top:-2px;background:{{ addTabBg }};color:var(--color-bg);font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.6;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="font-size:10px;font-weight:600">Ajouter</span></button>
-  <button onClick="{{ goPlan }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.plan }};margin-top:-2px;background:transparent;color:{{ tc.plan }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg><span style="font-size:10px;font-weight:600">Planning</span></button>
-  <button onClick="{{ goSet }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.set }};margin-top:-2px;background:transparent;color:{{ tc.set }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M21 4h-7"></path><path d="M10 4H3"></path><path d="M21 12h-9"></path><path d="M8 12H3"></path><path d="M21 20h-5"></path><path d="M12 20H3"></path><path d="M14 2v4"></path><path d="M8 10v4"></path><path d="M16 18v4"></path></svg><span style="font-size:10px;font-weight:600">Réglages</span></button>
+<div data-r="tabs" style="display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid var(--color-divider);background:var(--color-bg);padding-bottom:max(env(safe-area-inset-bottom), 8px)">
+  <div data-r="brand" style="display:none;flex-direction:column;gap:6px;padding:4px 14px 18px;margin-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-family:var(--font-heading);font-weight:800;font-size:44px;line-height:.85;letter-spacing:-.04em;color:var(--color-accent)">J+</span><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Révisions</span></div>
+  <button data-r="tab" onClick="{{ goToday }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.today }};border-left:0 solid {{ tb.today }};margin-top:-2px;background:transparent;color:{{ tc.today }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span style="font-size:10px;font-weight:600">Auj.</span></button>
+  <button data-r="tab" onClick="{{ goLib }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.lib }};border-left:0 solid {{ tb.lib }};margin-top:-2px;background:transparent;color:{{ tc.lib }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg><span style="font-size:10px;font-weight:600">Cours</span></button>
+  <button data-r="tab" onClick="{{ goAdd }}" aria-label="Ajouter un cours" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:4px;padding:10px 10px 6px;border:0;margin-top:-2px;background:{{ addTabBg }};color:var(--color-bg);font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.6;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="font-size:10px;font-weight:600">Ajouter</span></button>
+  <button data-r="tab" onClick="{{ goPlan }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.plan }};border-left:0 solid {{ tb.plan }};margin-top:-2px;background:transparent;color:{{ tc.plan }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg><span style="font-size:10px;font-weight:600">Planning</span></button>
+  <button data-r="tab" onClick="{{ goSet }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.set }};border-left:0 solid {{ tb.set }};margin-top:-2px;background:transparent;color:{{ tc.set }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M21 4h-7"></path><path d="M10 4H3"></path><path d="M21 12h-9"></path><path d="M8 12H3"></path><path d="M21 20h-5"></path><path d="M12 20H3"></path><path d="M14 2v4"></path><path d="M8 10v4"></path><path d="M16 18v4"></path></svg><span style="font-size:10px;font-weight:600">Réglages</span></button>
 </div>
 </sc-if>
 </div>

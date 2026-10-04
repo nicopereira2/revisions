@@ -1,4 +1,4 @@
-const CACHE = 'revisions-v8';
+const CACHE = 'revisions-v9';
 const SHELL = [
   './', './index.html', './Revisions.dc.html', './support.js', './course-import.js', './local-qgen.js', './cloud.js', './config.js',
   './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png',
