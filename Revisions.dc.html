@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Révisions</title>
+<title>ancre-tes-cours</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#f3f2f2" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#171514" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Révisions">
+<meta name="apple-mobile-web-app-title" content="Ancre tes cours">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script src="./support.js"></script>
 </head>
@@ -57,6 +57,8 @@
 [data-r=tab]:not([aria-label]):hover{background-color:var(--color-neutral-100)!important}
 [data-r=tab][aria-label]:hover{filter:brightness(1.1)}
 }
+html[data-theme="dark"] [data-logo=light]{display:none!important}html[data-theme="dark"] [data-logo=dark]{display:block!important}
+@media (prefers-color-scheme: dark){html:not([data-theme="light"]) [data-logo=light]{display:none!important}html:not([data-theme="light"]) [data-logo=dark]{display:block!important}}
 button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
 </style>
 </helmet>
@@ -69,7 +71,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 
 <sc-if value="{{ authChecking }}">
 <div data-screen-label="Chargement" style="min-height:calc(100dvh - 40px);display:flex;flex-direction:column;justify-content:flex-end;padding:20px 20px 56px">
-  <div style="font-family:var(--font-heading);font-weight:800;font-size:72px;line-height:.9;letter-spacing:-.04em;color:var(--color-accent)">J+</div>
+  <div style="display:flex;align-items:center;gap:17px"><img data-logo="light" src="logo-mark.png" alt="" style="height:76px;width:auto;display:block"><img data-logo="dark" src="logo-mark-dark.png" alt="" style="height:76px;width:auto;display:none"><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-family:var(--font-heading);font-weight:700;font-size:30px;line-height:1.05;letter-spacing:-.01em;white-space:nowrap">ancre-tes-cours</span><span style="font-size:15px;line-height:1.2">Révise moins, retiens plus.</span></div></div>
   <div style="font-size:15px;font-weight:600;margin-top:12px;padding-top:12px;border-top:2px solid var(--color-text)">{{ checkingLabel }}</div>
 </div>
 </sc-if>
@@ -86,8 +88,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 
 <sc-if value="{{ authForm }}">
 <div data-screen-label="Connexion" data-r="screen-narrow" style="min-height:calc(100dvh - 40px);display:flex;flex-direction:column;padding:12px 20px max(env(safe-area-inset-bottom), 24px)">
-  <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600"><span>Révisions</span><span style="color:var(--color-neutral-700)">Répétition espacée</span></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600"><img data-logo="light" src="logo-mark.png" alt="" style="height:28px;width:auto;display:block"><img data-logo="dark" src="logo-mark-dark.png" alt="" style="height:28px;width:auto;display:none"><span style="color:var(--color-neutral-700)">Répétition espacée</span></div>
   <div style="font-family:var(--font-heading);font-weight:800;font-size:54px;line-height:.92;letter-spacing:-.03em;margin:28px 0 12px">Ancre<br>tes cours.</div>
+  <div style="font-size:17px;font-weight:600;color:var(--color-accent-700);margin:0 0 10px">Révise moins, retiens plus.</div>
   <p style="font-size:15px;color:var(--color-neutral-700);margin:0 0 24px;text-wrap:pretty">{{ authLead }}</p>
   <sc-if value="{{ isEmailStep }}">
     <div class="field"><label>E-mail</label><input class="input" type="email" inputmode="email" autocomplete="email" autocapitalize="off" value="{{ authEmail }}" onChange="{{ onAuthEmail }}" onKeyDown="{{ onEmailKey }}" placeholder="toi@exemple.fr" style="min-height:48px;font-size:16px"></div>
@@ -708,7 +711,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 </div>
 <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
 <div data-r="tabs" style="display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid var(--color-divider);background:var(--color-bg);padding-bottom:max(env(safe-area-inset-bottom), 8px)">
-  <div data-r="brand" style="display:none;flex-direction:column;gap:6px;padding:4px 14px 18px;margin-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-family:var(--font-heading);font-weight:800;font-size:44px;line-height:.85;letter-spacing:-.04em;color:var(--color-accent)">J+</span><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Révisions</span></div>
+  <div data-r="brand" style="display:none;flex-direction:column;padding:4px 10px 18px;margin-bottom:10px;border-bottom:2px solid var(--color-divider)"><div style="display:flex;align-items:center;gap:9px"><img data-logo="light" src="logo-mark.png" alt="" style="height:40px;width:auto;display:block"><img data-logo="dark" src="logo-mark-dark.png" alt="" style="height:40px;width:auto;display:none"><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-family:var(--font-heading);font-weight:700;font-size:17px;line-height:1.05;letter-spacing:-.01em;white-space:nowrap">ancre-tes-cours</span><span style="font-size:11px;line-height:1.2">Révise moins, retiens plus.</span></div></div></div>
   <button data-r="tab" onClick="{{ goToday }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.today }};border-left:0 solid {{ tb.today }};margin-top:-2px;background:transparent;color:{{ tc.today }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span style="font-size:10px;font-weight:600">Auj.</span></button>
   <button data-r="tab" onClick="{{ goLib }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.lib }};border-left:0 solid {{ tb.lib }};margin-top:-2px;background:transparent;color:{{ tc.lib }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg><span style="font-size:10px;font-weight:600">Cours</span></button>
   <button data-r="tab" onClick="{{ goAdd }}" aria-label="Ajouter un cours" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:4px;padding:10px 10px 6px;border:0;margin-top:-2px;background:{{ addTabBg }};color:var(--color-bg);font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.6;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="font-size:10px;font-weight:600">Ajouter</span></button>

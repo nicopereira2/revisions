@@ -1,6 +1,6 @@
 {
-  "name": "Révisions — répétition espacée",
-  "short_name": "Révisions",
+  "name": "ancre-tes-cours — Révise moins, retiens plus.",
+  "short_name": "Ancre tes cours",
   "lang": "fr",
   "start_url": "./Revisions.dc.html",
   "scope": "./",
