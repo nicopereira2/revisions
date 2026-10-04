@@ -24,5 +24,8 @@ create policy "user_data_update_own" on public.user_data
 create policy "user_data_delete_own" on public.user_data
   for delete to authenticated using (auth.uid() = user_id);
 
+-- Les comptes connectés ont le droit d'utiliser la table (les règles ci-dessus limitent à leur propre ligne).
+grant select, insert, update, delete on public.user_data to authenticated;
+
 -- Les visiteurs non connectés n'ont aucun accès.
 revoke all on public.user_data from anon;

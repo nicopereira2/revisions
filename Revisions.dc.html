@@ -63,6 +63,8 @@
   <p style="font-size:15px;color:var(--color-neutral-700);margin:0 0 24px;text-wrap:pretty">{{ authLead }}</p>
   <sc-if value="{{ isEmailStep }}">
     <div class="field"><label>E-mail</label><input class="input" type="email" inputmode="email" autocomplete="email" autocapitalize="off" value="{{ authEmail }}" onChange="{{ onAuthEmail }}" onKeyDown="{{ onEmailKey }}" placeholder="toi@exemple.fr" style="min-height:48px;font-size:16px"></div>
+    <div class="field" style="margin-top:12px"><label>Mot de passe</label><input class="input" type="password" autocomplete="current-password" value="{{ authPass }}" onChange="{{ onAuthPass }}" onKeyDown="{{ onEmailKey }}" placeholder="6 caractères minimum" style="min-height:48px;font-size:16px"></div>
+    <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">Nouveau ? Le compte est créé automatiquement avec ce mot de passe.</p>
     <sc-if value="{{ hasAuthError }}"><p style="font-size:14px;color:var(--color-accent-700);font-weight:600;margin:12px 0 0;text-wrap:pretty">{{ authError }}</p></sc-if>
     <button class="btn btn-primary" onClick="{{ sendCode }}" disabled="{{ authBusy }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:20px"><span>{{ sendLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
   </sc-if>
@@ -618,8 +620,8 @@
   <sc-if value="{{ isLocalMode }}">
     <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">Mode sans compte : tes données restent sur cet appareil, sans sauvegarde en ligne.</p>
     <sc-if value="{{ serverReady }}">
-    <button class="btn btn-primary" onClick="{{ goAuth }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>Me connecter avec mon e-mail</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
-    <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0">E-mail, code reçu, c'est fait. Tes données actuelles passent dans ton compte.</p>
+    <button class="btn btn-primary" onClick="{{ goAuth }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>Me connecter / créer mon compte</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0">E-mail et mot de passe, c'est fait. Tes données actuelles passent dans ton compte.</p>
     </sc-if>
   </sc-if>
   <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Apparence</h4>
@@ -1011,22 +1013,26 @@ class Component extends DCLogic {
     this.setState({ auth: 'local', user: null, data: this.readLegacy() || emptyData(), dataReady: true, screen: 'today', sync: 'idle' });
   }
   async sendCode() {
-    const email = this.state.authEmail.trim().toLowerCase();
-    if (!/^\S+@\S+\.\S+$/.test(email)) return this.setState({ authError: 'Adresse e-mail invalide.', authInfo: '' });
+    const email = this.state.authEmail.trim().toLowerCase(), password = this.state.authPass || '';
+    if (!/^\S+@\S+\.\S+$/.test(email)) return this.setState({ authError: 'Adresse e-mail invalide.' });
+    if (password.length < 6) return this.setState({ authError: 'Le mot de passe fait au moins 6 caractères.' });
     if (!this.sb) return this.setState({ authError: 'Serveur non configuré.' });
     this.setState({ authBusy: true, authError: '', authInfo: '' });
     try {
-      const { error } = await this.sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
-      if (error) throw error;
-      this.setState({ authStep: 'code', authCode: '', authInfo: 'Code envoyé. Regarde aussi dans les spams.' });
-      this.startCooldown();
-    } catch (e) { this.setState({ authError: frErr(e) }); }
+      const a = await this.sb.auth.signInWithPassword({ email, password });
+      if (!a.error) return;
+      if (!/invalid login credentials/i.test(a.error.message || '')) throw a.error;
+      const b = await this.sb.auth.signUp({ email, password });
+      if (b.error) {
+        if (/already registered|already exists/i.test(b.error.message || '')) throw new Error('Mot de passe incorrect pour ce compte.');
+        throw b.error;
+      }
+      if (!b.data || !b.data.session) {
+        if (b.data && b.data.user && Array.isArray(b.data.user.identities) && !b.data.user.identities.length) throw new Error('Mot de passe incorrect pour ce compte.');
+        throw new Error('Compte créé, mais Supabase demande une confirmation par e-mail : désactive « Confirm email » dans Authentication.');
+      }
+    } catch (err) { this.setState({ authError: frErr(err) }); }
     finally { this.setState({ authBusy: false }); }
-  }
-  startCooldown() {
-    clearInterval(this.cdT);
-    this.setState({ resendIn: 60 });
-    this.cdT = setInterval(() => this.setState(s => { if (s.resendIn <= 1) { clearInterval(this.cdT); return { resendIn: 0 }; } return { resendIn: s.resendIn - 1 }; }), 1000);
   }
   async verifyCode() {
     const token = this.state.authCode.replace(/\D/g, '');
@@ -1765,15 +1771,16 @@ class Component extends DCLogic {
       serverReady: !!(st.setupUrl && st.setupKey),
       goSetup: () => this.setState({ auth: 'setup', setupError: '' }),
       isEmailStep: st.authStep !== 'code', isCodeStep: st.authStep === 'code',
-      authLead: st.authStep === 'code' ? 'Colle le code à 6 chiffres reçu par e-mail.' : 'Entre ton e-mail : je t’envoie un code. Pas de mot de passe à retenir, et tes cours te suivent sur tous tes appareils.',
+      authLead: 'Ton e-mail et un mot de passe. Tes cours te suivent sur tous tes appareils.',
       authEmail: st.authEmail, authCode: st.authCode, authEmailShown: st.authEmail.trim().toLowerCase(),
       onAuthEmail: e => this.setState({ authEmail: e.target.value }),
+      authPass: st.authPass || '', onAuthPass: e => this.setState({ authPass: e.target.value }),
       onAuthCode: e => { const v = e.target.value.replace(/\D/g, '').slice(0, 10); this.setState({ authCode: v }, () => { if (v.length === 6 && !this.state.authBusy) this.verifyCode(); }); },
       onEmailKey: e => { if (e.key === 'Enter') this.sendCode(); },
       onCodeKey: e => { if (e.key === 'Enter') this.verifyCode(); },
       hasAuthError: !!st.authError, authError: st.authError, hasAuthInfo: !!st.authInfo, authInfo: st.authInfo,
       authBusy: st.authBusy,
-      sendLabel: st.authBusy ? 'Envoi…' : 'Recevoir mon code',
+      sendLabel: st.authBusy ? 'Connexion…' : 'Continuer',
       verifyLabel: st.authBusy ? 'Vérification…' : 'Valider',
       sendCode: () => this.sendCode(), verifyCode: () => this.verifyCode(),
       resendLabel: st.resendIn ? 'Renvoyer le code (' + st.resendIn + ' s)' : 'Renvoyer le code',
