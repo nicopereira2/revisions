@@ -64,6 +64,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 </helmet>
 <div data-r="shell" style="height:100dvh;max-width:520px;margin:0 auto;display:flex;flex-direction:column;background:var(--color-bg);font-family:var(--font-body);color:var(--color-text)">
 <div data-r="main" ref="{{ scrollRef }}" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:max(env(safe-area-inset-top), 12px)">
+<sc-if value="{{ showPomoBar }}"><button onClick="{{ goTimer }}" style="position:sticky;top:0;z-index:20;width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;min-height:44px;padding:8px 20px;border:0;background:var(--color-text);color:var(--color-bg);font:inherit;text-align:left;cursor:pointer"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">{{ pomoBarLabel }}</span>{{ pomoClockMini }}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button></sc-if>
 
 <sc-if value="{{ showSyncBanner }}">
   <div style="margin:0 20px 4px;padding:10px 12px;background:{{ syncBannerBg }};color:{{ syncBannerFg }};font-size:13px;font-weight:600;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center"><span style="text-wrap:pretty">{{ syncBannerText }}</span><button onClick="{{ syncBannerAction }}" style="border:0;background:transparent;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0">{{ syncBannerBtn }}</button></div>
@@ -138,6 +139,21 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:2px solid var(--color-divider);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">
     <span>{{ dateLabel }}</span><span style="color:var(--color-neutral-700)">{{ streakLabel }}</span>
   </div>
+  <sc-if value="{{ isLate }}">
+    <div style="margin-top:16px;padding:14px 16px;background:var(--color-text);color:var(--color-bg);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center">
+      <span style="font-size:15px;font-weight:600;line-height:1.35;text-wrap:pretty">Il est tard : ton cerveau retient mieux après une vraie nuit. On s'arrête là ?</span>
+      <button class="btn btn-ghost" onClick="{{ dismissLate }}" style="color:var(--color-bg);padding:8px 6px;min-height:44px">OK</button>
+    </div>
+  </sc-if>
+  <sc-for list="{{ dayRems }}" as="r" hint-placeholder-count="0">
+    <div style="margin-top:16px;border-top:2px solid var(--color-text);border-bottom:1px solid var(--color-divider);padding:12px 0">
+      <div style="font-size:15px;font-weight:600;line-height:1.35;text-wrap:pretty">{{ r.text }}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+        <button class="btn btn-primary" onClick="{{ r.onCreate }}" style="justify-content:flex-start;padding:10px 14px;min-height:44px">Créer mes questions</button>
+        <button class="btn btn-ghost" onClick="{{ r.onSkip }}" style="padding:10px 8px;min-height:44px">Pas aujourd'hui</button>
+      </div>
+    </div>
+  </sc-for>
   <sc-if value="{{ noCards }}">
     <h2 style="font-size:34px;margin:28px 0 8px;text-wrap:pretty">Ta mémoire t'attend.</h2>
     <p style="font-size:15px;color:var(--color-neutral-700);margin:0 0 24px;text-wrap:pretty">Ajoute ton premier cours : je fabrique les questions et je te les ressors pile au moment où tu allais oublier.</p>
@@ -168,6 +184,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
       <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">Rien n'est dû aujourd'hui. Tu peux avancer les prochaines questions, les plus proches d'abord.</p>
     </sc-if>
     <button class="btn btn-ghost" onClick="{{ goPick }}" style="width:100%;justify-content:space-between;padding:14px 4px;font-size:15px;margin-top:6px;border-bottom:1px solid var(--color-divider)"><span>Choisir ce que je révise</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
+    <button class="btn btn-ghost" onClick="{{ openGoals }}" style="width:100%;justify-content:space-between;padding:14px 4px;font-size:15px;border-bottom:1px solid var(--color-divider)"><span style="display:flex;flex-direction:column;gap:2px;align-items:flex-start"><span>Objectifs</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
     <sc-if value="{{ hasNextExam }}">
       <button onClick="{{ goPlan }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:20px;padding:14px 16px;border:0;background:var(--color-text);color:var(--color-bg);text-align:left;font:inherit;cursor:pointer">
         <span style="display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-heading);font-weight:800;font-size:17px">{{ nextExam }}</span><span style="font-size:12px">{{ nextExamSub }}</span></span>
@@ -304,6 +321,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
             </sc-for>
           </div>
         </sc-if>
+        <sc-if value="{{ aiPending }}"><div style="font-size:13px;color:var(--color-neutral-700)">Correction rapide — l'IA affine…</div></sc-if>
         <sc-if value="{{ hasAiError }}"><div style="font-size:13px;color:var(--color-accent-700)">{{ aiError }}</div></sc-if>
         <div class="card" style="padding:14px 16px;gap:6px"><div class="card-kicker" style="color:var(--color-accent-700)">Correction du cours</div><div style="font-size:15px;line-height:1.55;text-wrap:pretty;overflow-x:auto">{{ cq.aM }}</div></div>
       </div>
@@ -328,6 +346,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
           </button>
         </sc-for>
       </div>
+      <sc-if value="{{ hasExamNote }}"><p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">{{ examNote }}</p></sc-if>
       <button class="btn btn-primary" onClick="{{ confirmEval }}" disabled="{{ confirmDisabled }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:8px"><span>{{ confirmLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></button>
     </sc-if>
   </div>
@@ -459,6 +478,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <sc-for list="{{ library }}" as="s" hint-placeholder-count="3">
     <div style="margin-top:22px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:2px solid var(--color-text)"><h4 style="margin:0;font-size:20px">{{ s.name }}</h4><span style="font-size:12px;color:var(--color-neutral-700)">{{ s.total }} q.</span></div>
+      <button class="btn btn-ghost" onClick="{{ s.onExo }}" style="width:100%;justify-content:space-between;padding:12px 0;font-size:14px;border-bottom:1px solid var(--color-divider)"><span>Exercice type bac</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
       <sc-for list="{{ s.chapters }}" as="c" hint-placeholder-count="2">
         <div style="border-bottom:1px solid var(--color-divider)">
           <button onClick="{{ c.onClick }}" style="width:100%;display:grid;grid-template-columns:1fr 64px;gap:12px;align-items:center;padding:12px 0;border:0;background:transparent;font:inherit;color:inherit;text-align:left;cursor:pointer">
@@ -515,6 +535,196 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     <sc-for list="{{ pickNs }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.onClick }}" style="min-height:48px;padding:6px 10px;border:0;border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-weight:800;font-family:var(--font-heading);font-size:15px;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for>
   </div>
   <button class="btn btn-primary" onClick="{{ startCustom }}" disabled="{{ cantPick }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:22px"><span>{{ pickStartLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isTimer }}">
+<div data-screen-label="Minuteur" data-r="screen-narrow" style="padding:12px 20px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Séance de travail</span><button class="btn btn-ghost" onClick="{{ goToday }}" style="padding:4px 2px;font-size:13px">Retour</button></div>
+  <sc-if value="{{ pomoWorking }}">
+    <div style="padding:28px 0 10px">{{ pomoClockBig }}</div>
+    <h2 style="font-size:26px;margin:10px 0 0;text-wrap:pretty">{{ pomoTitle }}</h2>
+    <div style="display:flex;gap:6px;margin-top:16px"><sc-for list="{{ pomoBlocks }}" as="b" hint-placeholder-count="4"><span style="width:36px;height:10px;background:{{ b.bg }}"></span></sc-for></div>
+    <p style="font-size:13px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">{{ pomoInfo }}</p>
+    <button class="btn btn-primary" onClick="{{ pomoRevise }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:22px"><span>{{ pomoReviseLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    <button class="btn btn-ghost" onClick="{{ pomoStop }}" style="display:flex;margin-top:10px;padding:10px 4px;min-height:44px">Arrêter la séance</button>
+  </sc-if>
+  <sc-if value="{{ pomoIdle }}">
+    <h2 style="font-size:30px;margin:20px 0 6px">Prêt pour {{ pomoWorkMin }} minutes ?</h2>
+    <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 18px;text-wrap:pretty">{{ pomoInfo }}</p>
+    <button class="btn btn-primary" onClick="{{ pomoStart }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px"><span>Lancer la séance</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isWeek }}">
+<div data-screen-label="Ma semaine" data-r="screen-narrow" style="padding:12px 20px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Ma semaine · {{ weekRange }}</span><button class="btn btn-ghost" onClick="{{ goToday }}" style="padding:4px 2px;font-size:13px">Retour</button></div>
+  <div style="padding:22px 0 14px">
+    <div style="font-family:var(--font-heading);font-weight:800;font-size:120px;line-height:.82;letter-spacing:-.06em;color:var(--color-accent)">{{ streakPad }}</div>
+    <h2 style="font-size:26px;margin:14px 0 0;text-wrap:pretty">{{ streakTitle }}</h2>
+    <p style="font-size:13px;color:var(--color-neutral-700);margin:6px 0 0;text-wrap:pretty">{{ streakSub }}</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px"><sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7"><div style="display:flex;flex-direction:column;gap:4px"><span style="height:28px;background:{{ d.bg }};border:2px solid {{ d.border }}"></span><span style="font-size:11px;font-weight:600;color:{{ d.fg }}">{{ d.l }}</span></div></sc-for></div>
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--color-divider);margin-top:28px"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Objectifs</span><span style="font-family:var(--font-heading);font-weight:800;font-size:17px;color:var(--color-accent)">{{ goalsDone }}</span></div>
+  <sc-for list="{{ goals }}" as="g" hint-placeholder-count="3">
+    <div style="display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:8px;align-items:center;min-height:62px;border-bottom:1px solid var(--color-divider)">
+      <button onClick="{{ g.onToggle }}" aria-label="Cocher l'objectif" style="width:44px;height:44px;border:0;background:transparent;padding:0;display:flex;align-items:center;cursor:pointer"><span style="width:24px;height:24px;border:2px solid var(--color-text);background:{{ g.box }};display:flex;align-items:center;justify-content:center;color:var(--color-bg)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:3.5;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></span></button>
+      <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-decoration:{{ g.deco }};text-wrap:pretty">{{ g.title }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ g.sub }}</span></span>
+      <sc-if value="{{ g.hasPlus }}"><button class="btn btn-secondary" onClick="{{ g.onPlus }}" style="padding:8px 12px;min-height:44px;font-size:14px">+1</button></sc-if>
+    </div>
+  </sc-for>
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--color-divider);margin-top:28px"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Exercices suggérés</span></div>
+  <sc-for list="{{ weekSugg }}" as="x" hint-placeholder-count="3">
+    <button onClick="{{ x.onClick }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:62px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer">
+      <span style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="font-size:15px;font-weight:600">{{ x.name }}</span><sc-if value="{{ x.hasTag }}"><span class="tag tag-accent">{{ x.tag }}</span></sc-if></span><span style="font-size:12px;color:var(--color-neutral-700)">{{ x.sub }}</span></span>
+      <span style="display:flex;gap:4px;align-items:center;font-size:13px;font-weight:600">Exercice type bac<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></span>
+    </button>
+  </sc-for>
+  <sc-if value="{{ noWeekSugg }}"><p style="font-size:13px;color:var(--color-neutral-700);margin:10px 0 0;text-wrap:pretty">Ajoute un cours : je te proposerai des exercices en situation, tes spécialités d'abord.</p></sc-if>
+  <sc-if value="{{ hasWeekExos }}">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--color-divider);margin-top:28px"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Faits cette semaine</span></div>
+    <sc-for list="{{ weekExos }}" as="x" hint-placeholder-count="2">
+      <button onClick="{{ x.onClick }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:56px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer">
+        <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ x.title }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ x.sub }}</span></span>
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:17px;color:var(--color-accent)">{{ x.note }}</span>
+      </button>
+    </sc-for>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isErrors }}">
+<div data-screen-label="Mes erreurs" data-r="screen-narrow" style="padding:12px 20px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Cahier d'erreurs · {{ errCount }}</span><button class="btn btn-ghost" onClick="{{ goToday }}" style="padding:4px 2px;font-size:13px">Retour</button></div>
+  <h2 style="font-size:30px;margin:20px 0 6px">Tes erreurs, tes points à gagner.</h2>
+  <sc-if value="{{ hasErrStat }}">
+    <div style="margin-top:14px;padding:14px 16px;background:var(--color-text);color:var(--color-bg)">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Ce mois-ci</div>
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:22px;line-height:1.15;margin-top:6px;text-wrap:pretty">{{ errStatTitle }}</div>
+      <div style="font-size:14px;line-height:1.4;margin-top:6px;text-wrap:pretty">{{ errStatTip }}</div>
+    </div>
+    <sc-for list="{{ errBars }}" as="b" hint-placeholder-count="3"><div style="display:grid;grid-template-columns:minmax(0,1fr) 96px 28px;gap:10px;align-items:center;min-height:36px;border-bottom:1px solid var(--color-divider)"><span style="font-size:13px;font-weight:600">{{ b.label }}</span><span style="height:6px;background:var(--color-neutral-300);display:block"><span style="display:block;height:6px;width:{{ b.w }};background:{{ b.color }}"></span></span><span style="font-family:var(--font-heading);font-weight:800;font-size:14px;text-align:right">{{ b.n }}</span></div></sc-for>
+  </sc-if>
+  <sc-if value="{{ hasErrMsg }}"><p style="font-size:13px;color:var(--color-accent-700);margin:14px 0 0;text-wrap:pretty">{{ errMsg }}</p></sc-if>
+  <sc-if value="{{ errFormClosed }}">
+    <button class="btn btn-primary" onClick="{{ openErrForm }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:18px"><span>+ Ajouter une erreur</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  </sc-if>
+  <sc-if value="{{ errFormOpen }}">
+    <div style="margin-top:18px;border-top:2px solid var(--color-text);padding-top:14px;display:flex;flex-direction:column;gap:14px">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:18px">{{ errFormTitle }}</div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px">
+        <div class="field"><label>Matière</label><select class="input" value="{{ ef.subj }}" onChange="{{ efSubj }}" style="min-height:46px;font-size:16px"><sc-for list="{{ efSubjOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}">{{ o.v }}</option></sc-for></select></div>
+        <div class="field"><label>Date</label><input class="input" type="date" value="{{ ef.date }}" onChange="{{ efDate }}" style="min-height:46px;font-size:16px"></div>
+      </div>
+      <div class="field"><label>Chapitre (facultatif)</label><input class="input" value="{{ ef.chap }}" onChange="{{ efChap }}" placeholder="Ex. Dosages par titrage" style="min-height:46px;font-size:16px"></div>
+      <div class="field"><label>Ce que j'ai fait</label><textarea class="input" value="{{ ef.what }}" onChange="{{ efWhat }}" placeholder="Ex. J'ai gardé la masse en g dans Ec = ½mv²." style="min-height:96px;font-size:16px;line-height:1.45;resize:vertical"></textarea></div>
+      <div><div style="font-size:13px;font-weight:600;margin-bottom:6px">Pourquoi je me suis trompé</div><div style="display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--color-divider)"><sc-for list="{{ efWhyOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.onClick }}" style="min-height:48px;padding:8px 12px;border:0;border-top:{{ o.bt }};border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-weight:600;font-size:14px;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for></div></div>
+      <div class="field"><label>La bonne méthode</label><textarea class="input" value="{{ ef.fix }}" onChange="{{ efFix }}" placeholder="Ex. Convertir en unités SI avant tout calcul : m en kg." style="min-height:96px;font-size:16px;line-height:1.45;resize:vertical"></textarea></div>
+      <input type="file" ref="{{ errPhotoRef }}" accept="image/*" capture="environment" onChange="{{ onEfPhoto }}" style="display:none">
+      <sc-if value="{{ efNoPhoto }}"><button class="btn btn-secondary" onClick="{{ efPickPhoto }}" style="width:100%;justify-content:space-between;padding:14px 16px"><span>Ajouter une photo de ma copie</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></button></sc-if>
+      <sc-if value="{{ efHasPhoto }}"><div style="display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--color-divider)"><img src="{{ efPhoto }}" alt="Ta copie" style="width:72px;height:72px;object-fit:cover;display:block"><span style="font-size:13px">Photo de la copie jointe.</span><button class="btn btn-ghost" onClick="{{ efClearPhoto }}" style="padding:8px 4px;min-height:44px;font-size:13px">Retirer</button></div></sc-if>
+      <sc-if value="{{ hasEfErr }}"><p style="font-size:13px;color:var(--color-accent-700);margin:0">{{ efErr }}</p></sc-if>
+      <div style="display:flex;gap:8px"><button class="btn btn-primary" onClick="{{ efSave }}" style="flex:1;justify-content:space-between;padding:16px;font-size:16px"><span>Enregistrer</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button><button class="btn btn-ghost" onClick="{{ efCancel }}" style="padding:16px 10px">Annuler</button></div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ noErrors }}"><p style="font-size:13px;color:var(--color-neutral-700);margin:14px 0 0;text-wrap:pretty">Rien encore. Après chaque contrôle ou exercice raté, note ici ce qui s'est passé : c'est là que tu gagnes le plus de points.</p></sc-if>
+  <sc-for list="{{ errRows }}" as="e" hint-placeholder-count="2">
+    <div style="border-bottom:1px solid var(--color-divider);padding:14px 0;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap"><span style="font-family:var(--font-heading);font-weight:800;font-size:16px;text-wrap:pretty">{{ e.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ e.date }}</span></div>
+      <span class="tag tag-accent" style="align-self:flex-start">{{ e.why }}</span>
+      <div style="font-size:14px;line-height:1.45;text-wrap:pretty"><span style="font-weight:700">Ce que j'ai fait : </span>{{ e.what }}</div>
+      <div style="font-size:14px;line-height:1.45;text-wrap:pretty"><span style="font-weight:700">La bonne méthode : </span>{{ e.fix }}</div>
+      <sc-if value="{{ e.hasPhoto }}"><img src="{{ e.photo }}" alt="Photo de la copie" style="max-width:100%;max-height:220px;object-fit:contain;align-self:flex-start;border:1px solid var(--color-divider);display:block"></sc-if>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <button class="btn btn-secondary" onClick="{{ e.onCard }}" disabled="{{ e.cardDisabled }}" style="justify-content:flex-start;padding:10px 12px;min-height:44px;font-size:14px">{{ e.cardLabel }}</button>
+        <button class="btn btn-ghost" onClick="{{ e.onEdit }}" style="padding:10px 6px;min-height:44px;font-size:14px">Modifier</button>
+        <button class="btn btn-ghost" onClick="{{ e.onDel }}" style="padding:10px 6px;min-height:44px;font-size:14px">Supprimer</button>
+      </div>
+    </div>
+  </sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isExo }}">
+<div data-screen-label="Exercice" data-r="screen-narrow" style="padding:12px 20px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Exercice type bac · {{ exoSubj }}</span><button class="btn btn-ghost" onClick="{{ exoBack }}" style="padding:4px 2px;font-size:13px">Retour</button></div>
+  <sc-if value="{{ exoNoAi }}">
+    <h2 style="font-size:30px;margin:20px 0 6px">Il me faut une clé IA.</h2>
+    <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 18px;text-wrap:pretty">Les exercices en situation sont écrits et corrigés par l'IA. Ajoute une clé Gemini ou Groq dans Réglages : c'est gratuit et ça prend 2 minutes.</p>
+    <button class="btn btn-primary" onClick="{{ goSet }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px"><span>Aller aux Réglages</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  </sc-if>
+  <sc-if value="{{ exoSetup }}">
+    <h2 style="font-size:30px;margin:20px 0 6px">Sur quel chapitre ?</h2>
+    <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 14px;text-wrap:pretty">Je pars de tes questions et de ton cours pour écrire un exercice en situation réelle, niveau bac : 3 à 5 questions qui s'enchaînent, corrigées étape par étape.</p>
+    <sc-for list="{{ exoChaps }}" as="c" hint-placeholder-count="3">
+      <button onClick="{{ c.onClick }}" style="width:100%;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:center;min-height:52px;padding:8px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer">
+        <span style="width:20px;height:20px;border:2px solid var(--color-text);background:{{ c.box }}"></span>
+        <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ c.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ c.sub }}</span></span>
+      </button>
+    </sc-for>
+    <sc-if value="{{ hasExoErr }}"><p style="font-size:13px;color:var(--color-accent-700);margin:12px 0 0;text-wrap:pretty">{{ exoErr }}</p></sc-if>
+    <button class="btn btn-primary" onClick="{{ exoGenerate }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:20px"><span>Écrire l'exercice</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  </sc-if>
+  <sc-if value="{{ exoLoading }}">
+    <div style="padding:40px 0">
+      <div style="height:4px;background:var(--color-neutral-300)"><span style="display:block;height:4px;width:40%;background:var(--color-accent)"></span></div>
+      <h2 style="font-size:28px;margin:20px 0 6px">{{ exoLoadingTitle }}</h2>
+      <p style="font-size:13px;color:var(--color-neutral-700);margin:0;text-wrap:pretty">{{ exoLoadingSub }}</p>
+    </div>
+  </sc-if>
+  <sc-if value="{{ exoAnswer }}">
+    <div style="display:flex;gap:4px;margin-top:16px"><sc-for list="{{ exoSegs }}" as="g" hint-placeholder-count="4"><span style="flex:1;height:4px;background:{{ g.bg }}"></span></sc-for></div>
+    <sc-if value="{{ exoShowEnonce }}">
+      <div style="margin-top:16px;padding:16px;background:var(--color-surface);display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:20px;line-height:1.15;text-wrap:pretty">{{ exoTitre }}</div>
+        <div style="font-size:15px;line-height:1.5;text-wrap:pretty">{{ exoContexte }}</div>
+        <sc-if value="{{ hasDonnees }}">
+          <div style="border-top:2px solid var(--color-text);padding-top:8px"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Données</span></div>
+          <sc-for list="{{ exoDonnees }}" as="d" hint-placeholder-count="3"><div style="font-size:14px;line-height:1.45;padding:6px 0;border-bottom:1px solid var(--color-divider)">{{ d.t }}</div></sc-for>
+        </sc-if>
+      </div>
+    </sc-if>
+    <button class="btn btn-ghost" onClick="{{ exoToggleEnonce }}" style="padding:10px 2px;font-size:14px;margin-top:4px;min-height:44px">{{ exoEnonceLabel }}</button>
+    <div style="margin-top:6px;border-top:2px solid var(--color-text);padding-top:12px">
+      <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">{{ exoQKicker }}</span>
+      <div style="font-size:19px;font-weight:600;line-height:1.35;margin-top:8px;text-wrap:pretty">{{ exoQ }}</div>
+      <div class="field" style="margin-top:14px"><label>Ta réponse</label><textarea class="input" value="{{ exoText }}" onChange="{{ onExoText }}" placeholder="Données utilisées, formule, calcul, unité, phrase de conclusion." style="min-height:160px;font-size:16px;line-height:1.45;resize:vertical"></textarea></div>
+      <input type="file" ref="{{ exoPhotoRef }}" accept="image/*" capture="environment" onChange="{{ onExoPhoto }}" style="display:none">
+      <sc-if value="{{ exoNoPhoto }}"><button class="btn btn-secondary" onClick="{{ exoPickPhoto }}" style="width:100%;justify-content:space-between;padding:14px 16px;margin-top:8px"><span>Ou prends ta copie en photo</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></button></sc-if>
+      <sc-if value="{{ exoHasPhoto }}"><div style="display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:8px;padding:8px 0;border-bottom:1px solid var(--color-divider)"><img src="{{ exoPhoto }}" alt="Ta copie" style="width:72px;height:72px;object-fit:cover;display:block"><span style="font-size:13px">Copie jointe : je la lirai à la correction.</span><button class="btn btn-ghost" onClick="{{ exoClearPhoto }}" style="padding:8px 4px;min-height:44px;font-size:13px">Retirer</button></div></sc-if>
+      <sc-if value="{{ hasExoErr }}"><p style="font-size:13px;color:var(--color-accent-700);margin:10px 0 0;text-wrap:pretty">{{ exoErr }}</p></sc-if>
+      <div style="display:flex;gap:8px;margin-top:16px">
+        <sc-if value="{{ exoHasPrev }}"><button class="btn btn-secondary" onClick="{{ exoPrev }}" aria-label="Question précédente" style="width:56px;justify-content:center;padding:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg></button></sc-if>
+        <button class="btn btn-primary" onClick="{{ exoNext }}" style="flex:1;justify-content:space-between;padding:16px;font-size:16px"><span>{{ exoNextLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ exoResult }}">
+    <div style="padding:22px 0 18px">
+      <div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:var(--font-heading);font-weight:800;font-size:120px;line-height:.82;letter-spacing:-.06em;color:var(--color-accent)">{{ exoNote }}</span><span style="font-family:var(--font-heading);font-weight:800;font-size:28px">/20</span></div>
+      <h2 style="font-size:24px;margin:14px 0 0;text-wrap:pretty">{{ exoResTitle }}</h2>
+      <p style="font-size:13px;color:var(--color-neutral-700);margin:4px 0 0;text-wrap:pretty">Note estimée par l'IA, à titre indicatif.</p>
+      <p style="font-size:15px;line-height:1.45;margin:10px 0 0;text-wrap:pretty">{{ exoBilan }}</p>
+    </div>
+    <sc-for list="{{ exoCorr }}" as="q" hint-placeholder-count="3">
+      <div style="border-top:2px solid var(--color-text);padding:12px 0 16px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-family:var(--font-heading);font-weight:800;font-size:17px">{{ q.n }}</span><span style="font-family:var(--font-heading);font-weight:800;font-size:17px;color:var(--color-accent)">{{ q.pts }}</span></div>
+        <div style="font-size:14px;color:var(--color-neutral-700);line-height:1.4;margin-top:4px;text-wrap:pretty">{{ q.q }}</div>
+        <div style="margin-top:10px;padding:10px 12px;background:var(--color-surface);font-size:14px;line-height:1.45;white-space:pre-wrap"><span style="display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:4px">Ta réponse</span>{{ q.ans }}</div>
+        <sc-for list="{{ q.steps }}" as="s" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--color-divider)">
+            <sc-if value="{{ s.ok }}"><span style="width:20px;height:20px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:3.5;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></span></sc-if>
+            <sc-if value="{{ s.ko }}"><span style="width:20px;height:20px;background:var(--color-accent);color:var(--color-bg);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:3.5;stroke-linecap:square"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></span></sc-if>
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14px;font-weight:700">{{ s.label }}</span><span style="font-size:13px;line-height:1.4;color:var(--color-neutral-800);text-wrap:pretty">{{ s.com }}</span></span>
+          </div>
+        </sc-for>
+        <div style="font-size:14px;line-height:1.45;margin-top:10px;text-wrap:pretty"><span style="font-weight:700">Corrigé : </span>{{ q.corr }}</div>
+      </div>
+    </sc-for>
+    <button class="btn btn-primary" onClick="{{ exoAddErrors }}" disabled="{{ exoErrDisabled }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:8px"><span>{{ exoErrLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    <button class="btn btn-secondary" onClick="{{ exoAgain }}" style="width:100%;justify-content:flex-start;padding:16px;font-size:15px;margin-top:8px">Nouvel exercice</button>
+  </sc-if>
 </div>
 </sc-if>
 
@@ -635,7 +845,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <div style="display:grid;grid-template-columns:repeat(7,1fr);margin-top:12px">
     <sc-for list="{{ ladder }}" as="l" hint-placeholder-count="7"><div style="border-left:2px solid var(--color-text);padding:0 0 0 5px;display:flex;flex-direction:column;justify-content:flex-end;height:{{ l.h }}"><span style="font-family:var(--font-heading);font-weight:800;font-size:13px">{{ l.label }}</span></div></sc-for>
   </div>
-  <p style="font-size:13px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">Méthode Ebbinghaus : chaque question revient quand ta mémoire tombe à 70 % sur la courbe de l'oubli. Chaque rappel réussi aplatit la courbe : Difficile ×1,1, Bien ×2, Facile ×2,8, avec un bonus si tu t'en souvenais malgré une longue pause. Raté : la question revient dans la séance et sa courbe repart presque de zéro. Avant un devoir, rien ne dépasse la veille.</p>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">Méthode Ebbinghaus : chaque question revient quand ta mémoire tombe à 70 % sur la courbe de l'oubli. Chaque rappel réussi aplatit la courbe : Difficile ×1,1, Bien ×2, Facile ×2,8, avec un bonus si tu t'en souvenais malgré une longue pause. Raté : la question revient dans la séance et sa courbe repart presque de zéro. Avant un devoir, l'écart se cale sur le temps restant (Cepeda et al., 2008) : 20–40 % sous 2 semaines, 10–20 % jusqu'à 2 mois, 5–10 % au-delà, avec toujours une révision dans les 2 derniers jours.</p>
 </div>
 </sc-if>
 
@@ -669,6 +879,25 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     </sc-for>
   </div>
   <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0">Auto : mode sombre quand ton appareil est en mode sombre.</p>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Minuteur de séance</h4>
+  <sc-for list="{{ pomoSteps }}" as="r" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:minmax(0,1fr) 44px 76px 44px;align-items:center;min-height:56px;border-bottom:1px solid var(--color-divider)"><span style="font-size:14px;font-weight:600;text-wrap:pretty">{{ r.label }}</span><button class="btn btn-secondary" onClick="{{ r.onMinus }}" aria-label="Moins" style="width:44px;height:44px;padding:0;justify-content:center;font-size:18px">−</button><span style="font-family:var(--font-heading);font-weight:800;font-size:16px;text-align:center;font-variant-numeric:tabular-nums">{{ r.val }}</span><button class="btn btn-secondary" onClick="{{ r.onPlus }}" aria-label="Plus" style="width:44px;height:44px;padding:0;justify-content:center;font-size:18px">+</button></div></sc-for>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Ta semaine</h4>
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;margin:4px 0 8px">Spécialités (coef. 16)</div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--color-divider)"><sc-for list="{{ specOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.onClick }}" style="min-height:48px;padding:8px 12px;border:0;border-top:{{ o.bt }};border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-weight:600;font-size:14px;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for></div>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">Elles passent en premier dans les exercices suggérés. Deux au maximum.</p>
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) 128px;gap:12px;align-items:center;min-height:56px;margin-top:12px;border-bottom:1px solid var(--color-divider)"><span style="font-size:14px;font-weight:600">Questions de l'appli chaque jour</span><div style="display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--color-divider)"><sc-for list="{{ goalDailyOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.onClick }}" style="min-height:48px;padding:8px 12px;border:0;border-top:{{ o.bt }};border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-weight:600;font-size:14px;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for></div></div>
+  <sc-for list="{{ goalSteps }}" as="r" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:minmax(0,1fr) 44px 76px 44px;align-items:center;min-height:56px;border-bottom:1px solid var(--color-divider)"><span style="font-size:14px;font-weight:600;text-wrap:pretty">{{ r.label }}</span><button class="btn btn-secondary" onClick="{{ r.onMinus }}" aria-label="Moins" style="width:44px;height:44px;padding:0;justify-content:center;font-size:18px">−</button><span style="font-family:var(--font-heading);font-weight:800;font-size:16px;text-align:center;font-variant-numeric:tabular-nums">{{ r.val }}</span><button class="btn btn-secondary" onClick="{{ r.onPlus }}" aria-label="Plus" style="width:44px;height:44px;padding:0;justify-content:center;font-size:18px">+</button></div></sc-for>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Jours de cours</h4>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 8px;text-wrap:pretty">Le soir de ces jours-là, l'accueil te rappelle de créer tes questions.</p>
+  <sc-for list="{{ courseDayRows }}" as="r" hint-placeholder-count="4">
+    <div style="padding:10px 0;border-bottom:1px solid var(--color-divider)">
+      <div style="font-size:14px;font-weight:600;margin-bottom:6px">{{ r.subj }}</div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px"><sc-for list="{{ r.days }}" as="d" hint-placeholder-count="6"><button onClick="{{ d.onClick }}" aria-label="{{ d.full }}" style="min-height:44px;border:2px solid var(--color-text);background:{{ d.bg }};color:{{ d.fg }};font:inherit;font-family:var(--font-heading);font-weight:800;font-size:14px;text-align:left;padding:0 8px;cursor:pointer">{{ d.l }}</button></sc-for></div>
+    </div>
+  </sc-for>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Sommeil</h4>
+  <div class="field"><label>Heure de coucher visée</label><input class="input" type="time" value="{{ bedtime }}" onChange="{{ onBedtime }}" style="min-height:46px;font-size:16px"></div>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">Après cette heure, l'accueil te propose d'arrêter. Rien n'est bloqué.</p>
   <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">IA gratuite</h4>
   <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">L'IA tourne sur les serveurs gratuits de Google (Gemini) et de Groq : rien ne tourne sur ton appareil, donc aucun risque de plantage. Tes clés restent sur cet appareil.</p>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--color-divider)">
@@ -717,6 +946,28 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <button data-r="tab" onClick="{{ goAdd }}" aria-label="Ajouter un cours" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:4px;padding:10px 10px 6px;border:0;margin-top:-2px;background:{{ addTabBg }};color:var(--color-bg);font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.6;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg><span style="font-size:10px;font-weight:600">Ajouter</span></button>
   <button data-r="tab" onClick="{{ goPlan }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.plan }};border-left:0 solid {{ tb.plan }};margin-top:-2px;background:transparent;color:{{ tc.plan }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4"></rect><path d="M3 10h18"></path></svg><span style="font-size:10px;font-weight:600">Planning</span></button>
   <button data-r="tab" onClick="{{ goSet }}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 6px;border:0;border-top:3px solid {{ tb.set }};border-left:0 solid {{ tb.set }};margin-top:-2px;background:transparent;color:{{ tc.set }};font:inherit;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M21 4h-7"></path><path d="M10 4H3"></path><path d="M21 12h-9"></path><path d="M8 12H3"></path><path d="M21 20h-5"></path><path d="M12 20H3"></path><path d="M14 2v4"></path><path d="M8 10v4"></path><path d="M16 18v4"></path></svg><span style="font-size:10px;font-weight:600">Réglages</span></button>
+</div>
+</sc-if>
+<sc-if value="{{ goalsOpen }}">
+<div data-screen-label="Objectifs" style="position:fixed;inset:0;z-index:55;display:flex;flex-direction:column;justify-content:flex-end">
+  <button onClick="{{ closeGoals }}" aria-label="Fermer" style="position:absolute;inset:0;border:0;padding:0;background:color-mix(in srgb, var(--color-text) 45%, transparent);cursor:pointer"></button>
+  <div role="dialog" aria-label="Objectifs" style="position:relative;width:100%;max-width:520px;margin:0 auto;box-sizing:border-box;background:var(--color-bg);border-top:2px solid var(--color-text);box-shadow:var(--shadow-lg);padding:14px 20px max(env(safe-area-inset-bottom), 20px)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-family:var(--font-heading);font-weight:800;font-size:22px">Objectifs</span><button class="btn btn-ghost" onClick="{{ closeGoals }}" style="padding:8px 4px;min-height:44px;font-size:13px">Fermer</button></div>
+    <button onClick="{{ goalsWeek }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:16px;font-weight:600">Ma semaine</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ weekRowSub }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
+    <button onClick="{{ goalsErrors }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:16px;font-weight:600">Mes erreurs</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ errCount }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
+    <button onClick="{{ goalsPomo }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:16px;font-weight:600">{{ pomoRowLabel }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ pomoInfo }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
+  </div>
+</div>
+</sc-if>
+<sc-if value="{{ pomoOnBreak }}">
+<div data-screen-label="Pause" style="position:fixed;inset:0;z-index:60;background:var(--color-bg);color:var(--color-text);display:flex;flex-direction:column;justify-content:space-between;gap:24px;padding:max(env(safe-area-inset-top), 20px) 24px max(env(safe-area-inset-bottom), 24px)">
+  <div style="padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">{{ pomoBreakKicker }}</span></div>
+  <div style="max-width:560px">
+    {{ pomoClockBreak }}
+    <div style="font-family:var(--font-heading);font-weight:700;font-size:28px;line-height:1.15;margin-top:20px;text-wrap:pretty">Pose ton téléphone, ferme les yeux, laisse ton cerveau ranger.</div>
+    <p style="font-size:14px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">{{ pomoBreakSub }}</p>
+  </div>
+  <button class="btn btn-ghost" onClick="{{ pomoStop }}" style="align-self:flex-start;padding:10px 4px;min-height:44px">Arrêter la séance</button>
 </div>
 </sc-if>
 </div>
@@ -813,12 +1064,13 @@ const ebbSched = (c, k, t, examGap) => {
   }
   S = Math.min(180, S);
   let gap = k === 'rate' ? 0 : Math.max(1, Math.round(S));
-  if (examGap && examGap > 1 && gap >= examGap) gap = examGap - 1;
+  // Contrôle prévu (Cepeda et al., 2008) : écart ≈ 20–40 % du temps restant sous 2 semaines, 10–20 % jusqu'à 2 mois, 5–10 % au-delà ; toujours une révision dans les 2 jours avant.
+  if (k !== 'rate' && examGap > 2) { const [a, b] = examWindow(examGap); gap = Math.min(Math.max(gap, k === 'difficile' ? 1 : a), b); }
   return { S, gap, stage: stageOfS(S) };
 };
 const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
-const emptyData = () => ({ courses: [], cards: [], exams: [], settings: { savateDays: [2, 4, 6], capMin: 15, tt: DEFAULT_TT, weekAPar: 0, apiKey: '', model: 'gemini-flash-latest' }, log: {}, deleted: {} });
-const normData = d => ({ ...emptyData(), ...(d || {}), courses: (d && d.courses) || [], cards: (d && d.cards) || [], exams: (d && d.exams) || [], log: (d && d.log) || {}, deleted: (d && d.deleted) || {}, settings: { ...emptyData().settings, ...((d && d.settings) || {}) } });
+const emptyData = () => ({ courses: [], cards: [], exams: [], settings: { savateDays: [2, 4, 6], capMin: 15, tt: DEFAULT_TT, weekAPar: 0, apiKey: '', model: 'gemini-flash-latest', pomoWork: 25, pomoBreak: 5, pomoLong: 15, pomoEvery: 4, goalDaily: true, goalExos: 2, goalBac: 1, specs: ['Physique-Chimie', 'SVT'], bedtime: '23:00' }, log: {}, deleted: {}, errors: [], exos: [], weekChecks: {} });
+const normData = d => ({ ...emptyData(), ...(d || {}), courses: (d && d.courses) || [], cards: (d && d.cards) || [], exams: (d && d.exams) || [], log: (d && d.log) || {}, deleted: (d && d.deleted) || {}, errors: (d && d.errors) || [], exos: (d && d.exos) || [], weekChecks: (d && d.weekChecks) || {}, settings: { ...emptyData().settings, ...((d && d.settings) || {}) } });
 const DEVICE_KEY = 'revisions.apikey', MODE_KEY = 'revisions.mode', LLM_KEY = 'revisions.llm';
 const GROQ_KEY = 'revisions.groqkey', THEME_KEY = 'revisions.theme';
 const applyTheme = th => {
@@ -867,6 +1119,19 @@ const mathHTML = s => {
 const mx = s => { s = s == null ? '' : String(s); if (!hasMath(s)) return s; const h = mathHTML(s); return h == null ? s : React.createElement('span', { dangerouslySetInnerHTML: { __html: h } }); };
 const parseJSON = t => { try { return parseJSON0(t); } catch (e) { return parseJSON0(t.replace(/\\(?!["\\/bfnrtu])/g, '\\\\')); } };
 const plural = (n, w) => n + ' ' + w + (n > 1 ? 's' : '');
+const WHY = [{ k: 'connaissance', label: 'Connaissance', in: 'sur les connaissances', tip: 'Refais tes questions du chapitre : la notion n’est pas encore ancrée.' }, { k: 'enonce', label: 'Lecture de l’énoncé', in: 'en lecture d’énoncé', tip: 'Avant d’écrire, surligne les données et reformule la question en une phrase.' }, { k: 'methode', label: 'Méthode', in: 'sur la méthode', tip: 'Écris la méthode type en 3 étapes, puis refais un exercice sans le corrigé.' }, { k: 'calcul', label: 'Calcul', in: 'en calcul', tip: 'Pose le calcul littéral d’abord, puis vérifie l’ordre de grandeur.' }, { k: 'etourderie', label: 'Étourderie', in: 'par étourderie', tip: 'Garde 3 minutes à la fin pour relire unités, signes et recopies.' }, { k: 'redaction', label: 'Rédaction', in: 'en rédaction', tip: 'Une phrase de conclusion par question, avec le résultat et son unité.' }];
+const WHY_MAP = {}; WHY.forEach(w => { WHY_MAP[w.k] = w; });
+const POMO_KEY = 'revisions.pomo', EXO_KEY = 'revisions.exo';
+const SPEC_OPTS = ['Physique-Chimie', 'SVT', 'Maths', 'SES', 'Histoire-Géo', 'Spé autre'];
+const DOW_L = [[1, 'L', 'Lundi'], [2, 'M', 'Mardi'], [3, 'M', 'Mercredi'], [4, 'J', 'Jeudi'], [5, 'V', 'Vendredi'], [6, 'S', 'Samedi']];
+const Countdown = ({ endAt, style }) => {
+  const [, tick] = React.useState(0);
+  React.useEffect(() => { const i = setInterval(() => tick(x => x + 1), 1000); return () => clearInterval(i); }, []);
+  const s = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+  return React.createElement('span', { style }, pad(Math.floor(s / 60)) + ':' + pad(s % 60));
+};
+const cepedaBand = g => (g <= 14 ? [0.2, 0.4] : g <= 60 ? [0.1, 0.2] : [0.05, 0.1]);
+const examWindow = g => { const [lo, hi] = cepedaBand(g); const a = Math.max(1, Math.round(g * lo)); return [a, Math.max(a, Math.min(Math.round(g * hi), g - 2))]; };
 
 function demoData(today) {
   const courses = [], cards = [];
@@ -890,6 +1155,8 @@ class Component extends DCLogic {
   fileRef = React.createRef();
   backupRef = React.createRef();
   photoRef = React.createRef();
+  errPhotoRef = React.createRef();
+  exoPhotoRef = React.createRef();
   state = { screen: 'today', auth: 'checking', user: null, dataReady: false, loadError: '', sync: 'idle', syncMsg: '', migrated: false, authStep: 'email', authEmail: '', authCode: '', resendIn: 0, authBusy: false, authError: '', authInfo: '', setupUrl: '', setupKey: '', setupError: '', cfgFromFile: false, data: emptyData(), sess: null, addStep: 'form', addSubj: 'Physique-Chimie', addChap: '', addText: '', addError: '', gen: [], genSel: [], loadIdx: 0, added: 0, manual: [{ q: '', a: '' }], openCourse: null, importStatus: null, aiTest: null, setMsg: '' };
 
   // ── Persistence ──────────────────────────────────────────────
@@ -1118,6 +1385,12 @@ class Component extends DCLogic {
     if (!window.katex) { const kt = setInterval(() => { if (window.katex) { clearInterval(kt); this.forceUpdate(); } }, 300); setTimeout(() => clearInterval(kt), 20000); }
     this.minTick = setInterval(() => { this.forceUpdate(); this.checkReminders(); }, 30000);
     setTimeout(() => this.checkReminders(), 3000);
+    this.pomo = this.pomoGet(); this.pomoCheck();
+    this.onPomoVis = () => { if (!document.hidden) this.pomoCheck(); };
+    document.addEventListener('visibilitychange', this.onPomoVis);
+    this.onTapAudio = () => { if (this.pomo && !this.actx) { try { const AC = window.AudioContext || window.webkitAudioContext; if (AC) this.actx = new AC(); } catch (e) {} } };
+    document.addEventListener('pointerdown', this.onTapAudio);
+    try { const ex = JSON.parse(lsGet(EXO_KEY)); if (ex && ex.data && ex.step === 'answer') this.setState({ exo: ex }); } catch (e) {}
     try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
     try { if ('serviceWorker' in navigator && window.top === window && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js'); } catch (e) {}
     this.onVis = () => {
@@ -1143,6 +1416,7 @@ class Component extends DCLogic {
     }
   }
   componentWillUnmount() {
+    clearTimeout(this.pomoT); document.removeEventListener('visibilitychange', this.onPomoVis); document.removeEventListener('pointerdown', this.onTapAudio);
     document.removeEventListener('visibilitychange', this.onVis);
     window.removeEventListener('online', this.onOnline);
     window.removeEventListener('pagehide', this.onHide);
@@ -1158,20 +1432,23 @@ class Component extends DCLogic {
   aiAvailable() { return this.aiMode() !== 'rules'; }
   qgen() { return import(new URL('./local-qgen.js', document.baseURI).href); }
   geminiKey() { const k = (this.state.data.settings.apiKey || '').trim(); return /^sk-ant/.test(k) ? '' : k; }
-  async callGemini(system, user, maxTokens, json) {
-    const st = this.state.data.settings, key = this.geminiKey();
+  async callGemini(system, user, maxTokens, json, opts = {}) {
+    const st = this.state.data.settings, key = this.geminiKey(), fast = !!opts.fast;
     {
       const wanted = (st.model || '').trim();
-      const models = [...new Set([wanted && !/^claude/i.test(wanted) ? wanted : 'gemini-flash-latest', 'gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'])];
+      const models = fast ? ['gemini-flash-lite-latest', 'gemini-2.5-flash-lite'] : [...new Set([wanted && !/^claude/i.test(wanted) ? wanted : 'gemini-flash-latest', 'gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'])];
       let lastErr;
       for (const model of models) {
         const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', {
           method: 'POST',
           headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+          signal: opts.signal,
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: system }] },
             contents: [{ role: 'user', parts: [{ text: user }] }],
-            generationConfig: { temperature: 0.4, maxOutputTokens: Math.max(2048, maxTokens * 4), ...(json ? { responseMimeType: 'application/json' } : {}) }
+            generationConfig: fast
+              ? { temperature: 0.2, maxOutputTokens: 400, thinkingConfig: { thinkingBudget: 0 }, ...(json ? { responseMimeType: 'application/json' } : {}) }
+              : { temperature: 0.4, maxOutputTokens: Math.max(2048, maxTokens * 4), ...(json ? { responseMimeType: 'application/json' } : {}) }
           })
         });
         const j = await r.json().catch(() => ({}));
@@ -1183,7 +1460,7 @@ class Component extends DCLogic {
         }
         const msg = (j.error && j.error.message) || ('Erreur ' + r.status);
         if (r.status === 404) { lastErr = new Error('Modèle « ' + model + ' » introuvable.'); continue; }
-        if (r.status === 503 || r.status === 500 || /high demand|overloaded|unavailable|try again later/i.test(msg)) { lastErr = new Error('Gemini est surchargé en ce moment'); await new Promise(res => setTimeout(res, 1200)); continue; }
+        if (r.status === 503 || r.status === 500 || /high demand|overloaded|unavailable|try again later/i.test(msg)) { lastErr = new Error('Gemini est surchargé en ce moment'); if (!fast) await new Promise(res => setTimeout(res, 1200)); continue; }
         if (r.status === 429) throw new Error('Quota gratuit Gemini atteint : attends une minute (ou demain si c’est la limite du jour).');
         if (r.status === 400 && /api key/i.test(msg)) throw new Error('Clé Gemini invalide : vérifie-la dans Réglages.');
         if (r.status === 403) throw new Error('Clé Gemini refusée : vérifie-la sur aistudio.google.com.');
@@ -1192,18 +1469,19 @@ class Component extends DCLogic {
       throw lastErr || new Error('Aucun modèle Gemini disponible.');
     }
   }
-  async callGroq(system, user, maxTokens, json) {
-    const key = this.groqKey();
+  async callGroq(system, user, maxTokens, json, opts = {}) {
+    const key = this.groqKey(), fast = !!opts.fast;
     let lastErr;
-    for (const model of ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'llama-3.3-70b-versatile']) {
+    for (const model of fast ? ['llama-3.1-8b-instant', 'openai/gpt-oss-20b'] : ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'llama-3.3-70b-versatile']) {
       const oss = /gpt-oss/.test(model);
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: 'Bearer ' + key },
+        signal: opts.signal,
         body: JSON.stringify({
-          model, temperature: 0.4,
+          model, temperature: fast ? 0.2 : 0.4,
           messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
-          max_completion_tokens: Math.min(6000, Math.max(oss ? 1500 : 600, maxTokens * (oss ? 3 : 2))),
+          max_completion_tokens: fast ? 400 : Math.min(6000, Math.max(oss ? 1500 : 600, maxTokens * (oss ? 3 : 2))),
           ...(oss ? { reasoning_effort: 'low' } : {}),
           ...(json ? { response_format: { type: 'json_object' } } : {})
         })
@@ -1234,6 +1512,20 @@ class Component extends DCLogic {
       try { return await call(); } catch (e) { errs.push(name + ' : ' + e.message); }
     }
     throw new Error(errs.join(' · '));
+  }
+  // Correction : Gemini et Groq en parallèle (mode rapide), première réponse JSON valide, 8 s max.
+  async aiFast(system, user) {
+    if (this.aiPref() === 'rules') throw new Error('IA désactivée');
+    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 8000), opts = { fast: true, signal: ctrl.signal };
+    const list = [this.geminiKey() && ['Gemini', () => this.callGemini(system, user, 400, true, opts)], this.groqKey() && ['Groq', () => this.callGroq(system, user, 400, true, opts)]].filter(Boolean);
+    if (!list.length) { clearTimeout(timer); throw new Error('aucune clé IA'); }
+    try {
+      return await Promise.any(list.map(([name, call]) => call()
+        .then(out => { const j = parseJSON(out); if (!j || typeof j !== 'object' || !j.level) throw new Error('réponse mal formée'); return j; })
+        .catch(e => { throw new Error(name + ' : ' + (ctrl.signal.aborted ? 'trop lent (plus de 8 s)' : e.message)); })));
+    } catch (e) {
+      throw new Error(e && e.errors ? e.errors.map(x => x.message).join(' · ') : (e && e.message) || 'indisponible');
+    } finally { clearTimeout(timer); ctrl.abort(); }
   }
 
   curve(data, scope, t) {
@@ -1355,7 +1647,7 @@ class Component extends DCLogic {
       neErr: st.neErr || '', hasNeErr: !!st.neErr,
       addExam: () => {
         if (!ne.date || ne.date < t) return this.setState({ neErr: 'Choisis la date du devoir.' });
-        this.updData(d => ({ ...d, exams: [...(d.exams || []), { id: uid(), subj: ne.subj, date: ne.date, title: ne.title.trim(), createdAt: t }] }));
+        this.updData(d => this.examPull({ ...d, exams: [...(d.exams || []), { id: uid(), subj: ne.subj, date: ne.date, title: ne.title.trim(), createdAt: t }] }, ne.subj, ne.date));
         this.setState({ ne: { subj: ne.subj, date: '', title: '' }, examOpen: false });
       },
       examOpen: !!st.examOpen, examClosed: !st.examOpen, openExam: () => this.setState({ examOpen: true, neErr: '' }), closeExam: () => this.setState({ examOpen: false }),
@@ -1415,7 +1707,7 @@ class Component extends DCLogic {
     const list = this.pickCards().map(c => ({ ...c, subj: (cm[c.courseId] || {}).subj || '', chap: (cm[c.courseId] || {}).chap || '' }));
     if (list.length) this.go('session', { sess: { list, idx: 0, results: [], ...this.blankQ() } });
   }
-  blankQ() { return { text: '', pick: null, phase: 'answer', proposal: null, sel: null, feedback: '', attendus: [], aiError: '', verdict: null, done: false }; }
+  blankQ() { return { text: '', pick: null, phase: 'answer', proposal: null, sel: null, feedback: '', attendus: [], aiError: '', aiPending: false, verdict: null, done: false }; }
 
   async reveal(dontKnow) {
     const s = this.state.sess; if (!s) return;
@@ -1428,29 +1720,322 @@ class Component extends DCLogic {
       const ok = (a.length > 1 && (a === g || a.includes(g) || (g.includes(a) && a.length >= g.length * 0.6))) || (cmp(text) !== '' && cmp(text) === cmp(card.gap));
       return this.updSess({ phase: 'result', proposal: ok ? 'bien' : 'rate', sel: ok ? 'bien' : 'rate', verdict: ok }, idx);
     }
-    if (!this.aiAvailable()) {
-      try {
-        const g = (await this.qgen()).gradeAnswer(text, card.a, card.q);
-        return this.updSess({ phase: 'result', text, proposal: g.level, sel: g.level, feedback: g.feedback, attendus: g.attendus }, idx);
-      } catch (e) { return this.updSess({ phase: 'result', text, proposal: null, sel: null }, idx); }
-    }
-    this.updSess({ phase: 'correcting', text }, idx);
+    let local = null;
+    try { local = (await this.qgen()).gradeAnswer(text, card.a, card.q); } catch (e) {}
+    const localPatch = local ? { phase: 'result', text, proposal: local.level, sel: local.level, feedback: local.feedback, attendus: local.attendus } : null;
+    if (!this.aiAvailable()) return this.updSess(localPatch || { phase: 'result', text, proposal: null, sel: null }, idx);
+    // Verdict local tout de suite, l'IA le remplace dès qu'elle répond.
+    this.updSess(localPatch ? { ...localPatch, aiPending: true } : { phase: 'correcting', text }, idx);
     try {
-      const out = await this.ai(
+      const j = await this.aiFast(
         'Tu corriges la réponse d’un élève de Terminale (bac français). Bienveillant mais exigeant, tu tutoies, ton de coach motivant, phrases courtes. Réponds UNIQUEMENT en JSON valide.',
-        `Question : ${card.q}\nRéponse attendue : ${card.a}\nRéponse de l’élève : ${text}\n\nRenvoie {"level":"rate|difficile|bien|facile","feedback":"1 à 2 phrases","attendus":[{"label":"élément attendu, court","ok":true}]}.\nrate = faux ou hors sujet ; difficile = partiel, l’essentiel manque ; bien = juste avec de petits oublis ; facile = complet et précis. 2 à 4 attendus.`,
-        700, true);
-      const j = parseJSON(out);
+        `Question : ${card.q}\nRéponse attendue : ${card.a}\nRéponse de l’élève : ${text}\n\nRenvoie {"level":"rate|difficile|bien|facile","feedback":"1 phrase","attendus":[{"label":"élément attendu, court","ok":true}]}.\nrate = faux ou hors sujet ; difficile = partiel, l’essentiel manque ; bien = juste avec de petits oublis ; facile = complet et précis. 2 à 3 attendus.`);
       const lv = LEVELS.some(l => l.k === j.level) ? j.level : 'difficile';
-      this.updSess({ phase: 'result', proposal: lv, sel: lv, feedback: String(j.feedback || ''), attendus: Array.isArray(j.attendus) ? j.attendus.slice(0, 5) : [] }, idx);
+      this.setState(st => {
+        const ss = st.sess;
+        if (!ss || ss.idx !== idx || (ss.phase !== 'result' && ss.phase !== 'correcting')) return null;
+        const touched = local && ss.sel && ss.sel !== local.level;
+        return { sess: { ...ss, phase: 'result', proposal: lv, sel: touched ? ss.sel : lv, feedback: String(j.feedback || ''), attendus: Array.isArray(j.attendus) ? j.attendus.slice(0, 5) : [], aiPending: false } };
+      });
     } catch (e) {
-      try {
-        const g = (await this.qgen()).gradeAnswer(text, card.a, card.q);
-        this.updSess({ phase: 'result', proposal: g.level, sel: g.level, feedback: g.feedback, attendus: g.attendus, aiError: 'IA indisponible (' + e.message + ') : correction par mots-clés.' }, idx);
-      } catch (e2) {
-        this.updSess({ phase: 'result', proposal: null, sel: null, aiError: 'Correction IA indisponible (' + e.message + '). Évalue-toi toi-même.' }, idx);
-      }
+      if (local) this.updSess({ aiPending: false, aiError: 'IA indisponible (' + e.message + ') : correction par mots-clés.' }, idx);
+      else this.updSess({ phase: 'result', proposal: null, sel: null, aiError: 'Correction IA indisponible (' + e.message + '). Évalue-toi toi-même.' }, idx);
     }
+  }
+  examPull(d, subj, date) {
+    const t = this.today(), g = diff(t, date); if (g < 1) return d;
+    const ids = new Set(d.courses.filter(c => c.subj === subj).map(c => c.id));
+    const [a, b] = g > 2 ? examWindow(g) : [0, 0], lim = addDays(t, b);
+    return { ...d, cards: d.cards.map(c => (ids.has(c.courseId) && c.due > lim ? { ...c, due: addDays(t, a + Math.floor(Math.random() * (b - a + 1))) } : c)) };
+  }
+  courseDays() {
+    const S = this.state.data.settings; if (S.courseDays) return S.courseDays;
+    const m = {}; (S.tt || []).forEach(e => { if (e.k !== 'cours') return; const s = subjPlan(e.l); if (s) { m[s] = m[s] || []; if (!m[s].includes(e.d)) m[s].push(e.d); } });
+    return m;
+  }
+  pomoCfg() { const S = this.state.data.settings; return { work: S.pomoWork || 25, brk: S.pomoBreak || 5, long: S.pomoLong || 15, every: S.pomoEvery || 4 }; }
+  pomoGet() { try { return JSON.parse(lsGet(POMO_KEY)); } catch (e) { return null; } }
+  pomoSave(p) { this.pomo = p; if (p) lsSet(POMO_KEY, JSON.stringify(p)); else lsDel(POMO_KEY); this.pomoArm(); this.forceUpdate(); }
+  pomoArm() { clearTimeout(this.pomoT); if (this.pomo) this.pomoT = setTimeout(() => this.pomoCheck(), Math.max(250, this.pomo.endAt - Date.now() + 150)); }
+  pomoStart() {
+    try { const AC = window.AudioContext || window.webkitAudioContext; if (AC && !this.actx) this.actx = new AC(); if (this.actx && this.actx.state === 'suspended') this.actx.resume(); } catch (e) {}
+    this.pomoSave({ phase: 'work', block: 1, done: 0, endAt: Date.now() + this.pomoCfg().work * 60000 });
+    this.go('timer');
+  }
+  pomoStop() { if (window.confirm('Arrêter la séance ?')) this.pomoSave(null); }
+  pomoCheck() {
+    let p = this.pomo; if (!p) return;
+    const c = this.pomoCfg(); let n = 0, changed = false;
+    while (p.endAt <= Date.now() && n++ < 100) {
+      changed = true;
+      if (p.phase === 'work') { const done = p.done + 1, long = done % c.every === 0; p = { ...p, done, phase: long ? 'long' : 'break', endAt: p.endAt + (long ? c.long : c.brk) * 60000 }; }
+      else p = { ...p, phase: 'work', block: p.done + 1, endAt: p.endAt + c.work * 60000 };
+    }
+    if (changed) { this.pomoAlert(p); this.pomoSave(p); } else this.pomoArm();
+  }
+  pomoAlert(p) {
+    const work = p.phase === 'work';
+    try { if (navigator.vibrate) navigator.vibrate(work ? [120, 80, 120] : [300]); } catch (e) {}
+    try {
+      const ctx = this.actx;
+      if (ctx) {
+        if (ctx.state === 'suspended') ctx.resume();
+        [0, 0.28].forEach((dl, i) => { const o = ctx.createOscillator(), g = ctx.createGain(), t0 = ctx.currentTime + dl; o.type = 'sine'; o.frequency.value = work ? (i ? 880 : 660) : (i ? 523 : 659); g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.12, t0 + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.35); o.connect(g); g.connect(ctx.destination); o.start(t0); o.stop(t0 + 0.4); });
+      }
+    } catch (e) {}
+    if (document.hidden && lsGet('revisions.notif') === '1') this.notify(work ? 'Pause terminée' : 'Bloc terminé', work ? 'On repart pour un bloc de travail.' : 'Pose ton téléphone : c’est la pause.');
+  }
+  blankEf() { return { subj: (this.state.data.settings.specs || [])[0] || 'Physique-Chimie', chap: '', what: '', why: '', fix: '', date: this.today(), photo: '' }; }
+  saveErr() {
+    const ef = this.state.ef; if (!ef) return;
+    if (!(ef.what || '').trim() && !(ef.fix || '').trim()) return this.setState({ efErr: 'Écris au moins ce que tu as fait ou la bonne méthode.' });
+    if (!ef.why) return this.setState({ efErr: 'Choisis pourquoi tu t’es trompé.' });
+    const t = this.today(), rec = { ...ef, what: (ef.what || '').trim(), fix: (ef.fix || '').trim(), chap: (ef.chap || '').trim(), date: ef.date || t, upd: new Date().toISOString() };
+    this.updData(d => ({ ...d, errors: rec.id ? (d.errors || []).map(x => (x.id === rec.id ? { ...x, ...rec } : x)) : [...(d.errors || []), { ...rec, id: uid(), createdAt: t }] }));
+    this.setState({ errOpen: false, ef: null, efErr: '', errMsg: rec.id ? 'Erreur mise à jour.' : 'Erreur notée. Transforme-la en question pour ne plus la refaire.' });
+  }
+  async errToCard(e) {
+    if (this.state.errBusy) return;
+    const t = this.today();
+    let q = 'Situation : ' + (e.what || '…') + (e.chap ? ' (' + e.chap + ')' : '') + '. Quelle est la bonne méthode ?', a = e.fix || '';
+    if (this.aiAvailable()) {
+      this.setState({ errBusy: e.id });
+      try {
+        const j = parseJSON(await this.ai('Tu es professeur de Terminale (bac français). Tu transformes une erreur d’élève en question de révision active, claire et compréhensible sans contexte. Tu tutoies. Toute formule en LaTeX entre $…$. Réponds UNIQUEMENT en JSON valide.',
+          'Matière : ' + e.subj + (e.chap ? '\nChapitre : ' + e.chap : '') + '\nCe que l’élève a fait (erreur) : ' + (e.what || '') + '\nType d’erreur : ' + ((WHY_MAP[e.why] || {}).label || '') + '\nLa bonne méthode : ' + (e.fix || '') + '\n\nRenvoie {"q":"une question qui remet l’élève dans la même situation pour qu’il applique la bonne méthode","a":"la réponse attendue avec la bonne méthode, 1 à 3 phrases"}.', 500, true));
+        if (j && j.q) { q = String(j.q); a = String(j.a || a); }
+      } catch (x) {}
+    }
+    const chap = e.chap || 'Cahier d’erreurs';
+    this.updData(d => {
+      let course = d.courses.find(c => c.subj === e.subj && norm(c.chap) === norm(chap));
+      const courses = course ? d.courses : [...d.courses, (course = { id: uid(), subj: e.subj, chap, createdAt: t, fromErrors: true })];
+      const card = { id: uid(), courseId: course.id, type: 'libre', q, a, k0: 0.1, stage: -1, last: null, due: t, createdAt: t, fromError: e.id };
+      return { ...d, courses, cards: [...d.cards, card], errors: (d.errors || []).map(x => (x.id === e.id ? { ...x, cardId: card.id, upd: new Date().toISOString() } : x)) };
+    });
+    this.setState({ errBusy: null, errMsg: 'Question ajoutée à « ' + chap + ' » (' + e.subj + '). Elle arrive dans tes révisions dès aujourd’hui.' });
+  }
+  exoSet(patch) {
+    this.setState(s => {
+      const exo = { ...(s.exo || {}), ...patch };
+      if (exo.step === 'answer') lsSet(EXO_KEY, JSON.stringify(exo)); else if (exo.step === 'result') lsDel(EXO_KEY);
+      return { exo };
+    });
+  }
+  exoSetup(subj) {
+    const t = this.today(), d = this.state.data, cur = this.state.exo;
+    if (cur && cur.step === 'answer' && cur.subj === subj && window.confirm('Reprendre ton exercice en cours ?')) return this.go('exo');
+    const r = id => { const cs = d.cards.filter(x => x.courseId === id); return cs.length ? cs.reduce((a, x) => a + retention(x, t), 0) / cs.length : 1; };
+    const weakest = d.courses.filter(c => c.subj === subj).sort((a, b) => r(a.id) - r(b.id))[0];
+    this.go('exo', { exo: { step: 'setup', subj, courseId: weakest ? weakest.id : 'all', err: '' } });
+  }
+  async exoGenerate() {
+    const ex = this.state.exo; if (!ex) return;
+    if (!this.aiAvailable()) return this.exoSet({ err: 'Ajoute une clé IA dans Réglages pour créer un exercice.' });
+    const t = this.today(), d = this.state.data;
+    const courses = ex.courseId === 'all' ? d.courses.filter(c => c.subj === ex.subj) : d.courses.filter(c => c.id === ex.courseId);
+    const ids = new Set(courses.map(c => c.id));
+    const cards = d.cards.filter(c => ids.has(c.courseId)).sort((a, b) => retention(a, t) - retention(b, t)).slice(0, 40);
+    const chap = ex.courseId === 'all' ? 'Programme de ' + ex.subj : (courses[0] || {}).chap || ex.subj;
+    const notions = cards.map(c => '- ' + String(c.q).slice(0, 220) + ' → ' + String(c.a || '').slice(0, 260)).join('\n');
+    const text = courses.map(c => c.text || '').join('\n\n').slice(0, 6000);
+    this.exoSet({ step: 'loading', err: '', chap });
+    try {
+      const j = parseJSON(await this.ai('Tu es professeur de ' + ex.subj + ' en Terminale (bac français). Tu écris des exercices type bac en situation réelle, rigoureux et réalistes. Toute formule, grandeur ou unité en LaTeX entre $…$. Réponds UNIQUEMENT en JSON valide.',
+        'Chapitre : ' + chap + '\nNotions travaillées par l’élève (question → réponse) :\n' + (notions || '(aucune)') + (text ? '\n\nExtrait de son cours :\n' + text : '') + '\n\nÉcris UN exercice type bac en contexte réel (sport, santé, environnement, technologie, actualité…), niveau Terminale, 30 à 45 min. Renvoie {"titre":"titre court","contexte":"mise en situation de 3 à 6 phrases","donnees":["donnée ou document court, avec valeurs et unités"],"questions":[{"q":"énoncé de la question","points":4,"attendu":"corrigé modèle détaillé : étapes, formule, calcul, résultat avec unité"}]}. 3 à 5 questions qui s’enchaînent (chacune s’appuie sur la précédente), total des points = 20. En philosophie ou histoire-géo, les données sont des documents ou citations courtes et les questions demandent analyse et argumentation.', 3000, true));
+      const qs = (j && Array.isArray(j.questions) ? j.questions : []).filter(q => q && q.q).slice(0, 5);
+      if (qs.length < 2) throw new Error('exercice incomplet');
+      const data = { titre: String(j.titre || 'Exercice'), contexte: String(j.contexte || ''), donnees: (Array.isArray(j.donnees) ? j.donnees : []).map(String).slice(0, 8), questions: qs.map(q => ({ q: String(q.q), points: Math.max(1, +q.points || Math.round(20 / qs.length)), attendu: String(q.attendu || '') })) };
+      if (this.state.exo && this.state.exo.step === 'loading') this.exoSet({ step: 'answer', id: uid(), date: t, data, idx: 0, answers: data.questions.map(() => ({ text: '', photo: '' })), showEnonce: true, saved: false, errorsAdded: false });
+    } catch (e) { this.exoSet({ step: 'setup', err: 'Impossible de créer l’exercice (' + e.message + '). Réessaie dans un instant.' }); }
+  }
+  async exoCorrect() {
+    const ex = this.state.exo; if (!ex || !ex.data) return;
+    if (!this.aiAvailable()) return this.exoSet({ err: 'Ajoute une clé IA dans Réglages pour la correction.' });
+    this.exoSet({ step: 'correcting', err: '', progress: '' });
+    try {
+      const answers = [];
+      for (let i = 0; i < ex.answers.length; i++) {
+        const a = ex.answers[i] || {}; let txt = a.text || '';
+        if (a.photo) { this.exoSet({ progress: 'Lecture de ta copie, question ' + (i + 1) + '…' }); try { txt += (txt ? '\n' : '') + '[copie] ' + await this.ocrImage(a.photo); } catch (e) {} }
+        answers.push(txt.trim());
+      }
+      this.exoSet({ progress: 'Correction détaillée…' });
+      const D = ex.data;
+      const qtxt = D.questions.map((q, i) => 'Q' + (i + 1) + ' (' + q.points + ' pts) : ' + q.q + '\nCorrigé attendu : ' + q.attendu + '\nRéponse de l’élève : ' + (answers[i] || '(pas de réponse)')).join('\n\n');
+      const j = parseJSON(await this.ai('Tu es correcteur du bac (Terminale) en ' + ex.subj + '. Exigeant et juste, tu tutoies, ton de coach motivant, phrases courtes. Toute formule ou unité en LaTeX entre $…$. Réponds UNIQUEMENT en JSON valide.',
+        'Exercice : ' + D.titre + '\n' + D.contexte + '\nDonnées :\n' + D.donnees.map(x => '- ' + x).join('\n') + '\n\n' + qtxt + '\n\nCorrige chaque question étape par étape. En sciences, les étapes sont : Données utilisées, Formule, Calcul, Unité, Cohérence du résultat (garde celles qui s’appliquent). Dans les autres matières : Connaissances, Analyse, Argumentation, Rédaction. Renvoie {"questions":[{"points":2.5,"etapes":[{"label":"Formule","ok":true,"commentaire":"1 phrase"}],"correction":"la bonne réponse en 2 à 4 phrases","erreurs":[{"what":"ce que l’élève a fait de faux","why":"connaissance|enonce|methode|calcul|etourderie|redaction","fix":"la bonne méthode"}]}],"bilan":"2 phrases"}. Une entrée par question, dans l’ordre ; points entre 0 et le barème de la question ; erreurs vide si la question est juste.', 3500, true));
+      const rq = Array.isArray(j && j.questions) ? j.questions : [];
+      const total = D.questions.reduce((s, q) => s + q.points, 0) || 20;
+      const res = D.questions.map((q, i) => { const r = rq[i] || {}; return { points: Math.max(0, Math.min(q.points, +r.points || 0)), etapes: (Array.isArray(r.etapes) ? r.etapes : []).slice(0, 6).map(s => ({ label: String(s.label || ''), ok: !!s.ok, commentaire: String(s.commentaire || '') })), correction: String(r.correction || q.attendu || ''), erreurs: (Array.isArray(r.erreurs) ? r.erreurs : []).filter(x => x && (x.what || x.fix)).map(x => ({ what: String(x.what || ''), why: WHY_MAP[x.why] ? x.why : 'methode', fix: String(x.fix || '') })) }; });
+      const note = Math.round(res.reduce((s, r) => s + r.points, 0) / total * 40) / 2;
+      const rec = { id: ex.id || uid(), subj: ex.subj, courseId: ex.courseId, chap: ex.chap, date: this.today(), note, data: D, answers: answers.map(x => x.slice(0, 2000)), result: { questions: res, note, bilan: String((j && j.bilan) || '') }, errorsAdded: false };
+      this.updData(d => ({ ...d, exos: [...(d.exos || []).filter(x => x.id !== rec.id), rec] }));
+      this.exoSet({ ...rec, step: 'result', saved: true });
+    } catch (e) { this.exoSet({ step: 'answer', err: 'Correction impossible (' + e.message + '). Tes réponses sont gardées : réessaie.' }); }
+  }
+  exoAddErrors() {
+    const ex = this.state.exo; if (!ex || !ex.result || ex.errorsAdded) return;
+    const t = this.today(), upd = new Date().toISOString();
+    const list = ex.result.questions.flatMap((r, i) => (r.erreurs || []).map(x => ({ id: uid(), subj: ex.subj, chap: ex.chap, what: 'Q' + (i + 1) + ' : ' + x.what, why: x.why, fix: x.fix, date: t, createdAt: t, fromExo: ex.id, upd })));
+    if (!list.length) return;
+    this.updData(d => ({ ...d, errors: [...(d.errors || []), ...list], exos: (d.exos || []).map(x => (x.id === ex.id ? { ...x, errorsAdded: true } : x)) }));
+    this.go('errors', { exo: { ...ex, errorsAdded: true }, errMsg: plural(list.length, 'erreur') + ' de ton exercice dans le cahier. Relis-les, corrige-les si besoin, puis transforme-les en questions.' });
+  }
+  extraVals(t, appReady, scr, accent, ink, bg) {
+    const st = this.state, data = st.data, S = data.settings, cm = this.courseMap();
+    const now = new Date(), nowMin = now.getHours() * 60 + now.getMinutes(), dv = '1px solid var(--color-divider)';
+    const cell = (on, i, cols) => ({ bg: on ? ink : 'transparent', fg: on ? bg : ink, bt: i >= cols ? dv : '0', bl: i % cols ? dv : '0' });
+    const v = {
+      isErrors: appReady && scr === 'errors', isExo: appReady && scr === 'exo', isWeek: appReady && scr === 'week', isTimer: appReady && scr === 'timer',
+      goErrors: () => this.go('errors', { errMsg: '' }), goWeek: () => this.go('week'), errPhotoRef: this.errPhotoRef, exoPhotoRef: this.exoPhotoRef
+    };
+    // sommeil
+    const bed = toMin(S.bedtime || '23:00'), early = now.getHours() < 5, night = early ? addDays(t, -1) : t;
+    const late = bed < 300 ? nowMin >= bed && nowMin < 300 : nowMin >= bed || early;
+    v.isLate = appReady && late && lsGet('revisions.lateOff') !== night;
+    v.dismissLate = () => { lsSet('revisions.lateOff', night); this.forceUpdate(); };
+    // rappel le jour même
+    const cd = this.courseDays(), dw = now.getDay(), skip = lsGet('revisions.remSkip') || '', ents = this.ttFor(t);
+    v.dayRems = !appReady || v.isLate ? [] : PLAN_SUBJ.filter(s => (cd[s] || []).includes(dw)).filter(s => {
+      const ends = ents.filter(e => e.k === 'cours' && subjPlan(e.l) === s).map(e => toMin(e.e));
+      return nowMin >= (ends.length ? Math.max(...ends) : 17 * 60) && !data.courses.some(c => c.subj === s && c.createdAt === t) && skip.indexOf(t + '|' + s) < 0;
+    }).map(s => ({ text: 'Tu as eu ' + s + ' aujourd’hui ? 5 minutes pour créer tes questions maintenant.', onCreate: () => this.go('add', { addStep: 'form', addSubj: s }), onSkip: () => { lsSet('revisions.remSkip', [t + '|' + s].concat(skip.split(';').filter(x => x.slice(0, 10) === t)).join(';')); this.forceUpdate(); } }));
+    // semaine
+    const wk = addDays(t, -((pkey(t).getDay() + 6) % 7)), wkEnd = addDays(wk, 6), wc = (data.weekChecks || {})[wk] || {};
+    const setWc = p => this.updData(d => ({ ...d, weekChecks: { ...(d.weekChecks || {}), [wk]: { ...((d.weekChecks || {})[wk] || {}), ...p } } }));
+    const days = [...Array(7)].map((_, i) => addDays(wk, i));
+    let streak = 0, k = data.log[t] ? t : addDays(t, -1); while (data.log[k]) { streak++; k = addDays(k, -1); }
+    const doneDays = days.filter(x => data.log[x]).length, exosWk = (data.exos || []).filter(x => x.date >= wk && x.date <= wkEnd);
+    v.weekRange = fmtS(wk) + ' – ' + fmtS(wkEnd);
+    v.weekDays = days.map((x, i) => ({ l: 'LMMJVSD'[i], bg: data.log[x] ? accent : 'transparent', border: x === t ? ink : data.log[x] ? accent : 'var(--color-neutral-300)', fg: x === t ? ink : 'var(--color-neutral-700)' }));
+    v.streakPad = String(streak).padStart(2, '0');
+    v.streakTitle = streak ? (streak > 1 ? 'jours d’affilée avec tes questions' : 'jour avec tes questions') : 'Pas encore de série.';
+    v.streakSub = data.log[t] ? 'Fait aujourd’hui. Reviens demain pour la prolonger.' : streak ? 'Fais tes questions aujourd’hui pour ne pas la casser.' : 'Fais tes questions aujourd’hui pour la lancer.';
+    const goals = [];
+    if (S.goalDaily !== false) goals.push({ id: 'daily', title: 'Questions de l’appli chaque jour', sub: doneDays + '/7 jours cette semaine', done: doneDays >= 7 });
+    const gEx = S.goalExos ?? 2, nEx = exosWk.length + (wc.exos || 0);
+    if (gEx > 0) goals.push({ id: 'exos', title: (gEx > 1 ? gEx + ' séances' : '1 séance') + ' d’exercices en situation', sub: nEx + '/' + gEx + ' · ceux faits dans l’appli comptent tout seuls', done: nEx >= gEx, plus: () => setWc({ exos: (wc.exos || 0) + 1 }) });
+    const gBac = S.goalBac ?? 1, nBac = wc.bac || 0;
+    if (gBac > 0) goals.push({ id: 'bac', title: (gBac > 1 ? gBac + ' sujets' : '1 sujet') + ' type bac chronométré', sub: nBac + '/' + gBac + ' · sur papier, en conditions réelles', done: nBac >= gBac, plus: () => setWc({ bac: nBac + 1 }) });
+    v.goals = goals.map(g => { const done = g.done || !!wc[g.id + 'Ok']; return { title: g.title, sub: g.sub, done, box: done ? ink : 'transparent', deco: done ? 'line-through' : 'none', hasPlus: !!g.plus && !done, onPlus: g.plus, onToggle: () => setWc({ [g.id + 'Ok']: !wc[g.id + 'Ok'] }) }; });
+    const nDone = v.goals.filter(g => g.done).length;
+    v.goalsDone = nDone + '/' + v.goals.length;
+    v.goalsOpen = appReady && !!st.goalsOpen && scr === 'today';
+    v.openGoals = () => this.setState({ goalsOpen: true });
+    v.closeGoals = () => this.setState({ goalsOpen: false });
+    v.goalsWeek = () => this.go('week', { goalsOpen: false });
+    v.goalsErrors = () => this.go('errors', { goalsOpen: false, errMsg: '' });
+    v.goalsPomo = () => { this.setState({ goalsOpen: false }); if (this.pomo) this.go('timer'); else this.pomoStart(); };
+    v.weekRowSub = (streak ? 'Série de ' + streak + ' j' : 'Lance ta série') + ' · ' + nDone + '/' + v.goals.length + ' objectifs';
+    const specs = S.specs || [], ss = {};
+    data.cards.forEach(c => { const s = (cm[c.courseId] || {}).subj; if (!s) return; const o = ss[s] = ss[s] || { n: 0, r: 0 }; o.n++; o.r += retention(c, t); });
+    v.weekSugg = Object.keys(ss).map(s => ({ s, spec: specs.includes(s) ? 1 : 0, r: ss[s].r / ss[s].n, g: this.examGapFor(s, t) }))
+      .sort((a, b) => (b.spec - a.spec) || ((a.g || 999) - (b.g || 999)) || (a.r - b.r)).slice(0, 4)
+      .map(x => ({ name: x.s, hasTag: !!x.spec, tag: 'Spé · coef. 16', sub: Math.round(x.r * 100) + ' % retenu' + (x.g ? ' · devoir dans ' + x.g + ' j' : ''), onClick: () => this.exoSetup(x.s) }));
+    v.hasWeekSugg = v.weekSugg.length > 0; v.noWeekSugg = !v.weekSugg.length;
+    v.weekExos = exosWk.slice().reverse().map(x => ({ title: x.subj + ' · ' + x.chap, sub: fmtS(x.date) + ' · ' + ((x.data || {}).titre || ''), note: String(x.note).replace('.', ',') + '/20', onClick: () => this.go('exo', { exo: { ...x, step: 'result', saved: true } }) }));
+    v.hasWeekExos = v.weekExos.length > 0;
+    // minuteur
+    const p = this.pomo, c = this.pomoCfg();
+    const clk = style => (p ? React.createElement(Countdown, { endAt: p.endAt, style }) : null);
+    const big = (fs, color) => ({ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: fs, lineHeight: 0.85, letterSpacing: '-.05em', color, fontVariantNumeric: 'tabular-nums', display: 'block' });
+    const blk = p ? ((p.block - 1) % c.every) + 1 : 1;
+    Object.assign(v, {
+      pomoWorking: !!p && p.phase === 'work', pomoIdle: !p, pomoOnBreak: appReady && !!p && p.phase !== 'work',
+      showPomoBar: appReady && !!p && p.phase === 'work' && scr !== 'timer',
+      pomoClockBig: clk(big('112px', accent)), pomoClockBreak: clk(big('96px', 'var(--color-neutral-800)')),
+      pomoClockMini: clk({ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '17px', fontVariantNumeric: 'tabular-nums' }),
+      pomoBarLabel: 'Travail · bloc ' + blk + '/' + c.every,
+      pomoTitle: 'Bloc ' + blk + ' sur ' + c.every + '. Un seul sujet, notifications coupées.',
+      pomoBlocks: [...Array(c.every)].map((_, i) => ({ bg: p && i < blk - 1 ? accent : p && i === blk - 1 ? ink : 'var(--color-neutral-300)' })),
+      pomoInfo: c.work + ' min de travail, puis ' + c.brk + ' min de pause. Pause longue de ' + c.long + ' min après ' + c.every + ' blocs.',
+      pomoWorkMin: c.work,
+      pomoBreakKicker: p && p.phase === 'long' ? 'Pause longue · ' + c.long + ' min' : 'Pause · ' + c.brk + ' min',
+      pomoBreakSub: 'Le bloc suivant démarre tout seul à la fin.' + (p ? ' ' + plural(p.done, 'bloc') + ' dans cette séance.' : ''),
+      pomoStart: () => this.pomoStart(), pomoStop: () => this.pomoStop(), goTimer: () => this.go('timer'),
+      openPomo: () => (this.pomo ? this.go('timer') : this.pomoStart()),
+      pomoRowLabel: p ? 'Séance en cours · ' + (p.phase === 'work' ? 'travail' : 'pause') : 'Lancer une séance · ' + c.work + '/' + c.brk,
+      pomoRevise: () => (this.sessionList().length ? this.startSession() : this.go('pick', {})),
+      pomoReviseLabel: this.sessionList().length ? 'Réviser mes questions' : 'Choisir ce que je révise'
+    });
+    // réglages
+    const step = (label, key, val, min, max, inc, unit) => ({ label, val: val + (unit || ''), onMinus: () => this.setSetting({ [key]: Math.max(min, val - inc) }), onPlus: () => this.setSetting({ [key]: Math.min(max, val + inc) }) });
+    v.pomoSteps = [step('Travail', 'pomoWork', c.work, 5, 90, 5, ' min'), step('Pause', 'pomoBreak', c.brk, 1, 30, 1, ' min'), step('Pause longue', 'pomoLong', c.long, 5, 60, 5, ' min'), step('Blocs avant la pause longue', 'pomoEvery', c.every, 2, 8, 1, '')];
+    v.goalSteps = [step('Séances d’exercices en situation', 'goalExos', gEx, 0, 7, 1, ''), step('Sujets type bac chronométrés', 'goalBac', gBac, 0, 3, 1, '')];
+    v.goalDailyOpts = [['Oui', true], ['Non', false]].map(([label, val], i) => ({ label, ...cell((S.goalDaily !== false) === val, i, 2), onClick: () => this.setSetting({ goalDaily: val }) }));
+    v.specOpts = SPEC_OPTS.map((s, i) => { const on = specs.includes(s); return { label: s, ...cell(on, i, 2), onClick: () => this.setSetting({ specs: on ? specs.filter(x => x !== s) : [...specs, s].slice(-2) }) }; });
+    v.courseDayRows = PLAN_SUBJ.map(s => ({ subj: s, days: DOW_L.map(([d, l, full]) => { const on = (cd[s] || []).includes(d); return { l, full, bg: on ? ink : 'transparent', fg: on ? bg : ink, onClick: () => { const cur = this.courseDays(), arr = cur[s] || []; this.setSetting({ courseDays: { ...cur, [s]: on ? arr.filter(x => x !== d) : [...arr, d].sort() } }); } }; }) }));
+    v.bedtime = S.bedtime || '23:00';
+    v.onBedtime = e => this.setSetting({ bedtime: e.target.value || '23:00' });
+    // cahier d'erreurs
+    const errs = (data.errors || []).slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : (a.createdAt || '') < (b.createdAt || '') ? 1 : -1));
+    const cnt = {}; errs.filter(e => (e.date || '').slice(0, 7) === t.slice(0, 7)).forEach(e => { if (WHY_MAP[e.why]) cnt[e.why] = (cnt[e.why] || 0) + 1; });
+    const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0], maxC = Math.max(1, ...Object.values(cnt));
+    Object.assign(v, {
+      hasErrStat: !!top, errStatTitle: top ? 'Tu perds surtout des points ' + WHY_MAP[top].in + '.' : '', errStatTip: top ? WHY_MAP[top].tip : '',
+      errBars: WHY.filter(w => cnt[w.k]).sort((a, b) => cnt[b.k] - cnt[a.k]).map(w => ({ label: w.label, n: cnt[w.k], w: Math.round(cnt[w.k] / maxC * 100) + '%', color: w.k === top ? accent : ink })),
+      errCount: plural(errs.length, 'erreur'), noErrors: !errs.length && !st.errOpen,
+      errRows: errs.map(e => { const has = !!e.cardId && data.cards.some(x => x.id === e.cardId), busy = st.errBusy === e.id; return { title: e.subj + (e.chap ? ' · ' + e.chap : ''), date: fmtS(e.date || e.createdAt || t), why: (WHY_MAP[e.why] || { label: 'Autre' }).label, what: mx(e.what || '—'), fix: mx(e.fix || '—'), hasPhoto: !!e.photo, photo: e.photo || '', cardDisabled: has || !!st.errBusy, cardLabel: has ? 'Question créée ✓' : busy ? 'Création…' : 'Transformer en question', onCard: () => this.errToCard(e), onEdit: () => this.setState({ errOpen: true, ef: { ...e }, efErr: '', errMsg: '' }, () => { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; }), onDel: () => { if (window.confirm('Supprimer cette erreur ?')) this.updData(d => ({ ...d, errors: (d.errors || []).filter(x => x.id !== e.id), deleted: { ...(d.deleted || {}), [e.id]: t } })); } }; }),
+      hasErrMsg: !!st.errMsg, errMsg: st.errMsg || ''
+    });
+    const ef = st.ef || this.blankEf(), setEf = p2 => this.setState(s => ({ ef: { ...(s.ef || this.blankEf()), ...p2 }, efErr: '' }));
+    Object.assign(v, {
+      errFormOpen: !!st.errOpen, errFormClosed: !st.errOpen, errFormTitle: ef.id ? 'Modifier l’erreur' : 'Nouvelle erreur', ef,
+      efSubjOpts: SUBJECTS.map(s => ({ v: s })),
+      efSubj: e => setEf({ subj: e.target.value }), efChap: e => setEf({ chap: e.target.value }), efWhat: e => setEf({ what: e.target.value }), efFix: e => setEf({ fix: e.target.value }), efDate: e => setEf({ date: e.target.value }),
+      efWhyOpts: WHY.map((w, i) => ({ label: w.label, ...cell(ef.why === w.k, i, 2), onClick: () => setEf({ why: w.k }) })),
+      efHasPhoto: !!ef.photo, efNoPhoto: !ef.photo, efPhoto: ef.photo || '',
+      efPickPhoto: () => { if (this.errPhotoRef.current) this.errPhotoRef.current.click(); },
+      onEfPhoto: async e => { const fl = e.target.files && e.target.files[0]; e.target.value = ''; if (!fl) return; try { setEf({ photo: await this.shrinkImage(fl, 900, 0.6) }); } catch (x) { this.setState({ efErr: 'Photo illisible.' }); } },
+      efClearPhoto: () => setEf({ photo: '' }), efSave: () => this.saveErr(), efCancel: () => this.setState({ errOpen: false, ef: null, efErr: '' }),
+      openErrForm: () => this.setState({ errOpen: true, ef: this.blankEf(), efErr: '', errMsg: '' }),
+      hasEfErr: !!st.efErr, efErr: st.efErr || ''
+    });
+    // exercice en situation
+    const ex = st.exo, D = ex && ex.data, ai = this.aiAvailable();
+    Object.assign(v, {
+      exoSubj: ex ? ex.subj : '', exoNoAi: !!ex && ex.step === 'setup' && !ai, exoSetup: !!ex && ex.step === 'setup' && ai,
+      exoLoading: !!ex && (ex.step === 'loading' || ex.step === 'correcting'),
+      exoLoadingTitle: ex && ex.step === 'correcting' ? 'Je corrige ta copie…' : 'J’écris ton exercice…',
+      exoLoadingSub: ex && ex.step === 'correcting' ? (ex.progress || 'Correction détaillée…') + ' Compte 20 à 40 secondes.' : 'Situation réelle, données, 3 à 5 questions. Compte 20 à 40 secondes.',
+      exoChaps: ex && ex.step === 'setup' ? [{ id: 'all', name: 'Tout ' + ex.subj, sub: plural(data.courses.filter(x => x.subj === ex.subj).length, 'chapitre') }].concat(data.courses.filter(x => x.subj === ex.subj).map(x => { const cs = data.cards.filter(y => y.courseId === x.id); return { id: x.id, name: x.chap, sub: plural(cs.length, 'question') + ' · ' + (cs.length ? Math.round(cs.reduce((a, y) => a + retention(y, t), 0) / cs.length * 100) : 0) + ' %' }; })).map(o => ({ ...o, box: ex.courseId === o.id ? ink : 'transparent', onClick: () => this.exoSet({ courseId: o.id }) })) : [],
+      exoGenerate: () => this.exoGenerate(), hasExoErr: !!(ex && ex.err), exoErr: ex ? ex.err || '' : '',
+      exoBack: () => this.go('lib'),
+      exoAnswer: !!ex && ex.step === 'answer' && !!D, exoResult: !!ex && ex.step === 'result' && !!D && !!ex.result
+    });
+    if (v.exoAnswer) {
+      const i = ex.idx || 0, q = D.questions[i], a = (ex.answers || [])[i] || { text: '', photo: '' };
+      const setAns = p2 => { const answers = (this.state.exo.answers || []).slice(); answers[i] = { ...answers[i], ...p2 }; this.exoSet({ answers }); };
+      Object.assign(v, {
+        exoTitre: D.titre, exoContexte: mx(D.contexte), exoDonnees: D.donnees.map(x => ({ t: mx(x) })), hasDonnees: D.donnees.length > 0,
+        exoShowEnonce: !!ex.showEnonce, exoEnonceLabel: ex.showEnonce ? 'Masquer l’énoncé' : 'Revoir l’énoncé', exoToggleEnonce: () => this.exoSet({ showEnonce: !ex.showEnonce }),
+        exoSegs: D.questions.map((_, j) => ({ bg: j < i ? accent : j === i ? ink : 'var(--color-neutral-300)' })),
+        exoQKicker: 'Question ' + (i + 1) + ' sur ' + D.questions.length + ' · ' + q.points + ' pts', exoQ: mx(q.q), exoText: a.text || '',
+        onExoText: e => { const val = e.target.value; this.setState(s => { const answers = s.exo.answers.slice(); answers[i] = { ...answers[i], text: val }; return { exo: { ...s.exo, answers } }; }); clearTimeout(this.exoT); this.exoT = setTimeout(() => { const x = this.state.exo; if (x && x.step === 'answer') lsSet(EXO_KEY, JSON.stringify(x)); }, 800); },
+        exoHasPhoto: !!a.photo, exoNoPhoto: !a.photo, exoPhoto: a.photo || '',
+        exoPickPhoto: () => { if (this.exoPhotoRef.current) this.exoPhotoRef.current.click(); },
+        onExoPhoto: async e => { const fl = e.target.files && e.target.files[0]; e.target.value = ''; if (!fl) return; try { setAns({ photo: await this.shrinkImage(fl, 1400, 0.7) }); } catch (x) { this.exoSet({ err: 'Photo illisible.' }); } },
+        exoClearPhoto: () => setAns({ photo: '' }),
+        exoHasPrev: i > 0, exoPrev: () => this.exoSet({ idx: i - 1, showEnonce: false, err: '' }),
+        exoNextLabel: i < D.questions.length - 1 ? 'Question suivante' : 'Terminer et faire corriger',
+        exoNext: () => { if (i < D.questions.length - 1) { this.exoSet({ idx: i + 1, showEnonce: false, err: '' }); if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; } else this.exoCorrect(); }
+      });
+    }
+    if (v.exoResult) {
+      const R = ex.result, nErr = R.questions.reduce((s, r) => s + (r.erreurs || []).length, 0);
+      Object.assign(v, {
+        exoNote: String(R.note).replace('.', ','), exoBilan: R.bilan, exoResTitle: D.titre,
+        exoCorr: D.questions.map((q, j) => { const r = R.questions[j] || { points: 0, etapes: [], correction: '' }; return { n: 'Question ' + (j + 1), pts: String(r.points).replace('.', ',') + ' / ' + q.points, q: mx(q.q), ans: mx((ex.answers || [])[j] || '(pas de réponse)'), steps: (r.etapes || []).map(s => ({ label: s.label, com: mx(s.commentaire), ok: s.ok, ko: !s.ok })), corr: mx(r.correction) }; }),
+        exoErrLabel: ex.errorsAdded ? 'Erreurs ajoutées au cahier ✓' : nErr ? 'Ajouter mes erreurs au cahier (' + nErr + ')' : 'Aucune erreur à noter. Bravo.',
+        exoErrDisabled: !!ex.errorsAdded || !nErr, exoAddErrors: () => this.exoAddErrors(), exoAgain: () => this.exoSetup(ex.subj)
+      });
+    }
+    // séance : écart calé sur le contrôle
+    const sc0 = st.sess && !st.sess.done ? st.sess.list[st.sess.idx] : null, eg = sc0 ? this.examGapFor(sc0.subj, t) : 0;
+    v.hasExamNote = eg > 0;
+    v.examNote = eg > 2 ? 'Devoir de ' + sc0.subj + ' dans ' + eg + ' j : écart calé entre ' + examWindow(eg).join(' et ') + ' j (Cepeda et al., 2008), avec une révision dans les 2 derniers jours.' : eg > 0 ? 'Devoir de ' + sc0.subj + (eg === 1 ? ' demain' : ' dans 2 j') + ' : dernière ligne droite.' : '';
+    return v;
   }
   examGapFor(subj, t) {
     const ex = (this.state.data.exams || []).filter(x => x.subj === subj && x.date > t).sort((a, b) => (a.date < b.date ? -1 : 1))[0];
@@ -1468,14 +2053,14 @@ class Component extends DCLogic {
     this.setState({ sess: { ...s, ...this.blankQ(), list, results, idx, done: idx >= list.length } }, () => { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; });
   }
 
-  async shrinkImage(file) {
+  async shrinkImage(file, max = 1800, q = 0.85) {
     const url = URL.createObjectURL(file);
     try {
       const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('Image illisible.')); i.src = url; });
-      const k = Math.min(1, 1800 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      const k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
       c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
       const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
-      return c.toDataURL('image/jpeg', 0.85);
+      return c.toDataURL('image/jpeg', q);
     } finally { URL.revokeObjectURL(url); }
   }
   async ocrImage(dataUrl) {
@@ -1653,7 +2238,7 @@ class Component extends DCLogic {
   }
   saveCourse(qs) {
     const t = this.today();
-    const course = { id: uid(), subj: this.state.addSubj, chap: this.state.addChap.trim() || 'Chapitre sans titre', createdAt: t };
+    const course = { id: uid(), subj: this.state.addSubj, chap: this.state.addChap.trim() || 'Chapitre sans titre', createdAt: t, text: (this.state.addText || '').slice(0, 8000) };
     const lvl = this.state.addK0 || 'none', k0 = K0[lvl];
     const cards = qs.map(q => ({ id: uid(), courseId: course.id, ...q, k0, stage: -1, last: null, due: lvl === 'good' ? addDays(t, 1) : t, createdAt: t }));
     this.updData(d => ({ ...d, courses: [...d.courses, course], cards: spreadNew([...d.cards, ...cards], t) }));
@@ -1766,7 +2351,7 @@ class Component extends DCLogic {
         onDelete: () => { if (window.confirm(`Supprimer « ${x.course.chap} » et ses ${plural(x.cards.length, 'question')} ?`)) this.updData(d => ({ ...d, courses: d.courses.filter(c => c.id !== x.id), cards: d.cards.filter(c => c.courseId !== x.id), deleted: { ...(d.deleted || {}), [x.id]: t } })); }
       });
     });
-    const library = Object.keys(libMap).sort((a, b) => (subjOrder[a] ?? 99) - (subjOrder[b] ?? 99)).map(name => ({ name, chapters: libMap[name], total: libMap[name].reduce((a, c) => a + c.n, 0) }));
+    const library = Object.keys(libMap).sort((a, b) => (subjOrder[a] ?? 99) - (subjOrder[b] ?? 99)).map(name => ({ name, chapters: libMap[name], total: libMap[name].reduce((a, c) => a + c.n, 0), onExo: () => this.exoSetup(name) }));
 
     // planning
     const capQ = this.capQ();
@@ -1865,6 +2450,7 @@ class Component extends DCLogic {
       startSession: () => this.startSession(),
       startAhead: () => this.startSession(null, true),
       isPick: appReady && scr === 'pick',
+      ...this.extraVals(t, appReady, scr, accent, ink, bg),
       goPick: () => this.go('pick', {}),
       ...(scr === 'pick' ? (() => {
         const sel = new Set(st.pickSel || []), toggle = ids => this.setState(s => { const cur = new Set(s.pickSel || []); const all = ids.every(id => cur.has(id)); ids.forEach(id => (all ? cur.delete(id) : cur.add(id))); return { pickSel: [...cur] }; });
@@ -1917,8 +2503,8 @@ class Component extends DCLogic {
       verdict: s && s.verdict ? 'Juste.' : 'Pas tout à fait.', verdictColor: s && s.verdict ? ink : 'var(--color-accent-700)',
       hasFeedback: !!(s && s.feedback), aiFeedback: s ? mx(s.feedback) : '',
       attendus: (s ? s.attendus : []).map(a => ({ label: mx(String(a.label || '')), box: a.ok ? ink : 'transparent', border: a.ok ? ink : accent, mark: a.ok ? bg : accent, sym: a.ok ? '✓' : '✗' })),
-      hasAiError: !!(s && s.aiError), aiError: s ? s.aiError : '',
-      evalLabel: propL ? (auto || !this.aiAvailable() ? 'Correction auto : ' : 'L’IA propose : ') + propL.label + ' — tu confirmes ?' : 'Comment c’était ?',
+      hasAiError: !!(s && s.aiError), aiError: s ? s.aiError : '', aiPending: !!(s && s.aiPending),
+      evalLabel: propL ? (auto || !this.aiAvailable() || (s && s.aiPending) ? 'Correction auto : ' : 'L’IA propose : ') + propL.label + ' — tu confirmes ?' : 'Comment c’était ?',
       levelOpts,
       confirmDisabled: !selL,
       confirmLabel: selL ? (() => { const g = this.schedFor(card, selL.k).gap; return `Valider · ${selL.label} · ${g ? 'J+' + g : 'revient tout de suite'}`; })() : 'Choisis un niveau',
@@ -2003,7 +2589,7 @@ class Component extends DCLogic {
       hasSetMsg: !!st.setMsg, setMsg: st.setMsg,
       hasDemo: data.courses.some(c => c.demo),
       removeDemo: () => this.updData(d => { const ids = new Set(d.courses.filter(c => c.demo).map(c => c.id)); const deleted = { ...(d.deleted || {}) }; ids.forEach(id => { deleted[id] = t; }); return { ...d, courses: d.courses.filter(c => !c.demo), cards: d.cards.filter(c => !ids.has(c.courseId)), deleted }; }),
-      resetAll: () => { if (window.confirm('Tout effacer ? Tes cours et ton historique seront supprimés.')) { const key = data.settings.apiKey; this.updData(d => { const deleted = { ...(d.deleted || {}) }; d.courses.forEach(c => { deleted[c.id] = t; }); return { ...emptyData(), deleted, settings: { ...emptyData().settings, apiKey: key } }; }); this.go('today'); } }
+      resetAll: () => { if (window.confirm('Tout effacer ? Tes cours et ton historique seront supprimés.')) { const key = data.settings.apiKey; this.updData(d => { const deleted = { ...(d.deleted || {}) }; d.courses.forEach(c => { deleted[c.id] = t; }); (d.errors || []).concat(d.exos || []).forEach(x => { deleted[x.id] = t; }); return { ...emptyData(), deleted, settings: { ...emptyData().settings, apiKey: key } }; }); this.go('today'); } }
     };
   }
 }
