@@ -275,8 +275,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <sc-if value="{{ sessActive }}">
   <div style="flex:1;padding:20px 20px 16px;display:flex;flex-direction:column;gap:16px">
     <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">{{ cq.subj }} · {{ cq.chap }}</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-neutral" style="white-space:nowrap;flex:none">{{ cq.typeLabel }}</span><span class="tag tag-outline" style="white-space:nowrap;flex:none">{{ cq.ivLabel }}</span></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-neutral" style="white-space:nowrap;flex:none">{{ cq.typeLabel }}</span><span class="tag tag-outline" style="white-space:nowrap;flex:none">{{ cq.ivLabel }}</span><sc-if value="{{ isVariant }}"><span class="tag tag-outline" style="white-space:nowrap;flex:none;color:var(--color-neutral-700)">Variante</span></sc-if></div>
     <h3 style="font-size:23px;margin:0;text-wrap:pretty;line-height:1.22">{{ cq.qM }}</h3>
+    <sc-if value="{{ hasVarMsg }}"><p style="font-size:13px;color:var(--color-neutral-700);margin:-6px 0 0;text-wrap:pretty">{{ varMsg }}</p></sc-if>
+    <sc-if value="{{ isVariant }}">
+      <div style="display:flex;flex-wrap:wrap;gap:0 20px;margin-top:-10px">
+        <button class="btn btn-ghost" onClick="{{ toggleOrig }}" style="padding:0;min-height:44px;font-size:13px">{{ origLabel }}</button>
+        <button class="btn btn-ghost" onClick="{{ reportVar }}" style="padding:0;min-height:44px;font-size:13px;color:var(--color-neutral-700)">Signaler une erreur</button>
+      </div>
+      <sc-if value="{{ showOrig }}">
+        <div style="border-top:1px solid var(--color-divider);padding-top:8px;margin-top:-10px"><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:4px">Question d'origine</div><div style="font-size:15px;line-height:1.45;text-wrap:pretty">{{ cq.origQM }}</div></div>
+      </sc-if>
+    </sc-if>
     <sc-if value="{{ showTextArea }}">
       <textarea class="input" value="{{ sessText }}" onChange="{{ onSessText }}" placeholder="Réponds de mémoire, même approximativement. C'est l'effort de rappel qui ancre." style="min-height:150px;font-size:16px;line-height:1.5;padding:12px"></textarea>
     </sc-if>
@@ -324,6 +334,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
         <sc-if value="{{ aiPending }}"><div style="font-size:13px;color:var(--color-neutral-700)">Correction rapide — l'IA affine…</div></sc-if>
         <sc-if value="{{ hasAiError }}"><div style="font-size:13px;color:var(--color-accent-700)">{{ aiError }}</div></sc-if>
         <div class="card" style="padding:14px 16px;gap:6px"><div class="card-kicker" style="color:var(--color-accent-700)">Correction du cours</div><div style="font-size:15px;line-height:1.55;text-wrap:pretty;overflow-x:auto">{{ cq.aM }}</div></div>
+        <sc-if value="{{ showEncore }}">
+          <button class="btn btn-secondary" onClick="{{ encore }}" disabled="{{ encoreDisabled }}" style="width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;text-align:left;white-space:normal"><span style="font-family:var(--font-heading);font-weight:800;font-size:16px">{{ encoreLabel }}</span><span style="font-size:12px;font-weight:400;text-wrap:pretty">{{ encoreSub }}</span></button>
+          <sc-if value="{{ hasEncoreMsg }}"><p style="font-size:13px;color:var(--color-accent-700);margin:0;text-wrap:pretty">{{ encoreMsg }}</p></sc-if>
+        </sc-if>
       </div>
     </sc-if>
   </div>
@@ -347,6 +361,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
         </sc-for>
       </div>
       <sc-if value="{{ hasExamNote }}"><p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">{{ examNote }}</p></sc-if>
+      <sc-if value="{{ hasVarCapNote }}"><p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">{{ varCapNote }}</p></sc-if>
       <button class="btn btn-primary" onClick="{{ confirmEval }}" disabled="{{ confirmDisabled }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:8px"><span>{{ confirmLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></button>
     </sc-if>
   </div>
@@ -488,7 +503,22 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
           <sc-if value="{{ c.open }}">
             <div style="padding:0 0 12px;display:flex;flex-direction:column">
               <sc-for list="{{ c.questions }}" as="q" hint-placeholder-count="3">
-                <div style="display:grid;grid-template-columns:1fr auto;gap:10px;padding:8px 0;border-top:1px solid var(--color-neutral-300)"><span style="font-size:13px;line-height:1.35">{{ q.q }}</span><span style="font-size:11px;color:var(--color-neutral-700);white-space:nowrap">{{ q.next }}</span></div>
+                <div style="border-top:1px solid var(--color-neutral-300)">
+                  <button onClick="{{ q.onClick }}" style="width:100%;display:grid;grid-template-columns:1fr auto;gap:10px;padding:8px 0;min-height:44px;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="font-size:13px;line-height:1.35">{{ q.q }}</span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><span style="font-size:11px;color:var(--color-neutral-700);white-space:nowrap">{{ q.next }}</span><span style="font-size:11px;color:var(--color-neutral-700);white-space:nowrap">{{ q.varsCount }}</span></span></button>
+                  <sc-if value="{{ q.open }}">
+                    <div style="padding:2px 0 14px;display:flex;flex-direction:column;gap:10px">
+                      <div><div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-700);margin-bottom:4px">Réponse attendue</div><div style="font-size:13px;line-height:1.45;text-wrap:pretty;overflow-x:auto">{{ q.a }}</div></div>
+                      <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:6px;border-bottom:2px solid var(--color-text)">{{ q.varsTitle }}</div>
+                      <sc-for list="{{ q.vars }}" as="v" hint-placeholder-count="2">
+                        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;padding-bottom:10px;border-bottom:1px solid var(--color-divider)">
+                          <div style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--color-accent-700)">{{ v.label }}</span><span style="font-size:13px;line-height:1.4;text-wrap:pretty">{{ v.q }}</span><span style="font-size:12px;line-height:1.4;color:var(--color-neutral-700);text-wrap:pretty;overflow-x:auto">{{ v.a }}</span></div>
+                          <button class="btn btn-ghost" onClick="{{ v.onDel }}" style="padding:0 4px;min-height:44px;font-size:13px">Supprimer</button>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{ q.noVars }}"><p style="font-size:12px;color:var(--color-neutral-700);margin:0;text-wrap:pretty">{{ q.noVarsText }}</p></sc-if>
+                    </div>
+                  </sc-if>
+                </div>
               </sc-for>
               <button class="btn btn-ghost" onClick="{{ c.onDelete }}" style="align-self:flex-start;margin-top:6px;padding:6px 4px;font-size:13px">Supprimer ce chapitre</button>
             </div>
@@ -648,7 +678,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 
 <sc-if value="{{ isExo }}">
 <div data-screen-label="Exercice" data-r="screen-narrow" style="padding:12px 20px 28px">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Exercice type bac · {{ exoSubj }}</span><button class="btn btn-ghost" onClick="{{ exoBack }}" style="padding:4px 2px;font-size:13px">Retour</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">{{ exoKind }} · {{ exoSubj }}</span><button class="btn btn-ghost" onClick="{{ exoBack }}" style="padding:4px 2px;font-size:13px">Retour</button></div>
   <sc-if value="{{ exoNoAi }}">
     <h2 style="font-size:30px;margin:20px 0 6px">Il me faut une clé IA.</h2>
     <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 18px;text-wrap:pretty">Les exercices en situation sont écrits et corrigés par l'IA. Ajoute une clé Gemini ou Groq dans Réglages : c'est gratuit et ça prend 2 minutes.</p>
@@ -674,6 +704,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     </div>
   </sc-if>
   <sc-if value="{{ exoAnswer }}">
+    <sc-if value="{{ exoHasTimer }}"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;padding-bottom:8px;border-bottom:1px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:{{ exoTimeColor }};text-wrap:pretty">{{ exoTimeLabel }}</span>{{ exoClock }}</div></sc-if>
     <div style="display:flex;gap:4px;margin-top:16px"><sc-for list="{{ exoSegs }}" as="g" hint-placeholder-count="4"><span style="flex:1;height:4px;background:{{ g.bg }}"></span></sc-for></div>
     <sc-if value="{{ exoShowEnonce }}">
       <div style="margin-top:16px;padding:16px;background:var(--color-surface);display:flex;flex-direction:column;gap:10px">
@@ -722,8 +753,81 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
         <div style="font-size:14px;line-height:1.45;margin-top:10px;text-wrap:pretty"><span style="font-weight:700">Corrigé : </span>{{ q.corr }}</div>
       </div>
     </sc-for>
+    <sc-if value="{{ exoIsAnnale }}">
+      <div style="border-top:2px solid var(--color-text);padding:12px 0 2px"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Chapitres du sujet · quoi revoir</span></div>
+      <sc-for list="{{ anResChaps }}" as="c" hint-placeholder-count="3">
+        <button onClick="{{ c.onClick }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:56px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ c.name }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ c.sub }}</span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><sc-if value="{{ c.hasPts }}"><span style="font-family:var(--font-heading);font-weight:800;font-size:15px;color:{{ c.ptsColor }};white-space:nowrap">{{ c.pts }}</span></sc-if><span style="font-size:13px;font-weight:600;color:var(--color-accent-700);white-space:nowrap">{{ c.act }}</span></span></button>
+      </sc-for>
+      <button class="btn btn-primary" onClick="{{ anAddCards }}" disabled="{{ anCardsDisabled }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:14px"><span>{{ anCardsLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+    </sc-if>
     <button class="btn btn-primary" onClick="{{ exoAddErrors }}" disabled="{{ exoErrDisabled }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:8px"><span>{{ exoErrLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
-    <button class="btn btn-secondary" onClick="{{ exoAgain }}" style="width:100%;justify-content:flex-start;padding:16px;font-size:15px;margin-top:8px">Nouvel exercice</button>
+    <button class="btn btn-secondary" onClick="{{ exoAgain }}" style="width:100%;justify-content:flex-start;padding:16px;font-size:15px;margin-top:8px">{{ exoAgainLabel }}</button>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAnnale }}">
+<div data-screen-label="Annales" data-r="screen-narrow" style="padding:12px 20px 28px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Annales du bac</span><button class="btn btn-ghost" onClick="{{ anBack }}" style="padding:4px 2px;font-size:13px">Retour</button></div>
+  <sc-if value="{{ anHome }}">
+    <h2 style="font-size:30px;margin:20px 0 6px;text-wrap:pretty">De vrais sujets, en vraies conditions.</h2>
+    <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 16px;text-wrap:pretty">Importe un sujet d'annale en photo, PDF ou texte. Je le découpe en exercices, je repère tes chapitres et je rédige le corrigé. Sujet complet chronométré ou un seul exercice.</p>
+    <button class="btn btn-primary" onClick="{{ anNew }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px"><span>Importer un sujet</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+    <sc-if value="{{ anHasNotes }}">
+      <h4 style="margin:28px 0 0;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Tes notes</h4>
+      <sc-for list="{{ anNotes }}" as="n" hint-placeholder-count="2">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border-bottom:1px solid var(--color-divider)"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600">{{ n.subj }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ n.sub }}</span></span><span style="display:flex;flex-direction:column;align-items:flex-end"><span style="font-family:var(--font-heading);font-weight:800;font-size:26px;line-height:1;color:var(--color-accent)">{{ n.avg }}</span><span style="font-size:11px;color:var(--color-neutral-700)">/20 de moyenne</span></span></div>
+      </sc-for>
+    </sc-if>
+    <sc-if value="{{ anHasSujets }}">
+      <h4 style="margin:28px 0 0;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Tes sujets</h4>
+      <sc-for list="{{ anSujets }}" as="s" hint-placeholder-count="2">
+        <button onClick="{{ s.onClick }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ s.titre }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ s.sub }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
+      </sc-for>
+    </sc-if>
+  </sc-if>
+  <sc-if value="{{ anImport }}">
+    <h2 style="font-size:30px;margin:20px 0 6px">Quel sujet ?</h2>
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin:16px 0 8px">Matière</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--color-divider)"><sc-for list="{{ anSubjs }}" as="o" hint-placeholder-count="6"><button onClick="{{ o.onClick }}" style="min-height:48px;padding:8px 12px;border:0;border-top:{{ o.bt }};border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-weight:600;font-size:14px;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for></div>
+    <input type="file" ref="{{ anPhotoRef }}" accept="image/*" multiple="{{ true }}" onChange="{{ onAnFiles }}" style="display:none">
+    <input type="file" ref="{{ anFileRef }}" accept=".pdf,.docx,.txt,application/pdf" multiple="{{ true }}" onChange="{{ onAnFiles }}" style="display:none">
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin:20px 0 8px">Le sujet</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn btn-secondary" onClick="{{ anPickPhotos }}" style="justify-content:space-between;padding:14px"><span>Photos</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg></button>
+      <button class="btn btn-secondary" onClick="{{ anPickFile }}" style="justify-content:space-between;padding:14px"><span>PDF ou Word</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2;stroke-linecap:square"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path></svg></button>
+    </div>
+    <sc-if value="{{ hasAnImportMsg }}"><p style="font-size:13px;margin:10px 0 0;color:var(--color-neutral-700)">{{ anImportMsg }}</p></sc-if>
+    <div class="field" style="margin-top:14px"><label>Ou colle le texte du sujet</label><textarea class="input" value="{{ anText }}" onChange="{{ onAnText }}" placeholder="Exercice 1 …" style="min-height:180px;font-size:15px;line-height:1.45;resize:vertical"></textarea></div>
+    <p style="font-size:12px;color:var(--color-neutral-700);margin:6px 0 0;text-wrap:pretty">{{ anTextInfo }}</p>
+    <sc-if value="{{ anNoAi }}"><p style="font-size:13px;color:var(--color-accent-700);margin:12px 0 0;text-wrap:pretty">Il faut une clé IA (Réglages) pour analyser et corriger un sujet.</p></sc-if>
+    <sc-if value="{{ hasAnErr }}"><p style="font-size:13px;color:var(--color-accent-700);margin:12px 0 0;text-wrap:pretty">{{ anErr }}</p></sc-if>
+    <button class="btn btn-primary" onClick="{{ anParse }}" disabled="{{ anParseDisabled }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:16px"><span>Analyser le sujet</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  </sc-if>
+  <sc-if value="{{ anParsing }}">
+    <div style="padding:40px 0">
+      <div style="height:4px;background:var(--color-neutral-300)"><span style="display:block;height:4px;width:40%;background:var(--color-accent)"></span></div>
+      <h2 style="font-size:28px;margin:20px 0 6px">Je découpe ton sujet…</h2>
+      <p style="font-size:13px;color:var(--color-neutral-700);margin:0;text-wrap:pretty">Exercices, barème, chapitres, puis le corrigé de chaque question. Compte 30 secondes à 1 minute.</p>
+    </div>
+  </sc-if>
+  <sc-if value="{{ anChoose }}">
+    <div style="padding:20px 0 16px">
+      <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">{{ anSubjLabel }}</div>
+      <h2 style="font-size:28px;margin:8px 0 6px;text-wrap:pretty">{{ anTitre }}</h2>
+      <p style="font-size:13px;color:var(--color-neutral-700);margin:0">{{ anMeta }}</p>
+    </div>
+    <button class="btn btn-primary" onClick="{{ anFull }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px"><span>{{ anFullLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    <h4 style="margin:28px 0 0;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Ou un seul exercice</h4>
+    <sc-for list="{{ anParts }}" as="p" hint-placeholder-count="3">
+      <button onClick="{{ p.onClick }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ p.titre }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ p.sub }}</span></span><span style="font-family:var(--font-heading);font-weight:800;font-size:15px;white-space:nowrap">{{ p.pts }}</span></button>
+    </sc-for>
+    <h4 style="margin:28px 0 0;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Chapitres du sujet</h4>
+    <p style="font-size:13px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">Ce qui tombe dans ce sujet, le plus fragile en premier. Révise-le avant de te lancer.</p>
+    <sc-for list="{{ anChaps }}" as="c" hint-placeholder-count="3">
+      <button onClick="{{ c.onClick }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:56px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ c.name }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ c.sub }}</span></span><span style="font-size:13px;font-weight:600;color:var(--color-accent-700);white-space:nowrap">{{ c.act }}</span></button>
+    </sc-for>
+    <button class="btn btn-ghost" onClick="{{ anDelete }}" style="margin-top:16px;padding:6px 4px;font-size:13px">Supprimer ce sujet</button>
   </sc-if>
 </div>
 </sc-if>
@@ -898,6 +1002,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Sommeil</h4>
   <div class="field"><label>Heure de coucher visée</label><input class="input" type="time" value="{{ bedtime }}" onChange="{{ onBedtime }}" style="min-height:46px;font-size:16px"></div>
   <p style="font-size:13px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">Après cette heure, l'accueil te propose d'arrêter. Rien n'est bloqué.</p>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Variantes</h4>
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) 128px;gap:12px;align-items:center;min-height:56px;border-bottom:1px solid var(--color-divider)"><span style="font-size:14px;font-weight:600">Varier les questions</span><div style="display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--color-divider)"><sc-for list="{{ varyOpts }}" as="o" hint-placeholder-count="2"><button onClick="{{ o.onClick }}" style="min-height:48px;padding:8px 12px;border:0;border-top:{{ o.bt }};border-left:{{ o.bl }};background:{{ o.bg }};color:{{ o.fg }};font:inherit;font-weight:600;font-size:14px;text-align:left;cursor:pointer">{{ o.label }}</button></sc-for></div></div>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:8px 0 0;text-wrap:pretty">{{ varyNote }}</p>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:6px 0 0;text-wrap:pretty">Une question ne passe aux longs intervalles qu'une fois réussie sur une variante. Pour voir ou supprimer les variantes : Cours, puis touche une question.</p>
   <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">IA gratuite</h4>
   <p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">L'IA tourne sur les serveurs gratuits de Google (Gemini) et de Groq : rien ne tourne sur ton appareil, donc aucun risque de plantage. Tes clés restent sur cet appareil.</p>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--color-divider)">
@@ -919,7 +1027,17 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     <div style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid var(--color-divider);font-size:14px;line-height:1.4"><strong style="font-family:var(--font-heading);color:var(--color-accent)">2</strong><span>« Create API Key », donne-lui un nom, puis copie la clé (elle commence par gsk_).</span></div>
   </div>
   <div class="field" style="margin-bottom:12px"><label>Clé API Groq</label><input class="input" type="password" value="{{ groqKeyVal }}" onChange="{{ onGroqKey }}" placeholder="gsk_…" autocomplete="off" autocapitalize="off" style="min-height:46px;font-size:16px"></div>
-  <div style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center">
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;margin:22px 0 4px">Autre IA de secours (facultatif)</div>
+  <p style="font-size:13px;color:var(--color-neutral-700);margin:0;text-wrap:pretty">Elle prend le relais quand Gemini et Groq saturent : création des questions, correction et variantes.</p>
+  <sc-for list="{{ extraProv }}" as="p" hint-placeholder-count="4">
+    <div style="padding-top:10px;border-top:2px solid var(--color-text);margin-top:14px;display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:15px">{{ p.name }}</div>
+      <div style="font-size:14px;line-height:1.4;text-wrap:pretty">Ouvre <a href="{{ p.link }}" target="_blank" rel="noopener">{{ p.linkLabel }}</a>. {{ p.steps }}</div>
+      <sc-if value="{{ p.hasNote }}"><div style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ p.note }}</div></sc-if>
+      <div class="field"><label>Clé API {{ p.name }}</label><input class="input" type="password" value="{{ p.val }}" onChange="{{ p.onChange }}" placeholder="{{ p.ph }}" autocomplete="off" autocapitalize="off" style="min-height:46px;font-size:16px"></div>
+    </div>
+  </sc-for>
+  <div style="display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;margin-top:16px">
     <button class="btn btn-secondary" onClick="{{ testAi }}" style="justify-content:flex-start;padding:12px 14px">Tester</button>
     <span style="font-size:13px;color:{{ aiTestColor }}">{{ aiTestMsg }}</span>
   </div>
@@ -955,6 +1073,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-family:var(--font-heading);font-weight:800;font-size:22px">Objectifs</span><button class="btn btn-ghost" onClick="{{ closeGoals }}" style="padding:8px 4px;min-height:44px;font-size:13px">Fermer</button></div>
     <button onClick="{{ goalsWeek }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:16px;font-weight:600">Ma semaine</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ weekRowSub }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
     <button onClick="{{ goalsErrors }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:16px;font-weight:600">Mes erreurs</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ errCount }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
+    <button onClick="{{ goalsAnnale }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:16px;font-weight:600">Annales du bac</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ anRowSub }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
     <button onClick="{{ goalsPomo }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;min-height:60px;padding:10px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:16px;font-weight:600">{{ pomoRowLabel }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ pomoInfo }}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="m9 18 6-6-6-6"></path></svg></button>
   </div>
 </div>
@@ -1069,8 +1188,8 @@ const ebbSched = (c, k, t, examGap) => {
   return { S, gap, stage: stageOfS(S) };
 };
 const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
-const emptyData = () => ({ courses: [], cards: [], exams: [], settings: { savateDays: [2, 4, 6], capMin: 15, tt: DEFAULT_TT, weekAPar: 0, apiKey: '', model: 'gemini-flash-latest', pomoWork: 25, pomoBreak: 5, pomoLong: 15, pomoEvery: 4, goalDaily: true, goalExos: 2, goalBac: 1, specs: ['Physique-Chimie', 'SVT'], bedtime: '23:00' }, log: {}, deleted: {}, errors: [], exos: [], weekChecks: {} });
-const normData = d => ({ ...emptyData(), ...(d || {}), courses: (d && d.courses) || [], cards: (d && d.cards) || [], exams: (d && d.exams) || [], log: (d && d.log) || {}, deleted: (d && d.deleted) || {}, errors: (d && d.errors) || [], exos: (d && d.exos) || [], weekChecks: (d && d.weekChecks) || {}, settings: { ...emptyData().settings, ...((d && d.settings) || {}) } });
+const emptyData = () => ({ courses: [], cards: [], exams: [], settings: { savateDays: [2, 4, 6], capMin: 15, tt: DEFAULT_TT, weekAPar: 0, apiKey: '', model: 'gemini-flash-latest', pomoWork: 25, pomoBreak: 5, pomoLong: 15, pomoEvery: 4, goalDaily: true, goalExos: 2, goalBac: 1, specs: ['Physique-Chimie', 'SVT'], bedtime: '23:00', varyQ: true }, log: {}, deleted: {}, errors: [], exos: [], weekChecks: {}, annales: [] });
+const normData = d => ({ ...emptyData(), ...(d || {}), courses: (d && d.courses) || [], cards: (d && d.cards) || [], exams: (d && d.exams) || [], log: (d && d.log) || {}, deleted: (d && d.deleted) || {}, errors: (d && d.errors) || [], exos: (d && d.exos) || [], annales: (d && d.annales) || [], weekChecks: (d && d.weekChecks) || {}, settings: { ...emptyData().settings, ...((d && d.settings) || {}) } });
 const DEVICE_KEY = 'revisions.apikey', MODE_KEY = 'revisions.mode', LLM_KEY = 'revisions.llm';
 const GROQ_KEY = 'revisions.groqkey', THEME_KEY = 'revisions.theme';
 const applyTheme = th => {
@@ -1128,10 +1247,26 @@ const Countdown = ({ endAt, style }) => {
   const [, tick] = React.useState(0);
   React.useEffect(() => { const i = setInterval(() => tick(x => x + 1), 1000); return () => clearInterval(i); }, []);
   const s = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
-  return React.createElement('span', { style }, pad(Math.floor(s / 60)) + ':' + pad(s % 60));
+  return React.createElement('span', { style }, s >= 3600 ? Math.floor(s / 3600) + ':' + pad(Math.floor((s % 3600) / 60)) + ':' + pad(s % 60) : pad(Math.floor(s / 60)) + ':' + pad(s % 60));
 };
 const cepedaBand = g => (g <= 14 ? [0.2, 0.4] : g <= 60 ? [0.1, 0.2] : [0.05, 0.1]);
 const examWindow = g => { const [lo, hi] = cepedaBand(g); const a = Math.max(1, Math.round(g * lo)); return [a, Math.max(a, Math.min(Math.round(g * hi), g - 2))]; };
+// Variantes : la même notion posée autrement à partir de la 2e révision.
+const VAR_TARGET = 3, VAR_MAX = 6, VAR_CAP = 14, VAR_DAY_MAX = 80, VAR_KEY = 'revisions.varDay';
+const VAR_LABEL = { calcul: 'Autres valeurs', inverse: 'Question inverse', exemple: 'Nouvel exemple', vf: 'Vrai / faux à justifier', qcm: 'QCM à pièges', explique: 'Avec tes mots', relier: 'Lien avec le chapitre' };
+const VAR_ANGLES = [['inverse', 'question inverse : on donne la définition, la propriété ou la description, l’élève retrouve le terme ou la notion'], ['exemple', 'application à un exemple concret nouveau, absent de la question d’origine'], ['vf', 'affirmation « Vrai ou faux ? Justifie. » : l’élève tranche puis justifie en une ou deux phrases'], ['qcm', 'QCM à 4 choix dont 3 pièges plausibles (erreurs classiques d’élèves)'], ['explique', '« Explique avec tes mots » : l’élève reformule la notion simplement'], ['relier', 'relier la notion à une autre notion du même chapitre (liste fournie)']];
+const pickVar = (c, ex) => { const vs = ((c && c.vars) || []).filter(v => v && v.q && !(ex || []).includes(v.id) && v.id !== c.lastVar); return vs.find(v => !v.n) || vs.slice().sort((a, b) => (a.n || 0) - (b.n || 0))[0] || null; };
+const withVar = (b, v) => ({ ...b, base: b, vid: v.id, type: TYPE_LABEL[v.type] ? v.type : 'libre', q: v.q, a: v.a, options: v.options, correct: v.correct, gap: v.gap });
+const unusedVars = c => (c.vars || []).filter(v => v && !v.n).length;
+const numsOf = s => { s = String(s || '').replace(/\$/g, '').replace(/\{,\}/g, '.').replace(/(\d),(\d)/g, '$1.$2').replace(/(\d)[\s\u202f\u00a0](?=\d{3}\b)/g, '$1').replace(/\\times|\\cdot|×|·/g, '×').replace(/−/g, '-').replace(/(-?\d+(?:\.\d+)?)\s*×\s*10\s*\^\s*\{?\s*(-?\d+)\s*\}?/g, '$1e$2'); return (s.match(/-?\d+(?:\.\d+)?(?:e-?\d+)?/g) || []).map(Number).filter(n => isFinite(n)); };
+const sameNum = (a, b) => { const x = numsOf(a), y = numsOf(b); if (!x.length || !y.length) return false; const close = (p, q) => Math.abs(p - q) <= Math.max(1e-9, 0.02 * Math.max(Math.abs(p), Math.abs(q))); return (x.length === y.length && x.every((n, i) => close(n, y[i]))) || close(x[0], y[0]) && (x.length === 1 || y.length === 1); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const AN_DUR = { 'Physique-Chimie': 210, 'SVT': 210, 'Maths': 240, 'Philosophie': 240, 'Histoire-Géo': 240, 'SES': 240, 'Ens. scientifique': 120, 'Anglais': 210, 'Spé autre': 210 };
+const n20 = x => String(Math.round((+x || 0) * 2) / 2).replace('.', ',');
+const fmtDur = m => (m >= 60 ? Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + pad(m % 60) : '') : m + ' min');
+const OAI_PROV = [
+  { id: 'sambanova', name: 'SambaNova', url: 'https://api.sambanova.ai/v1/chat/completions', models: ['DeepSeek-V3.1', 'gpt-oss-120b', 'Meta-Llama-3.3-70B-Instruct'], fast: ['Meta-Llama-3.3-70B-Instruct', 'gpt-oss-120b'], link: 'https://cloud.sambanova.ai/apis', linkLabel: 'cloud.sambanova.ai/apis', steps: 'Connecte-toi avec Google, puis « Create API Key ».', note: '', ph: 'Clé SambaNova' }
+];
 
 function demoData(today) {
   const courses = [], cards = [];
@@ -1157,6 +1292,8 @@ class Component extends DCLogic {
   photoRef = React.createRef();
   errPhotoRef = React.createRef();
   exoPhotoRef = React.createRef();
+  anPhotoRef = React.createRef();
+  anFileRef = React.createRef();
   state = { screen: 'today', auth: 'checking', user: null, dataReady: false, loadError: '', sync: 'idle', syncMsg: '', migrated: false, authStep: 'email', authEmail: '', authCode: '', resendIn: 0, authBusy: false, authError: '', authInfo: '', setupUrl: '', setupKey: '', setupError: '', cfgFromFile: false, data: emptyData(), sess: null, addStep: 'form', addSubj: 'Physique-Chimie', addChap: '', addText: '', addError: '', gen: [], genSel: [], loadIdx: 0, added: 0, manual: [{ q: '', a: '' }], openCourse: null, importStatus: null, aiTest: null, setMsg: '' };
 
   // ── Persistence ──────────────────────────────────────────────
@@ -1383,7 +1520,7 @@ class Component extends DCLogic {
     applyTheme(lsGet(THEME_KEY) || 'auto');
     if (window.matchMedia) { this.onScheme = () => { if ((lsGet(THEME_KEY) || 'auto') === 'auto') applyTheme('auto'); }; matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.onScheme); }
     if (!window.katex) { const kt = setInterval(() => { if (window.katex) { clearInterval(kt); this.forceUpdate(); } }, 300); setTimeout(() => clearInterval(kt), 20000); }
-    this.minTick = setInterval(() => { this.forceUpdate(); this.checkReminders(); }, 30000);
+    this.minTick = setInterval(() => { this.forceUpdate(); this.checkReminders(); this.varKick(500); }, 30000);
     setTimeout(() => this.checkReminders(), 3000);
     this.pomo = this.pomoGet(); this.pomoCheck();
     this.onPomoVis = () => { if (!document.hidden) this.pomoCheck(); };
@@ -1394,7 +1531,7 @@ class Component extends DCLogic {
     try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
     try { if ('serviceWorker' in navigator && window.top === window && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js'); } catch (e) {}
     this.onVis = () => {
-      if (document.visibilityState === 'visible') { this.forceUpdate(); this.refreshRemote(); }
+      if (document.visibilityState === 'visible') { this.forceUpdate(); this.refreshRemote(); this.varKick(3000); }
       else this.cloudSave();
     };
     this.onOnline = () => this.cloudSave();
@@ -1410,13 +1547,14 @@ class Component extends DCLogic {
   }
   componentDidUpdate() {
     const st = this.state;
+    if (st.dataReady && !this.varStarted) { this.varStarted = true; this.varKick(5000); }
     if (st.dataReady && st.data && !st.data.settings.spread1 && !this.spreading) {
       this.spreading = true;
       this.updData(d => ({ ...d, cards: spreadNew(d.cards, this.today()), settings: { ...d.settings, spread1: true } }), () => { this.spreading = false; });
     }
   }
   componentWillUnmount() {
-    clearTimeout(this.pomoT); document.removeEventListener('visibilitychange', this.onPomoVis); document.removeEventListener('pointerdown', this.onTapAudio);
+    clearTimeout(this.varT); clearTimeout(this.pomoT); document.removeEventListener('visibilitychange', this.onPomoVis); document.removeEventListener('pointerdown', this.onTapAudio);
     document.removeEventListener('visibilitychange', this.onVis);
     window.removeEventListener('online', this.onOnline);
     window.removeEventListener('pagehide', this.onHide);
@@ -1428,7 +1566,38 @@ class Component extends DCLogic {
 
   aiPref() { return this.state.data.settings.aiMode === 'rules' ? 'rules' : 'auto'; }
   groqKey() { return (lsGet(GROQ_KEY) || '').trim(); }
-  aiMode() { return this.aiPref() === 'rules' ? 'rules' : (this.geminiKey() || this.groqKey()) ? 'cloud' : 'rules'; }
+  provKey(id) { return (lsGet('revisions.key.' + id) || '').trim(); }
+  keyNames() { return [this.geminiKey() && 'Gemini', this.groqKey() && 'Groq', ...OAI_PROV.filter(p => this.provKey(p.id)).map(p => p.name)].filter(Boolean); }
+  aiMode() { return this.aiPref() === 'rules' ? 'rules' : this.keyNames().length ? 'cloud' : 'rules'; }
+  aiList(system, user, maxTokens, json, opts) {
+    return [this.geminiKey() && ['Gemini', () => this.callGemini(system, user, maxTokens, json, opts)], this.groqKey() && ['Groq', () => this.callGroq(system, user, maxTokens, json, opts)]]
+      .concat(OAI_PROV.map(p => this.provKey(p.id) && [p.name, () => this.callOAI(p, system, user, maxTokens, json, opts)])).filter(Boolean);
+  }
+  // Mistral, SambaNova, Cohere, OpenRouter : même format que l'API OpenAI.
+  async callOAI(p, system, user, maxTokens, json, opts = {}) {
+    const key = this.provKey(p.id), fast = !!opts.fast; let lastErr;
+    for (const model of fast ? p.fast : p.models) {
+      let useJson = json;
+      for (let tries = 0; tries < 2; tries++) {
+        const r = await fetch(p.url, { method: 'POST', signal: opts.signal, headers: { 'content-type': 'application/json', authorization: 'Bearer ' + key }, body: JSON.stringify({ model, temperature: fast ? 0.2 : 0.4, messages: [{ role: 'system', content: system }, { role: 'user', content: user }], max_tokens: fast ? (opts.max || 400) : Math.min(8000, Math.max(1500, maxTokens * 2)), ...(useJson ? { response_format: { type: 'json_object' } } : {}) }) });
+        const j = await r.json().catch(() => ({}));
+        if (r.ok) {
+          const c0 = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+          const t = typeof c0 === 'string' ? c0 : Array.isArray(c0) ? c0.map(x => x.text || '').join('') : '';
+          if (t) return t;
+          lastErr = new Error('réponse vide'); break;
+        }
+        const msg = String((j.error && (j.error.message || j.error)) || j.message || ('Erreur ' + r.status));
+        if (r.status === 400 && useJson && /json|response_format/i.test(msg)) { useJson = false; continue; }
+        if (r.status === 401 || r.status === 403) throw new Error('clé ' + p.name + ' invalide');
+        if (r.status === 402) throw new Error('crédit gratuit épuisé');
+        if (r.status === 429) throw new Error('limite gratuite atteinte, réessaie plus tard');
+        lastErr = new Error(r.status === 404 ? 'modèle indisponible' : r.status >= 500 ? 'surchargé' : msg.slice(0, 120));
+        break;
+      }
+    }
+    throw lastErr || new Error('indisponible');
+  }
   aiAvailable() { return this.aiMode() !== 'rules'; }
   qgen() { return import(new URL('./local-qgen.js', document.baseURI).href); }
   geminiKey() { const k = (this.state.data.settings.apiKey || '').trim(); return /^sk-ant/.test(k) ? '' : k; }
@@ -1447,7 +1616,7 @@ class Component extends DCLogic {
             systemInstruction: { parts: [{ text: system }] },
             contents: [{ role: 'user', parts: [{ text: user }] }],
             generationConfig: fast
-              ? { temperature: 0.2, maxOutputTokens: 400, thinkingConfig: { thinkingBudget: 0 }, ...(json ? { responseMimeType: 'application/json' } : {}) }
+              ? { temperature: 0.2, maxOutputTokens: opts.max || 400, thinkingConfig: { thinkingBudget: 0 }, ...(json ? { responseMimeType: 'application/json' } : {}) }
               : { temperature: 0.4, maxOutputTokens: Math.max(2048, maxTokens * 4), ...(json ? { responseMimeType: 'application/json' } : {}) }
           })
         });
@@ -1472,7 +1641,7 @@ class Component extends DCLogic {
   async callGroq(system, user, maxTokens, json, opts = {}) {
     const key = this.groqKey(), fast = !!opts.fast;
     let lastErr;
-    for (const model of fast ? ['llama-3.1-8b-instant', 'openai/gpt-oss-20b'] : ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'llama-3.3-70b-versatile']) {
+    for (const model of fast ? (opts.models || ['llama-3.1-8b-instant', 'openai/gpt-oss-20b']) : ['openai/gpt-oss-120b', 'openai/gpt-oss-20b', 'llama-3.3-70b-versatile']) {
       const oss = /gpt-oss/.test(model);
       const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -1481,7 +1650,7 @@ class Component extends DCLogic {
         body: JSON.stringify({
           model, temperature: fast ? 0.2 : 0.4,
           messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
-          max_completion_tokens: fast ? 400 : Math.min(6000, Math.max(oss ? 1500 : 600, maxTokens * (oss ? 3 : 2))),
+          max_completion_tokens: fast ? (opts.max || 400) : Math.min(6000, Math.max(oss ? 1500 : 600, maxTokens * (oss ? 3 : 2))),
           ...(oss ? { reasoning_effort: 'low' } : {}),
           ...(json ? { response_format: { type: 'json_object' } } : {})
         })
@@ -1505,7 +1674,7 @@ class Component extends DCLogic {
   }
   async ai(system, user, maxTokens, json) {
     if (this.aiPref() === 'rules') throw new Error('IA désactivée');
-    const list = [this.geminiKey() && ['Gemini', () => this.callGemini(system, user, maxTokens, json)], this.groqKey() && ['Groq', () => this.callGroq(system, user, maxTokens, json)]].filter(Boolean);
+    const list = this.aiList(system, user, maxTokens, json, {});
     if (!list.length) throw new Error('aucune clé IA');
     const errs = [];
     for (const [name, call] of list) {
@@ -1514,17 +1683,23 @@ class Component extends DCLogic {
     throw new Error(errs.join(' · '));
   }
   // Correction : Gemini et Groq en parallèle (mode rapide), première réponse JSON valide, 8 s max.
-  async aiFast(system, user) {
+  aiFast(system, user) { return this.aiQuick(system, user, j => j && typeof j === 'object' && j.level); }
+  async aiQuick(system, user, valid, o = {}) {
     if (this.aiPref() === 'rules') throw new Error('IA désactivée');
-    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 8000), opts = { fast: true, signal: ctrl.signal };
-    const list = [this.geminiKey() && ['Gemini', () => this.callGemini(system, user, 400, true, opts)], this.groqKey() && ['Groq', () => this.callGroq(system, user, 400, true, opts)]].filter(Boolean);
+    const ms = o.timeout || 8000, ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), ms), opts = { fast: true, signal: ctrl.signal, max: o.max, models: o.models };
+    const list = this.aiList(system, user, 400, true, opts);
     if (!list.length) { clearTimeout(timer); throw new Error('aucune clé IA'); }
+    // Deux IA en parallèle ; si les deux échouent, les deux suivantes, dans le temps restant.
+    const errs = [];
     try {
-      return await Promise.any(list.map(([name, call]) => call()
-        .then(out => { const j = parseJSON(out); if (!j || typeof j !== 'object' || !j.level) throw new Error('réponse mal formée'); return j; })
-        .catch(e => { throw new Error(name + ' : ' + (ctrl.signal.aborted ? 'trop lent (plus de 8 s)' : e.message)); })));
-    } catch (e) {
-      throw new Error(e && e.errors ? e.errors.map(x => x.message).join(' · ') : (e && e.message) || 'indisponible');
+      for (let i = 0; i < list.length && !ctrl.signal.aborted; i += 2) {
+        try {
+          return await Promise.any(list.slice(i, i + 2).map(([name, call]) => call()
+            .then(out => { const j = parseJSON(out); if (!valid(j)) throw new Error('réponse mal formée'); return j; })
+            .catch(e => { throw new Error(name + ' : ' + (ctrl.signal.aborted ? 'trop lent (plus de ' + Math.round(ms / 1000) + ' s)' : e.message)); })));
+        } catch (e) { (e && e.errors ? e.errors : [e]).forEach(x => errs.push((x && x.message) || 'indisponible')); }
+      }
+      throw new Error(errs.join(' · ') || 'indisponible');
     } finally { clearTimeout(timer); ctrl.abort(); }
   }
 
@@ -1690,7 +1865,7 @@ class Component extends DCLogic {
   startSession(subj, ahead) {
     const cm = this.courseMap(), t = this.today();
     const src = ahead ? this.state.data.cards.filter(c => c.due > t).sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : retention(a, t) - retention(b, t))).slice(0, 15) : subj ? this.state.data.cards.filter(c => (cm[c.courseId] || {}).subj === subj).sort((a, b) => retention(a, t) - retention(b, t)).slice(0, 15) : this.sessionList();
-    const list = src.map(c => ({ ...c, subj: (cm[c.courseId] || {}).subj || '', chap: (cm[c.courseId] || {}).chap || '' }));
+    const list = src.map(c => this.sessItem(c, cm));
     if (list.length) this.go('session', { sess: { list, idx: 0, results: [], ...this.blankQ() } });
   }
   pickCards() {
@@ -1704,10 +1879,10 @@ class Component extends DCLogic {
   }
   startCustom() {
     const cm = this.courseMap();
-    const list = this.pickCards().map(c => ({ ...c, subj: (cm[c.courseId] || {}).subj || '', chap: (cm[c.courseId] || {}).chap || '' }));
+    const list = this.pickCards().map(c => this.sessItem(c, cm));
     if (list.length) this.go('session', { sess: { list, idx: 0, results: [], ...this.blankQ() } });
   }
-  blankQ() { return { text: '', pick: null, phase: 'answer', proposal: null, sel: null, feedback: '', attendus: [], aiError: '', aiPending: false, verdict: null, done: false }; }
+  blankQ() { return { text: '', pick: null, phase: 'answer', proposal: null, sel: null, feedback: '', attendus: [], aiError: '', aiPending: false, verdict: null, done: false, showOrig: false, encoreBusy: false, encoreMsg: '', varMsg: '' }; }
 
   async reveal(dontKnow) {
     const s = this.state.sess; if (!s) return;
@@ -1862,14 +2037,14 @@ class Component extends DCLogic {
       }
       this.exoSet({ progress: 'Correction détaillée…' });
       const D = ex.data;
-      const qtxt = D.questions.map((q, i) => 'Q' + (i + 1) + ' (' + q.points + ' pts) : ' + q.q + '\nCorrigé attendu : ' + q.attendu + '\nRéponse de l’élève : ' + (answers[i] || '(pas de réponse)')).join('\n\n');
+      const qtxt = D.questions.map((q, i) => 'Q' + (i + 1) + (D.parts && q.part != null ? ' [partie ' + (q.part + 1) + ']' : '') + ' (' + q.points + ' pts) : ' + q.q + '\nCorrigé attendu : ' + q.attendu + '\nRéponse de l’élève : ' + (answers[i] || '(pas de réponse)')).join('\n\n');
       const j = parseJSON(await this.ai('Tu es correcteur du bac (Terminale) en ' + ex.subj + '. Exigeant et juste, tu tutoies, ton de coach motivant, phrases courtes. Toute formule ou unité en LaTeX entre $…$. Réponds UNIQUEMENT en JSON valide.',
-        'Exercice : ' + D.titre + '\n' + D.contexte + '\nDonnées :\n' + D.donnees.map(x => '- ' + x).join('\n') + '\n\n' + qtxt + '\n\nCorrige chaque question étape par étape. En sciences, les étapes sont : Données utilisées, Formule, Calcul, Unité, Cohérence du résultat (garde celles qui s’appliquent). Dans les autres matières : Connaissances, Analyse, Argumentation, Rédaction. Renvoie {"questions":[{"points":2.5,"etapes":[{"label":"Formule","ok":true,"commentaire":"1 phrase"}],"correction":"la bonne réponse en 2 à 4 phrases","erreurs":[{"what":"ce que l’élève a fait de faux","why":"connaissance|enonce|methode|calcul|etourderie|redaction","fix":"la bonne méthode"}]}],"bilan":"2 phrases"}. Une entrée par question, dans l’ordre ; points entre 0 et le barème de la question ; erreurs vide si la question est juste.', 3500, true));
+        'Exercice : ' + D.titre + '\n' + this.enonceText(D) + '\n\n' + qtxt + '\n\nCorrige chaque question étape par étape. En sciences, les étapes sont : Données utilisées, Formule, Calcul, Unité, Cohérence du résultat (garde celles qui s’appliquent). Dans les autres matières : Connaissances, Analyse, Argumentation, Rédaction. Renvoie {"questions":[{"points":2.5,"etapes":[{"label":"Formule","ok":true,"commentaire":"1 phrase"}],"correction":"la bonne réponse en 2 à 4 phrases","erreurs":[{"what":"ce que l’élève a fait de faux","why":"connaissance|enonce|methode|calcul|etourderie|redaction","fix":"la bonne méthode"}]}],"bilan":"2 phrases"}. Une entrée par question, dans l’ordre ; points entre 0 et le barème de la question ; erreurs vide si la question est juste.', Math.max(3500, D.questions.length * 350), true));
       const rq = Array.isArray(j && j.questions) ? j.questions : [];
       const total = D.questions.reduce((s, q) => s + q.points, 0) || 20;
       const res = D.questions.map((q, i) => { const r = rq[i] || {}; return { points: Math.max(0, Math.min(q.points, +r.points || 0)), etapes: (Array.isArray(r.etapes) ? r.etapes : []).slice(0, 6).map(s => ({ label: String(s.label || ''), ok: !!s.ok, commentaire: String(s.commentaire || '') })), correction: String(r.correction || q.attendu || ''), erreurs: (Array.isArray(r.erreurs) ? r.erreurs : []).filter(x => x && (x.what || x.fix)).map(x => ({ what: String(x.what || ''), why: WHY_MAP[x.why] ? x.why : 'methode', fix: String(x.fix || '') })) }; });
       const note = Math.round(res.reduce((s, r) => s + r.points, 0) / total * 40) / 2;
-      const rec = { id: ex.id || uid(), subj: ex.subj, courseId: ex.courseId, chap: ex.chap, date: this.today(), note, data: D, answers: answers.map(x => x.slice(0, 2000)), result: { questions: res, note, bilan: String((j && j.bilan) || '') }, errorsAdded: false };
+      const rec = { id: ex.id || uid(), subj: ex.subj, courseId: ex.courseId, chap: ex.chap, date: this.today(), note, data: D, answers: answers.map(x => x.slice(0, 2000)), result: { questions: res, note, bilan: String((j && j.bilan) || '') }, errorsAdded: false, ...(ex.annale ? { annale: ex.annale } : {}) };
       this.updData(d => ({ ...d, exos: [...(d.exos || []).filter(x => x.id !== rec.id), rec] }));
       this.exoSet({ ...rec, step: 'result', saved: true });
     } catch (e) { this.exoSet({ step: 'answer', err: 'Correction impossible (' + e.message + '). Tes réponses sont gardées : réessaie.' }); }
@@ -1963,6 +2138,9 @@ class Component extends DCLogic {
     const step = (label, key, val, min, max, inc, unit) => ({ label, val: val + (unit || ''), onMinus: () => this.setSetting({ [key]: Math.max(min, val - inc) }), onPlus: () => this.setSetting({ [key]: Math.min(max, val + inc) }) });
     v.pomoSteps = [step('Travail', 'pomoWork', c.work, 5, 90, 5, ' min'), step('Pause', 'pomoBreak', c.brk, 1, 30, 1, ' min'), step('Pause longue', 'pomoLong', c.long, 5, 60, 5, ' min'), step('Blocs avant la pause longue', 'pomoEvery', c.every, 2, 8, 1, '')];
     v.goalSteps = [step('Séances d’exercices en situation', 'goalExos', gEx, 0, 7, 1, ''), step('Sujets type bac chronométrés', 'goalBac', gBac, 0, 3, 1, '')];
+    v.varyOpts = [['Oui', true], ['Non', false]].map(([label, val], i) => ({ label, ...cell((S.varyQ !== false) === val, i, 2), onClick: () => { this.setSetting({ varyQ: val }); if (val) this.varKick(1500); } }));
+    const nVar = data.cards.reduce((a, x) => a + unusedVars(x), 0);
+    v.varyNote = S.varyQ === false ? 'Désactivé : tu révises toujours la question d’origine.' : !this.aiAvailable() ? 'Ajoute une clé IA ci-dessous : c’est elle qui écrit les variantes. Sans clé, tu révises la question d’origine.' : 'Dès la 2e révision, la même notion revient autrement : autres valeurs pour les calculs (vérifiés par une 2e IA), autre angle pour le reste. ' + (nVar ? plural(nVar, 'variante') + ' prête' + (nVar > 1 ? 's' : '') + '.' : 'Elles se préparent en arrière-plan, 2 jours avant la révision.');
     v.goalDailyOpts = [['Oui', true], ['Non', false]].map(([label, val], i) => ({ label, ...cell((S.goalDaily !== false) === val, i, 2), onClick: () => this.setSetting({ goalDaily: val }) }));
     v.specOpts = SPEC_OPTS.map((s, i) => { const on = specs.includes(s); return { label: s, ...cell(on, i, 2), onClick: () => this.setSetting({ specs: on ? specs.filter(x => x !== s) : [...specs, s].slice(-2) }) }; });
     v.courseDayRows = PLAN_SUBJ.map(s => ({ subj: s, days: DOW_L.map(([d, l, full]) => { const on = (cd[s] || []).includes(d); return { l, full, bg: on ? ink : 'transparent', fg: on ? bg : ink, onClick: () => { const cur = this.courseDays(), arr = cur[s] || []; this.setSetting({ courseDays: { ...cur, [s]: on ? arr.filter(x => x !== d) : [...arr, d].sort() } }); } }; }) }));
@@ -1995,7 +2173,7 @@ class Component extends DCLogic {
     // exercice en situation
     const ex = st.exo, D = ex && ex.data, ai = this.aiAvailable();
     Object.assign(v, {
-      exoSubj: ex ? ex.subj : '', exoNoAi: !!ex && ex.step === 'setup' && !ai, exoSetup: !!ex && ex.step === 'setup' && ai,
+      exoSubj: ex ? ex.subj : '', exoKind: ex && ex.annale ? 'Annale' : 'Exercice type bac', exoNoAi: !!ex && ex.step === 'setup' && !ai, exoSetup: !!ex && ex.step === 'setup' && ai,
       exoLoading: !!ex && (ex.step === 'loading' || ex.step === 'correcting'),
       exoLoadingTitle: ex && ex.step === 'correcting' ? 'Je corrige ta copie…' : 'J’écris ton exercice…',
       exoLoadingSub: ex && ex.step === 'correcting' ? (ex.progress || 'Correction détaillée…') + ' Compte 20 à 40 secondes.' : 'Situation réelle, données, 3 à 5 questions. Compte 20 à 40 secondes.',
@@ -2005,10 +2183,12 @@ class Component extends DCLogic {
       exoAnswer: !!ex && ex.step === 'answer' && !!D, exoResult: !!ex && ex.step === 'result' && !!D && !!ex.result
     });
     if (v.exoAnswer) {
-      const i = ex.idx || 0, q = D.questions[i], a = (ex.answers || [])[i] || { text: '', photo: '' };
+      const i = ex.idx || 0, q = D.questions[i], a = (ex.answers || [])[i] || { text: '', photo: '' }, P = D.parts ? D.parts[q.part] : null, late = !!ex.endAt && Date.now() > ex.endAt;
       const setAns = p2 => { const answers = (this.state.exo.answers || []).slice(); answers[i] = { ...answers[i], ...p2 }; this.exoSet({ answers }); };
       Object.assign(v, {
-        exoTitre: D.titre, exoContexte: mx(D.contexte), exoDonnees: D.donnees.map(x => ({ t: mx(x) })), hasDonnees: D.donnees.length > 0,
+        exoTitre: P ? P.titre : D.titre, exoContexte: mx(P ? P.contexte : D.contexte), exoDonnees: (P ? P.donnees : D.donnees).map(x => ({ t: mx(x) })), hasDonnees: (P ? P.donnees : D.donnees).length > 0,
+        exoHasTimer: !!ex.endAt, exoClock: ex.endAt ? React.createElement(Countdown, { endAt: ex.endAt, style: { fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '22px', fontVariantNumeric: 'tabular-nums', color: late ? 'var(--color-accent-700)' : 'var(--color-text)' } }) : null,
+        exoTimeLabel: late ? 'Temps écoulé : finis ta phrase et rends ta copie' : 'Temps restant · épreuve de ' + fmtDur(ex.dur || 0), exoTimeColor: late ? 'var(--color-accent-700)' : 'var(--color-text)',
         exoShowEnonce: !!ex.showEnonce, exoEnonceLabel: ex.showEnonce ? 'Masquer l’énoncé' : 'Revoir l’énoncé', exoToggleEnonce: () => this.exoSet({ showEnonce: !ex.showEnonce }),
         exoSegs: D.questions.map((_, j) => ({ bg: j < i ? accent : j === i ? ink : 'var(--color-neutral-300)' })),
         exoQKicker: 'Question ' + (i + 1) + ' sur ' + D.questions.length + ' · ' + q.points + ' pts', exoQ: mx(q.q), exoText: a.text || '',
@@ -2019,7 +2199,7 @@ class Component extends DCLogic {
         exoClearPhoto: () => setAns({ photo: '' }),
         exoHasPrev: i > 0, exoPrev: () => this.exoSet({ idx: i - 1, showEnonce: false, err: '' }),
         exoNextLabel: i < D.questions.length - 1 ? 'Question suivante' : 'Terminer et faire corriger',
-        exoNext: () => { if (i < D.questions.length - 1) { this.exoSet({ idx: i + 1, showEnonce: false, err: '' }); if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; } else this.exoCorrect(); }
+        exoNext: () => { if (i < D.questions.length - 1) { this.exoSet({ idx: i + 1, showEnonce: !!(P && D.questions[i + 1].part !== q.part), err: '' }); if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; } else this.exoCorrect(); }
       });
     }
     if (v.exoResult) {
@@ -2028,7 +2208,50 @@ class Component extends DCLogic {
         exoNote: String(R.note).replace('.', ','), exoBilan: R.bilan, exoResTitle: D.titre,
         exoCorr: D.questions.map((q, j) => { const r = R.questions[j] || { points: 0, etapes: [], correction: '' }; return { n: 'Question ' + (j + 1), pts: String(r.points).replace('.', ',') + ' / ' + q.points, q: mx(q.q), ans: mx((ex.answers || [])[j] || '(pas de réponse)'), steps: (r.etapes || []).map(s => ({ label: s.label, com: mx(s.commentaire), ok: s.ok, ko: !s.ok })), corr: mx(r.correction) }; }),
         exoErrLabel: ex.errorsAdded ? 'Erreurs ajoutées au cahier ✓' : nErr ? 'Ajouter mes erreurs au cahier (' + nErr + ')' : 'Aucune erreur à noter. Bravo.',
-        exoErrDisabled: !!ex.errorsAdded || !nErr, exoAddErrors: () => this.exoAddErrors(), exoAgain: () => this.exoSetup(ex.subj)
+        exoErrDisabled: !!ex.errorsAdded || !nErr, exoAddErrors: () => this.exoAddErrors(),
+        exoAgain: () => (ex.annale ? this.go('annale', { an: { step: 'choose', sujetId: ex.annale.sujetId } }) : this.exoSetup(ex.subj)),
+        exoAgainLabel: ex.annale ? 'Revenir au sujet' : 'Nouvel exercice', exoIsAnnale: !!ex.annale,
+        anResChaps: ex.annale ? this.anChapList(D.questions, j => (R.questions[j] || {}).points || 0, ex.subj, t).sort((a, b) => a.got / a.max - b.got / b.max).map(o => this.anChapRow(o, ex.subj, true)) : [],
+        ...(() => { const nf = D.questions.filter((q, j) => ((R.questions[j] || {}).points || 0) < q.points * 0.5).length; return { anCardsLabel: ex.cardsAdded ? 'Questions ratées ajoutées à tes révisions ✓' : st.anBusy ? 'Ajout en cours…' : nf ? 'Ajouter ' + nf + (nf > 1 ? ' questions ratées' : ' question ratée') + ' à mes révisions' : 'Aucune question ratée. Solide.', anCardsDisabled: !!ex.cardsAdded || !!st.anBusy || !nf, anAddCards: () => this.anAddCards() }; })()
+      });
+    }
+    // annales
+    const an = st.an || { step: 'home' }, anStep = an.step || 'home', anRec = (data.exos || []).filter(x => x.annale);
+    const sj = anStep === 'choose' ? (data.annales || []).find(x => x.id === an.sujetId) : null;
+    Object.assign(v, {
+      isAnnale: appReady && scr === 'annale', anHome: anStep === 'home' || (anStep === 'choose' && !sj), anImport: anStep === 'import', anParsing: anStep === 'parsing', anChoose: !!sj,
+      anPhotoRef: this.anPhotoRef, anFileRef: this.anFileRef,
+      goalsAnnale: () => this.go('annale', { goalsOpen: false, an: { step: 'home' } }),
+      anRowSub: anRec.length ? plural(anRec.length, 'annale') + ' faite' + (anRec.length > 1 ? 's' : '') + ' · dernière note ' + n20(anRec[anRec.length - 1].note) + '/20' : 'Vrais sujets, chronométrés, notés sur 20',
+      anBack: () => (anStep === 'home' ? this.go('today') : this.anSet({ step: 'home', err: '' })),
+      anNew: () => this.anSet({ step: 'import', subj: an.subj || (S.specs || [])[0] || 'Physique-Chimie', text: '', err: '', importMsg: '' }),
+      hasAnErr: !!an.err, anErr: an.err || '', anNoAi: !this.aiAvailable()
+    });
+    const bySubj = {}; anRec.forEach(x => { (bySubj[x.subj] = bySubj[x.subj] || []).push(x); });
+    v.anNotes = Object.keys(bySubj).map(s => { const xs = bySubj[s].slice().sort((a, b) => (a.date < b.date ? -1 : 1)); return { subj: s, avg: n20(xs.reduce((a, x) => a + x.note, 0) / xs.length), sub: plural(xs.length, 'annale') + ' · dernières : ' + xs.slice(-4).map(x => n20(x.note)).join(' → ') }; });
+    v.anHasNotes = v.anNotes.length > 0;
+    v.anSujets = (data.annales || []).slice().reverse().map(s => { const done = anRec.filter(x => x.annale.sujetId === s.id); return { titre: s.titre, sub: s.subj + ' · ' + plural(s.parts.length, 'exercice') + (done.length ? ' · dernière note ' + n20(done[done.length - 1].note) + '/20' : ' · pas encore fait'), onClick: () => this.anSet({ step: 'choose', sujetId: s.id, err: '' }) }; });
+    v.anHasSujets = v.anSujets.length > 0;
+    v.anSubjs = EXAM_SUBJ.map((s, i) => ({ label: s, ...cell(an.subj === s, i, 2), onClick: () => this.anSet({ subj: s }) }));
+    const anTxt = (an.text || '').trim();
+    Object.assign(v, {
+      anText: an.text || '', onAnText: e => this.anSet({ text: e.target.value, err: '' }),
+      anImporting: !!an.importing, hasAnImportMsg: !!an.importMsg, anImportMsg: an.importMsg || '',
+      anPickPhotos: () => { if (!an.importing && this.anPhotoRef.current) this.anPhotoRef.current.click(); },
+      anPickFile: () => { if (!an.importing && this.anFileRef.current) this.anFileRef.current.click(); },
+      onAnFiles: e => { const fs = e.target.files ? [...e.target.files] : []; e.target.value = ''; if (fs.length) this.anImport(fs); },
+      anTextInfo: anTxt ? plural(anTxt.split(/\s+/).length, 'mot') + ' · relis vite que rien ne manque.' : 'Photographie toutes les pages, dans l’ordre. Les annexes aussi.',
+      anParse: () => this.anParse(), anParseDisabled: !!an.importing || anTxt.length < 200
+    });
+    if (sj) {
+      const tot = sj.parts.reduce((a, p) => a + p.points, 0) || 20;
+      Object.assign(v, {
+        anTitre: sj.titre, anSubjLabel: sj.subj,
+        anMeta: plural(sj.parts.length, 'exercice') + ' · ' + n20(tot) + ' pts · épreuve de ' + fmtDur(sj.duree),
+        anFullLabel: 'Sujet complet · ' + fmtDur(sj.duree) + ' chrono', anFull: () => this.anStart(sj, 'all'),
+        anParts: sj.parts.map((p, k) => ({ titre: p.titre, sub: plural(p.questions.length, 'question') + ' · ' + fmtDur(this.anDur(sj, k)) + ' chrono · ' + [...new Set(p.questions.map(q => (q.courseId && cm[q.courseId] ? cm[q.courseId].chap : q.chap)).filter(Boolean))].slice(0, 3).join(', '), pts: n20(p.points) + ' pts', onClick: () => this.anStart(sj, k) })),
+        anChaps: this.anChapList(sj.parts.flatMap(p => p.questions), null, sj.subj, t).sort((a, b) => (a.r == null ? 2 : a.r / 100) - (b.r == null ? 2 : b.r / 100)).map(o => this.anChapRow(o, sj.subj, false)),
+        anDelete: () => { if (window.confirm('Supprimer ce sujet ? Tes notes restent.')) { this.updData(d => ({ ...d, annales: (d.annales || []).filter(x => x.id !== sj.id), deleted: { ...(d.deleted || {}), [sj.id]: t } })); this.anSet({ step: 'home' }); } }
       });
     }
     // séance : écart calé sur le contrôle
@@ -2037,20 +2260,268 @@ class Component extends DCLogic {
     v.examNote = eg > 2 ? 'Devoir de ' + sc0.subj + ' dans ' + eg + ' j : écart calé entre ' + examWindow(eg).join(' et ') + ' j (Cepeda et al., 2008), avec une révision dans les 2 derniers jours.' : eg > 0 ? 'Devoir de ' + sc0.subj + (eg === 1 ? ' demain' : ' dans 2 j') + ' : dernière ligne droite.' : '';
     return v;
   }
+  // ── Annales ───────────────────────────────────────────────────
+  anSet(patch) { this.setState(s => ({ an: { ...(s.an || { step: 'home' }), ...patch } })); }
+  enonceText(D) {
+    const dn = xs => (xs && xs.length ? '\nDonnées :\n' + xs.map(x => '- ' + x).join('\n') : '');
+    return D.parts ? D.parts.map((p, k) => 'Partie ' + (k + 1) + ' : ' + p.titre + '\n' + p.contexte + dn(p.donnees)).join('\n\n') : D.contexte + dn(D.donnees);
+  }
+  async anImport(files) {
+    this.anSet({ importing: true, importMsg: '', err: '' });
+    try {
+      const parts = [];
+      for (let i = 0; i < files.length; i++) {
+        const f = files[i];
+        this.anSet({ importMsg: 'Lecture ' + (i + 1) + ' / ' + files.length + '…' });
+        if (/^image\//.test(f.type) || /\.(jpe?g|png|heic|webp)$/i.test(f.name)) parts.push(await this.ocrImage(await this.shrinkImage(f)));
+        else { const mod = await import(new URL('./course-import.js', document.baseURI).href); parts.push(await mod.extractText(f, (a, b) => this.anSet({ importMsg: 'Page ' + a + ' / ' + b + '…' }))); }
+      }
+      this.setState(s => ({ an: { ...(s.an || {}), importing: false, importMsg: plural(files.length, 'fichier') + ' lu' + (files.length > 1 ? 's' : '') + '.', text: [((s.an && s.an.text) || '').trim(), ...parts.map(x => (x || '').trim())].filter(Boolean).join('\n\n') } }));
+    } catch (e) { this.anSet({ importing: false, importMsg: '', err: (e && e.message) || 'Fichier illisible.' }); }
+  }
+  async anParse() {
+    const an = this.state.an || {}, text = (an.text || '').trim(), subj = an.subj || 'Physique-Chimie';
+    if (text.length < 200) return this.anSet({ err: 'Importe ou colle le sujet complet.' });
+    if (!this.aiAvailable()) return this.anSet({ err: 'Ajoute une clé IA dans Réglages pour analyser un sujet.' });
+    const chaps = this.state.data.courses.filter(c => c.subj === subj), ids = new Set(chaps.map(c => c.id));
+    this.anSet({ step: 'parsing', err: '' });
+    try {
+      const j = parseJSON(await this.ai('Tu es professeur de ' + subj + ' en Terminale et correcteur du bac français. Tu découpes un sujet d’annale en exercices et en questions, et tu rédiges le corrigé de chaque question. Toute formule, grandeur ou unité en LaTeX entre $…$, antislashs doublés dans le JSON. Réponds UNIQUEMENT en JSON valide.',
+        'Matière : ' + subj + '\nChapitres de l’élève (id : nom) :\n' + (chaps.map(c => c.id + ' : ' + c.chap).join('\n') || '(aucun)') + '\n\nSujet :\n"""\n' + text.slice(0, 30000) + '\n"""\n\nDécoupe ce sujet. Recopie fidèlement chaque énoncé (sans le résumer) avec ses valeurs et unités. Pour chaque question, indique le chapitre du programme de Terminale concerné ; si un chapitre de l’élève correspond, mets son id dans courseId, sinon laisse courseId vide. Renvoie {"titre":"ex. Bac 2024 · Métropole · Jour 1","duree_min":210,"exercices":[{"titre":"Exercice 1 · titre court","points":6,"contexte":"mise en situation de l’exercice","donnees":["donnée, document ou figure décrite en une ligne"],"questions":[{"q":"énoncé de la question","points":1,"type":"calcul|libre","chapitre":"nom du chapitre","courseId":"id ou vide","attendu":"corrigé modèle : étapes clés et résultat avec unité, 2 à 5 phrases"}]}]}. Si le barème n’est pas indiqué, répartis 20 points. duree_min = durée officielle de l’épreuve en minutes.', 4000, true));
+      const ex0 = (j && Array.isArray(j.exercices) ? j.exercices : []).filter(e => e && Array.isArray(e.questions) && e.questions.length);
+      const parts = ex0.slice(0, 8).map((e, k) => {
+        const raw = e.questions.filter(q => q && q.q).slice(0, 20), dflt = Math.max(0.5, Math.round((+e.points || 4) / Math.max(1, raw.length) * 2) / 2);
+        const qs = raw.map(q => ({ q: String(q.q), points: +q.points > 0 ? +q.points : dflt, attendu: String(q.attendu || ''), type: q.type === 'calcul' ? 'calcul' : 'libre', chap: String(q.chapitre || '').trim(), courseId: ids.has(q.courseId) ? q.courseId : '' }));
+        return { titre: String(e.titre || 'Exercice ' + (k + 1)), points: qs.reduce((s, q) => s + q.points, 0), contexte: String(e.contexte || ''), donnees: (Array.isArray(e.donnees) ? e.donnees : []).map(String).slice(0, 12), questions: qs };
+      }).filter(p => p.questions.length);
+      if (!parts.length) throw new Error('aucun exercice repéré');
+      const s = { id: uid(), subj, titre: String((j && j.titre) || 'Sujet de ' + subj), duree: Math.min(300, Math.max(30, Math.round(+(j && j.duree_min)) || AN_DUR[subj] || 210)), parts, createdAt: this.today() };
+      this.updData(d => ({ ...d, annales: [...(d.annales || []), s] }));
+      this.anSet({ step: 'choose', sujetId: s.id, text: '', importMsg: '' });
+    } catch (e) { this.anSet({ step: 'import', err: 'Analyse impossible (' + e.message + '). Réessaie dans un instant.' }); }
+  }
+  anDur(sj, k) { const tot = sj.parts.reduce((a, p) => a + p.points, 0) || 1; return Math.max(10, Math.round(sj.duree * sj.parts[k].points / tot / 5) * 5); }
+  anStart(sj, part) {
+    const cur = this.state.exo;
+    if (cur && cur.step === 'answer' && !window.confirm('Un exercice est en cours. Le remplacer par ce sujet ?')) return;
+    const sel = part === 'all' ? sj.parts.map((_, k) => k) : [part], dur = part === 'all' ? sj.duree : this.anDur(sj, part);
+    const questions = sel.flatMap((k, j) => sj.parts[k].questions.map(q => ({ ...q, part: j })));
+    const data = { titre: sj.titre + (part === 'all' ? '' : ' · ' + sj.parts[part].titre), contexte: '', donnees: [], parts: sel.map(k => ({ titre: sj.parts[k].titre, contexte: sj.parts[k].contexte, donnees: sj.parts[k].donnees })), questions };
+    const exo = { step: 'answer', id: uid(), subj: sj.subj, courseId: 'annale', chap: data.titre, date: this.today(), data, idx: 0, answers: questions.map(() => ({ text: '', photo: '' })), showEnonce: true, saved: false, errorsAdded: false, annale: { sujetId: sj.id, part }, endAt: Date.now() + dur * 60000, dur };
+    lsSet(EXO_KEY, JSON.stringify(exo));
+    this.go('exo', { exo });
+  }
+  anChapList(qs, getPts, subj, t) {
+    const d = this.state.data, cm = this.courseMap(), m = new Map();
+    qs.forEach((q, i) => {
+      const co = (q.courseId && cm[q.courseId]) || (q.chap ? d.courses.find(c => c.subj === subj && norm(c.chap) === norm(q.chap)) : null);
+      const key = co ? co.id : norm(q.chap || 'autre');
+      const o = m.get(key) || { name: co ? co.chap : q.chap || 'Autre', co, got: 0, max: 0, n: 0 };
+      o.max += q.points; o.got += getPts ? getPts(i) : 0; o.n++; m.set(key, o);
+    });
+    return [...m.values()].map(o => { const cs = o.co ? d.cards.filter(c => c.courseId === o.co.id) : []; return { ...o, cs: cs.length, r: cs.length ? Math.round(cs.reduce((a, c) => a + retention(c, t), 0) / cs.length * 100) : null }; });
+  }
+  anChapRow(o, subj, withPts) {
+    const has = !!(o.co && o.cs);
+    return { name: o.name, sub: (has ? 'Rétention ' + o.r + ' % · ' : o.co ? 'Aucune question encore · ' : 'Pas encore dans tes cours · ') + plural(o.n, 'question') + ' du sujet', hasPts: withPts, pts: withPts ? n20(o.got) + ' / ' + n20(o.max) + ' pts' : '', ptsColor: o.got < o.max / 2 ? 'var(--color-accent-700)' : 'var(--color-text)', act: has ? 'Réviser' : 'Ajouter le cours',
+      onClick: () => (has ? this.go('pick', { pickSel: [o.co.id], pickMode: 'weak', pickN: 15 }) : this.go('add', { addStep: 'form', addSubj: subj, addChap: o.name, addText: '', addError: '', importStatus: null })) };
+  }
+  async anAddCards() {
+    const ex = this.state.exo; if (!ex || !ex.result || ex.cardsAdded || this.state.anBusy) return;
+    const D = ex.data, R = ex.result, t = this.today();
+    const failed = D.questions.map((q, i) => ({ q, r: R.questions[i] || {} })).filter(x => (x.r.points || 0) < x.q.points * 0.5);
+    if (!failed.length) return;
+    this.setState({ anBusy: true });
+    const ctx = x => { const P = D.parts && D.parts[x.q.part]; return P && P.contexte ? P.contexte.slice(0, 400) : ''; };
+    let items = failed.map(x => ({ q: (ctx(x) ? ctx(x) + '\n\n' : '') + x.q.q, a: x.r.correction || x.q.attendu, type: x.q.type === 'calcul' ? 'calcul' : 'libre' }));
+    if (this.aiAvailable()) {
+      try {
+        const j = parseJSON(await this.ai('Tu es professeur de ' + ex.subj + ' en Terminale. Tu transformes des questions d’annale ratées en questions de révision autonomes : compréhensibles sans le sujet, avec les données utiles recopiées. Tu tutoies. Toute formule ou unité en LaTeX entre $…$, antislashs doublés. Réponds UNIQUEMENT en JSON valide.',
+          failed.map((x, k) => (k + 1) + '. Contexte : ' + ctx(x) + '\nQuestion : ' + x.q.q + '\nCorrigé : ' + (x.r.correction || x.q.attendu)).join('\n\n') + '\n\nRenvoie {"questions":[{"q":"question autonome","a":"réponse attendue, 1 à 4 phrases","type":"calcul|libre"}]}, une par question, dans l’ordre.', 2500, true));
+        const arr = j && Array.isArray(j.questions) ? j.questions : [];
+        items = items.map((it, k) => (arr[k] && arr[k].q && arr[k].a ? { q: String(arr[k].q), a: String(arr[k].a), type: arr[k].type === 'calcul' ? 'calcul' : 'libre' } : it));
+      } catch (e) {}
+    }
+    this.updData(d => {
+      let courses = d.courses; const cards = [];
+      failed.forEach((x, k) => {
+        let co = (x.q.courseId && courses.find(c => c.id === x.q.courseId)) || courses.find(c => c.subj === ex.subj && norm(c.chap) === norm(x.q.chap || 'Annales'));
+        if (!co) { co = { id: uid(), subj: ex.subj, chap: x.q.chap || 'Annales', createdAt: t, fromAnnale: true }; courses = [...courses, co]; }
+        cards.push({ id: uid(), courseId: co.id, ...items[k], k0: 0.1, stage: -1, last: null, due: t, createdAt: t, fromAnnale: ex.id });
+      });
+      return { ...d, courses, cards: spreadNew([...d.cards, ...cards], t), exos: (d.exos || []).map(x => (x.id === ex.id ? { ...x, cardsAdded: true } : x)) };
+    });
+    this.setState(s => ({ anBusy: false, exo: s.exo && s.exo.id === ex.id ? { ...s.exo, cardsAdded: true } : s.exo }));
+  }
   examGapFor(subj, t) {
     const ex = (this.state.data.exams || []).filter(x => x.subj === subj && x.date > t).sort((a, b) => (a.date < b.date ? -1 : 1))[0];
     return ex ? diff(t, ex.date) : 0;
   }
-  schedFor(card, k) { const t = this.today(); return ebbSched(card, k, t, this.examGapFor(card.subj, t)); }
-  confirmEval() {
+  varCapOn(c) { return this.state.data.settings.varyQ !== false && ((c.vars || []).length > 0 || this.aiAvailable()); }
+  schedFor(card, k) {
+    const t = this.today(), sc = ebbSched(card, k, t, this.examGapFor(card.subj, t));
+    // Bien acquise = réussie au moins une fois sur une variante. Avant ça, pas d'intervalle long.
+    if (k === 'rate' || card.varOk || (card.vid && (k === 'bien' || k === 'facile')) || !this.varCapOn(card)) return sc;
+    const cap = Math.max(VAR_CAP, stabOf(card));
+    return sc.S > cap ? { S: cap, gap: Math.min(sc.gap, Math.round(cap)), stage: stageOfS(cap), capped: true } : sc;
+  }
+  varPatch(c, item, k) {
+    if (!item.vid) return {};
+    return { lastVar: item.vid, vars: (c.vars || []).map(v => (v.id === item.vid ? { ...v, n: (v.n || 0) + 1 } : v)), varOk: !!c.varOk || k === 'bien' || k === 'facile', vupd: new Date().toISOString() };
+  }
+  confirmEval(insert) {
     const s = this.state.sess; if (!s || !s.sel) return;
     const card = s.list[s.idx], k = s.sel, t = this.today();
-    const sc = this.schedFor(card, k), ns = sc.stage, gap = sc.gap, due = addDays(t, gap);
-    this.updData(d => ({ ...d, cards: d.cards.map(c => (c.id === card.id ? { ...c, hist: [...events(c), { d: t, s: ns, k, S: sc.S }], stage: ns, S: sc.S, due, last: t, reps: (c.reps || 0) + 1, lapses: (c.lapses || 0) + (k === 'rate' ? 1 : 0) } : c)), log: { ...d.log, [t]: (d.log[t] || 0) + 1 } }));
-    const results = [...s.results, { card, k, n: gap, due }];
+    let list = s.list, results = s.results;
+    if (card.practice) {
+      if (card.vid) this.updData(d => ({ ...d, cards: d.cards.map(c => (c.id === card.id ? { ...c, ...this.varPatch(c, card, k) } : c)) }));
+    } else {
+      const sc = this.schedFor(card, k), ns = sc.stage, gap = sc.gap, due = addDays(t, gap);
+      const dc = this.state.data.cards.find(c => c.id === card.id);
+      this.updData(d => ({ ...d, cards: d.cards.map(c => (c.id === card.id ? { ...c, hist: [...events(c), { d: t, s: ns, k, S: sc.S }], stage: ns, S: sc.S, due, last: t, reps: (c.reps || 0) + 1, lapses: (c.lapses || 0) + (k === 'rate' ? 1 : 0), ...this.varPatch(c, card, k) } : c)), log: { ...d.log, [t]: (d.log[t] || 0) + 1 } }));
+      results = [...s.results, { card, k, n: gap, due }];
+      if (k === 'rate' && (card.requeue || 0) < 2) {
+        const b = { ...(card.base || card), stage: ns, S: sc.S, last: t, hist: [...events(card), { d: t, s: ns, k, S: sc.S }], requeue: (card.requeue || 0) + 1 };
+        const v = this.state.data.settings.varyQ !== false && dc ? pickVar({ ...dc, lastVar: card.vid || dc.lastVar }, [card.vid]) : null;
+        list = [...list, v ? withVar(b, v) : b];
+      }
+    }
+    if (insert) list = [...list.slice(0, s.idx + 1), insert, ...list.slice(s.idx + 1)];
     const idx = s.idx + 1;
-    const list = k === 'rate' && (card.requeue || 0) < 2 ? [...s.list, { ...card, stage: ns, S: sc.S, last: t, hist: [...events(card), { d: t, s: ns, k, S: sc.S }], requeue: (card.requeue || 0) + 1 }] : s.list;
     this.setState({ sess: { ...s, ...this.blankQ(), list, results, idx, done: idx >= list.length } }, () => { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; });
+    this.varKick(4000);
+  }
+  // ── Variantes ────────────────────────────────────────────────
+  sessItem(c, cm) {
+    const co = cm[c.courseId] || {}, b = { ...c, subj: co.subj || '', chap: co.chap || '' };
+    if (this.state.data.settings.varyQ === false || !c.last) return b;
+    const v = pickVar(c);
+    return v ? withVar(b, v) : b;
+  }
+  varKick(ms) { clearTimeout(this.varT); this.varT = setTimeout(() => this.varRun(), ms || 0); }
+  varSpend(n) {
+    const t = this.today(); let o = {}; try { o = JSON.parse(lsGet(VAR_KEY) || '{}') || {}; } catch (e) {}
+    if (o.d !== t) o = { d: t, n: 0 };
+    if (n) { o.n += n; lsSet(VAR_KEY, JSON.stringify(o)); }
+    return VAR_DAY_MAX - o.n;
+  }
+  varCanRun() { const st = this.state; return st.dataReady && st.data.settings.varyQ !== false && this.aiAvailable() && navigator.onLine !== false && Date.now() >= (this.varPause || 0) && this.varSpend(0) > 0; }
+  async varRun() {
+    if (this.varBusy || !this.varCanRun()) return;
+    const t = this.today(), lim = addDays(t, 2), now = Date.now(), fail = this.varFail = this.varFail || {};
+    const todo = this.state.data.cards.filter(c => c.last && c.due <= lim && unusedVars(c) < VAR_TARGET && !(fail[c.id] > now)).sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0)).slice(0, 10);
+    if (!todo.length) return;
+    this.varBusy = true;
+    try {
+      for (const c0 of todo) {
+        if (!this.varCanRun()) break;
+        const c = this.state.data.cards.find(x => x.id === c0.id); if (!c) continue;
+        const need = VAR_TARGET - unusedVars(c); if (need <= 0) continue;
+        try { const got = await this.genVariants(c, c.type === 'calcul' ? 1 : need); if (!got.length) fail[c.id] = Date.now() + 30 * 60e3; }
+        catch (e) { if (/quota|limite|429/i.test((e && e.message) || '')) { this.varPause = Date.now() + 10 * 60e3; break; } fail[c.id] = Date.now() + 30 * 60e3; }
+        await sleep(3000);
+      }
+    } finally { this.varBusy = false; }
+  }
+  async genVariants(c, need) {
+    const co = this.courseMap()[c.courseId] || {};
+    const out = c.type === 'calcul' ? [await this.genCalcVar(c, co)].filter(Boolean) : await this.genTextVars(c, co, need);
+    if (out.length) this.addVars(c.id, out);
+    return out;
+  }
+  async genCalcVar(c, co) {
+    const prev = (c.vars || []).map(v => '- ' + String(v.q).slice(0, 200)).join('\n');
+    for (let a = 0; a < 2; a++) {
+      if (this.varSpend(0) <= 0) return null;
+      this.varSpend(1);
+      let j;
+      try {
+        j = parseJSON(await this.ai('Tu es professeur de ' + (co.subj || 'sciences') + ' en Terminale (bac français). Tu écris des variantes d’exercices de calcul : même méthode, autres valeurs ou autre situation. Nombres « propres » (résultat calculable à la main), unités cohérentes, ordres de grandeur réalistes. Tu tutoies. Toute formule, grandeur ou unité en LaTeX entre $…$, antislashs doublés dans le JSON. Réponds UNIQUEMENT en JSON valide.',
+          'Chapitre : ' + (co.chap || '') + '\nQuestion d’origine : ' + c.q + '\nCorrigé d’origine : ' + c.a + (prev ? '\nVariantes déjà écrites (change encore les valeurs ou la situation) :\n' + prev : '') + '\n\nÉcris UNE variante : exactement la même méthode, mais d’autres valeurs numériques, une autre fonction ou une autre situation (ex. $x e^{2x}$ devient $x^2 e^{-x}$ ; une chute libre de 20 m devient une balle lancée depuis 35 m). Niveau Terminale, énoncé complet et autonome. Renvoie {"q":"énoncé","a":"corrigé détaillé : Données : … Formule : … Calcul : … Résultat : … (avec unité)","resultat":"résultat final seul, avec unité"}.', 1500, true));
+      } catch (e) { if (/quota|limite|429/i.test((e && e.message) || '')) throw e; continue; }
+      if (!j || !j.q || !j.a || j.resultat == null) continue;
+      const v = { id: uid(), type: 'calcul', angle: 'calcul', q: String(j.q), a: String(j.a), res: String(j.resultat), createdAt: this.today() };
+      if (await this.verifyCalc(v.q, v.res)) return v;
+    }
+    return null;
+  }
+  // Une 2e IA résout la variante sans voir le corrigé ; résultat différent = variante jetée.
+  async verifyCalc(q, res) {
+    try {
+      this.varSpend(1);
+      const j = await this.aiQuick('Tu es un très bon élève de Terminale. Tu résous l’exercice avec soin, étape par étape, sans sauter de calcul, puis tu donnes le résultat final. Réponds UNIQUEMENT en JSON valide.',
+        'Exercice :\n' + q + '\n\nRésous-le. Renvoie {"calcul":"étapes courtes","resultat":"résultat final seul, avec unité"}.', x => x && x.resultat != null, { max: 1500, timeout: 25000, models: ['openai/gpt-oss-20b', 'llama-3.3-70b-versatile'] });
+      const mine = String(j.resultat);
+      if (sameNum(res, mine)) return true;
+      this.varSpend(1);
+      const k = await this.aiQuick('Tu compares deux résultats finaux d’un même exercice. Réponds UNIQUEMENT en JSON valide.',
+        'Résultat A : ' + res + '\nRésultat B : ' + mine + '\n\nSont-ils identiques : même valeur à l’arrondi près ou expression mathématiquement équivalente, unités compatibles ? Renvoie {"same":true} ou {"same":false}.', x => x && typeof x.same === 'boolean', { max: 300, timeout: 10000 });
+      return k.same === true;
+    } catch (e) { return false; }
+  }
+  async genTextVars(c, co, need) {
+    const sib = this.state.data.cards.filter(x => x.courseId === c.courseId && x.id !== c.id).slice(0, 12).map(x => '- ' + String(x.q).slice(0, 140)).join('\n');
+    const pool = VAR_ANGLES.filter(a => a[0] !== 'relier' || sib), r0 = c.vRot || 0;
+    const angles = [...Array(Math.min(need, pool.length))].map((_, i) => pool[(r0 + i) % pool.length]);
+    const prev = (c.vars || []).map(v => '- ' + String(v.q).slice(0, 160)).join('\n');
+    this.varSpend(1);
+    const j = parseJSON(await this.ai('Tu es professeur de Terminale (bac français). Tu écris des variantes d’une question de révision pour que l’élève retienne la notion, pas la formulation. Tu tutoies. Toute formule ou unité en LaTeX entre $…$, antislashs doublés dans le JSON. Réponds UNIQUEMENT en JSON valide.',
+      'Matière : ' + (co.subj || '') + '\nChapitre : ' + (co.chap || '') + '\nQuestion d’origine : ' + c.q + '\nRéponse d’origine : ' + c.a + (sib ? '\nAutres notions du chapitre :\n' + sib : '') + (prev ? '\nVariantes déjà écrites (ne les répète pas) :\n' + prev : '') + '\n\nÉcris ' + angles.length + ' variante(s), une par angle, dans cet ordre :\n' + angles.map((a, i) => (i + 1) + '. ' + a[0] + ' : ' + a[1]).join('\n') + '\nToujours la même notion et la même réponse de fond que l’original, niveau Terminale, compréhensible sans contexte. Renvoie {"variantes":[{"angle":"inverse|exemple|vf|qcm|explique|relier","q":"énoncé","a":"réponse attendue, 1 à 3 phrases","options":["4 choix"] (qcm uniquement),"correct":0 (qcm uniquement, index 0-3)}]}.', 1800, true));
+    const arr = Array.isArray(j) ? j : (j && (j.variantes || j.questions)) || [];
+    return arr.filter(x => x && x.q && x.a).slice(0, angles.length).map((x, i) => {
+      const angle = VAR_LABEL[x.angle] && x.angle !== 'calcul' ? x.angle : angles[i][0];
+      const v = { id: uid(), angle, type: angle === 'qcm' ? 'qcm' : angle === 'explique' ? 'explique' : 'libre', q: String(x.q), a: String(x.a), createdAt: this.today() };
+      if (v.type === 'qcm') { if (Array.isArray(x.options) && x.options.length >= 3 && Number.isInteger(x.correct) && x.correct >= 0 && x.correct < x.options.length) { v.options = x.options.map(String); v.correct = x.correct; } else v.type = 'libre'; }
+      return v;
+    });
+  }
+  addVars(id, vs) {
+    const iso = new Date().toISOString();
+    this.updData(d => ({ ...d, cards: d.cards.map(c => {
+      if (c.id !== id) return c;
+      const all = [...(c.vars || []), ...vs], fresh = all.filter(v => !v.n), used = all.filter(v => v.n).slice(-2);
+      return { ...c, vars: [...used, ...fresh].slice(-VAR_MAX), vRot: (c.vRot || 0) + vs.length, vupd: iso };
+    }) }));
+  }
+  delVar(cid, vid) {
+    if (!window.confirm('Supprimer cette variante ?')) return;
+    this.updData(d => ({ ...d, cards: d.cards.map(c => (c.id === cid ? { ...c, vars: (c.vars || []).filter(v => v.id !== vid), vupd: new Date().toISOString() } : c)) }));
+    this.varKick(2000);
+  }
+  reportVar() {
+    const s = this.state.sess; if (!s) return;
+    const item = s.list[s.idx]; if (!item || !item.vid) return;
+    if (!window.confirm('Cette variante te semble fausse ? Je la supprime et je la remplace.')) return;
+    const dc = this.state.data.cards.find(c => c.id === item.id);
+    this.updData(d => ({ ...d, cards: d.cards.map(c => (c.id === item.id ? { ...c, vars: (c.vars || []).filter(v => v.id !== item.vid), vupd: new Date().toISOString() } : c)) }));
+    const base = item.base || item, v2 = dc ? pickVar({ ...dc, vars: (dc.vars || []).filter(v => v.id !== item.vid) }, [item.vid]) : null;
+    const list = s.list.slice(); list[s.idx] = { ...(v2 ? withVar(base, v2) : base), practice: item.practice };
+    this.setState({ sess: { ...s, ...this.blankQ(), list, varMsg: v2 ? 'Variante supprimée. En voici une autre.' : 'Variante supprimée. Voici la question d’origine, une nouvelle variante se prépare.' } });
+    this.varKick(1500);
+  }
+  async encore() {
+    const s = this.state.sess; if (!s || !s.sel || s.encoreBusy) return;
+    const item = s.list[s.idx], idx = s.idx;
+    const dc = this.state.data.cards.find(c => c.id === item.id); if (!dc || item.type !== 'calcul') return;
+    let v = pickVar({ ...dc, lastVar: item.vid || dc.lastVar }, [item.vid]);
+    if (!v) {
+      if (!this.aiAvailable()) return this.updSess({ encoreMsg: 'Pas d’autre calcul prêt : ajoute une clé IA dans Réglages.' }, idx);
+      this.updSess({ encoreBusy: true, encoreMsg: '' }, idx);
+      try { v = (await this.genVariants(dc, 1))[0]; } catch (e) {}
+      const s2 = this.state.sess; if (!s2 || s2.idx !== idx) return;
+      if (!v) return this.updSess({ encoreBusy: false, encoreMsg: 'Pas de calcul vérifié dispo pour l’instant. Réessaie dans un moment.' }, idx);
+    }
+    const co = this.courseMap()[dc.courseId] || {};
+    this.confirmEval({ ...withVar({ ...dc, subj: co.subj || '', chap: co.chap || '' }, v), practice: true });
+  }
+  qDetail(c, t) {
+    const st = this.state, S = st.data.settings, open = st.openQ === c.id, vs = (c.vars || []).filter(v => v && v.q);
+    const row = { q: mx(c.q), next: c.due <= t ? 'à revoir' : fmtS(c.due), varsCount: vs.length ? plural(vs.length, 'variante') : '', open, onClick: () => this.setState(z => ({ openQ: z.openQ === c.id ? null : c.id })) };
+    if (!open) return { ...row, a: '', vars: [], varsTitle: '', noVars: false, noVarsText: '' };
+    return { ...row, a: mx(c.a), varsTitle: vs.length ? 'Variantes · ' + vs.length : 'Variantes',
+      vars: vs.map(v => ({ label: (VAR_LABEL[v.angle] || TYPE_LABEL[v.type] || 'Variante') + (v.n ? ' · déjà posée' : ''), q: mx(v.q), a: mx(v.a), onDel: () => this.delVar(c.id, v.id) })),
+      noVars: !vs.length,
+      noVarsText: S.varyQ === false ? 'Variantes désactivées dans Réglages.' : !this.aiAvailable() ? 'Ajoute une clé IA dans Réglages : c’est elle qui écrit les variantes.' : !c.last ? 'Les variantes arrivent après ta première révision de cette question.' : 'Elles se préparent toutes seules dans les 2 jours avant la révision.' };
   }
 
   async shrinkImage(file, max = 1800, q = 0.85) {
@@ -2084,6 +2555,16 @@ class Component extends DCLogic {
         if (r.ok && txt) return txt;
         errs.push('Groq ' + r.status);
       } catch (e) { errs.push('Groq réseau'); }
+    }
+    for (const p of OAI_PROV.filter(x => x.vision && this.provKey(x.id))) {
+      try {
+        const r = await fetch(p.url, { method: 'POST', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + this.provKey(p.id) }, body: JSON.stringify({ model: p.vision, temperature: 0.1, max_tokens: 4000, messages: [{ role: 'user', content: [{ type: 'text', text: prompt }, { type: 'image_url', image_url: { url: dataUrl } }] }] }) });
+        const j = await r.json().catch(() => ({}));
+        const c0 = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
+        const txt = (typeof c0 === 'string' ? c0 : Array.isArray(c0) ? c0.map(x => x.text || '').join('') : '').trim();
+        if (r.ok && txt) return txt;
+        errs.push(p.name + ' ' + r.status);
+      } catch (e) { errs.push(p.name + ' réseau'); }
     }
     this.setState({ importProgress: 'Lecture hors IA (formules non reconnues)…' });
     if (!window.Tesseract) await new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'; s.onload = res; s.onerror = () => rej(new Error('Lecture de photo indisponible hors ligne. ' + errs.join(', '))); document.head.appendChild(s); });
@@ -2308,7 +2789,7 @@ class Component extends DCLogic {
     const sessActive = !!(s && !s.done);
     const card = sessActive ? s.list[s.idx] : null;
     const phase = s ? s.phase : null;
-    const cq = card ? { ...card, qM: mx(card.q), aM: mx(card.a), typeLabel: TYPE_LABEL[card.type] || 'Question', ivLabel: card.stage < 0 ? '1re révision' : 'Mémoire stable ~' + Math.max(1, Math.round(stabOf(card))) + ' j' } : {};
+    const cq = card ? { ...card, qM: mx(card.q), aM: mx(card.a), typeLabel: TYPE_LABEL[card.type] || 'Question', ivLabel: card.practice ? 'Entraînement · ta date ne bouge pas' : card.stage < 0 ? '1re révision' : 'Mémoire stable ~' + Math.max(1, Math.round(stabOf(card))) + ' j', origQM: card.base ? mx(card.base.q) : '' } : {};
     const isText = !!card && ['libre', 'calcul', 'explique'].includes(card.type);
     const isGap = !!card && card.type === 'trou';
     const isQcm = !!card && card.type === 'qcm';
@@ -2324,8 +2805,8 @@ class Component extends DCLogic {
       return { label, border: result && ok ? accent : picked ? ink : 'var(--color-divider)', bg: result && ok ? accent : 'transparent', fg: result && ok ? bg : ink, onClick: pickFor(i, ok) };
     }) : [];
     const levelOpts = card ? LEVELS.map(l => {
-      const n = this.schedFor(card, l.k).gap, on = s.sel === l.k;
-      return { label: l.label, iv: n === 0 ? 'Revient tout de suite' : 'J+' + n, border: on ? ink : 'var(--color-divider)', bg: on ? ink : 'transparent', fg: on ? bg : ink, onClick: () => this.updSess({ sel: l.k }) };
+      const n = card.practice ? -1 : this.schedFor(card, l.k).gap, on = s.sel === l.k;
+      return { label: l.label, iv: n < 0 ? 'Sans date' : n === 0 ? 'Revient tout de suite' : 'J+' + n, border: on ? ink : 'var(--color-divider)', bg: on ? ink : 'transparent', fg: on ? bg : ink, onClick: () => this.updSess({ sel: l.k }) };
     }) : [];
     const selL = s && s.sel ? LEVELS.find(l => l.k === s.sel) : null;
     const propL = s && s.proposal ? LEVELS.find(l => l.k === s.proposal) : null;
@@ -2346,7 +2827,7 @@ class Component extends DCLogic {
       (libMap[x.course.subj] = libMap[x.course.subj] || []).push({
         id: x.id, name: x.course.chap, n: x.cards.length, next: next <= t ? "aujourd'hui" : fmtS(next),
         ret: p + ' %', w: p + '%', color: p < 65 ? accent : ink, open: st.openCourse === x.id,
-        questions: x.cards.map(c => ({ q: mx(c.q), next: c.due <= t ? 'à revoir' : fmtS(c.due) })),
+        questions: x.cards.map(c => this.qDetail(c, t)),
         onClick: () => this.setState(z => ({ openCourse: z.openCourse === x.id ? null : x.id })),
         onDelete: () => { if (window.confirm(`Supprimer « ${x.course.chap} » et ses ${plural(x.cards.length, 'question')} ?`)) this.updData(d => ({ ...d, courses: d.courses.filter(c => c.id !== x.id), cards: d.cards.filter(c => c.courseId !== x.id), deleted: { ...(d.deleted || {}), [x.id]: t } })); }
       });
@@ -2487,10 +2968,11 @@ class Component extends DCLogic {
       revealLabel: isGap ? 'Vérifier' : 'Corriger',
       feedbackKicker: this.aiAvailable() ? 'Correction IA' : 'Correction auto',
       modeOpts: [
-        { k: 'auto', label: 'IA gratuite', sub: this.geminiKey() && this.groqKey() ? 'Gemini + Groq' : this.geminiKey() ? 'Gemini' : this.groqKey() ? 'Groq' : 'clé à ajouter' },
+        { k: 'auto', label: 'IA gratuite', sub: (n => (n.length > 2 ? n.length + ' IA branchées' : n.join(' + ') || 'clé à ajouter'))(this.keyNames()) },
         { k: 'rules', label: 'Sans IA', sub: 'instantané, hors ligne' }
       ].map((m, i) => { const on = this.aiPref() === m.k; return { ...m, bg: on ? accent : 'transparent', fg: on ? bg : ink, bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => this.setSetting({ aiMode: m.k }) }; }),
-      modeNote: this.aiPref() === 'rules' ? 'Règles intégrées : définitions, formules, textes à trous. Instantané et hors ligne.' : !this.geminiKey() && !this.groqKey() ? 'Ajoute au moins une clé ci-dessous (gratuit, 2 minutes). En attendant, le générateur intégré prend le relais.' : this.geminiKey() && this.groqKey() ? 'Gemini d’abord, Groq si Gemini sature, générateur intégré en dernier recours. Ça ne tombe plus en panne.' : 'Ajoute aussi l’autre clé : si une IA est surchargée, l’appli bascule toute seule sur l’autre.',
+      extraProv: OAI_PROV.map(p => ({ name: p.name, link: p.link, linkLabel: p.linkLabel, steps: p.steps, note: p.note, hasNote: !!p.note, ph: p.ph, val: this.provKey(p.id), onChange: e => { lsSet('revisions.key.' + p.id, e.target.value.trim()); this.setState({ groqTick: Date.now(), aiTest: null }); } })),
+      modeNote: this.keyNames().length > 1 && this.aiPref() !== 'rules' ? 'Elles prennent le relais l’une après l’autre (' + this.keyNames().join(', ') + '), générateur intégré en dernier recours.' : this.aiPref() === 'rules' ? 'Règles intégrées : définitions, formules, textes à trous. Instantané et hors ligne.' : !this.keyNames().length ? 'Ajoute au moins une clé ci-dessous (gratuit, 2 minutes). En attendant, le générateur intégré prend le relais.' : this.geminiKey() && this.groqKey() ? 'Gemini d’abord, Groq si Gemini sature, générateur intégré en dernier recours. Ça ne tombe plus en panne.' : 'Ajoute aussi l’autre clé : si une IA est surchargée, l’appli bascule toute seule sur l’autre.',
       groqKeyVal: this.groqKey(),
       themeOpts: [{ k: 'auto', label: 'Auto', sub: 'comme l’appareil' }, { k: 'light', label: 'Clair', sub: 'toujours' }, { k: 'dark', label: 'Sombre', sub: 'toujours' }].map((o, i) => { const on = (lsGet(THEME_KEY) || 'auto') === o.k; return { ...o, bg: on ? accent : 'transparent', fg: on ? bg : ink, bl: i ? '1px solid var(--color-divider)' : '0', onClick: () => { lsSet(THEME_KEY, o.k); applyTheme(o.k); this.setState({ themeTick: Date.now() }); } }; }),
       onGroqKey: e => { lsSet(GROQ_KEY, e.target.value.trim()); this.setState({ groqTick: Date.now(), aiTest: null }); },
@@ -2507,8 +2989,21 @@ class Component extends DCLogic {
       evalLabel: propL ? (auto || !this.aiAvailable() || (s && s.aiPending) ? 'Correction auto : ' : 'L’IA propose : ') + propL.label + ' — tu confirmes ?' : 'Comment c’était ?',
       levelOpts,
       confirmDisabled: !selL,
-      confirmLabel: selL ? (() => { const g = this.schedFor(card, selL.k).gap; return `Valider · ${selL.label} · ${g ? 'J+' + g : 'revient tout de suite'}`; })() : 'Choisis un niveau',
+      confirmLabel: selL ? (card && card.practice ? 'Valider · ' + selL.label + ' · entraînement' : (() => { const g = this.schedFor(card, selL.k).gap; return `Valider · ${selL.label} · ${g ? 'J+' + g : 'revient tout de suite'}`; })()) : 'Choisis un niveau',
       confirmEval: () => this.confirmEval(),
+      isVariant: !!(card && card.vid),
+      showOrig: !!(s && s.showOrig), origLabel: s && s.showOrig ? 'Masquer la question d’origine' : 'Voir la question d’origine',
+      toggleOrig: () => this.updSess({ showOrig: !(this.state.sess && this.state.sess.showOrig) }),
+      reportVar: () => this.reportVar(),
+      hasVarMsg: !!(s && s.varMsg), varMsg: s ? s.varMsg || '' : '',
+      showEncore: !!(card && result && card.type === 'calcul' && data.settings.varyQ !== false && (this.aiAvailable() || pickVar({ ...(data.cards.find(c => c.id === card.id) || {}), lastVar: card.vid }, [card.vid]))),
+      encoreDisabled: !(s && s.sel) || !!(s && s.encoreBusy),
+      encoreLabel: s && s.encoreBusy ? 'Je prépare un autre calcul…' : 'Encore un !',
+      encoreSub: s && s.encoreBusy ? 'Je le vérifie avant de te le donner. Quelques secondes.' : s && s.sel ? 'Je valide ton niveau, puis un autre calcul du même type. Ta date de révision ne bouge pas.' : 'Choisis d’abord ton niveau en bas.',
+      encore: () => this.encore(),
+      hasEncoreMsg: !!(s && s.encoreMsg), encoreMsg: s ? s.encoreMsg || '' : '',
+      hasVarCapNote: !!(card && result && !card.practice && s.sel && s.sel !== 'rate' && this.schedFor(card, s.sel).capped),
+      varCapNote: 'Réussis-la sur une variante pour débloquer les longs intervalles.',
       doneScore: good + '/' + results.length,
       doneTitle: results.length && good === results.length ? 'Tout est revenu. Solide.' : 'C’est en train de rentrer.',
       doneSub: savate ? 'Bon entraînement ce soir. Le reste attendra demain.' : 'Les ratées reviennent demain ; les autres s’éloignent.',
@@ -2574,13 +3069,13 @@ class Component extends DCLogic {
       testAi: async () => {
         this.setState({ aiTest: { busy: true } });
         const out = []; let ok = true;
-        for (const [name, key, call] of [['Gemini', this.geminiKey(), this.callGemini.bind(this)], ['Groq', this.groqKey(), this.callGroq.bind(this)]]) {
+        for (const [name, key, call] of [['Gemini', this.geminiKey(), this.callGemini.bind(this)], ['Groq', this.groqKey(), this.callGroq.bind(this)], ...OAI_PROV.map(p => [p.name, this.provKey(p.id), (s1, u1, m1, j1) => this.callOAI(p, s1, u1, m1, j1)])]) {
           if (!key) continue;
           try { await call('Réponds uniquement : OK', 'Test', 16, false); out.push(name + ' OK'); } catch (e) { ok = false; out.push(name + ' : ' + e.message); }
         }
         this.setState({ aiTest: out.length ? { ok, msg: out.join(' · ') } : { ok: false, msg: 'aucune clé' } });
       },
-      aiTestMsg: !at ? [this.geminiKey() && 'Clé Gemini enregistrée', this.groqKey() && 'Clé Groq enregistrée'].filter(Boolean).join(' · ') || 'Aucune clé' : at.busy ? 'Test en cours…' : at.ok ? at.msg : 'Échec : ' + at.msg,
+      aiTestMsg: !at ? (this.keyNames().length ? 'Clés enregistrées : ' + this.keyNames().join(', ') : 'Aucune clé') : at.busy ? 'Test en cours…' : at.ok ? at.msg : 'Échec : ' + at.msg,
       aiTestColor: at && !at.busy && !at.ok ? 'var(--color-accent-700)' : 'var(--color-neutral-700)',
       dataSummary: plural(data.courses.length, 'chapitre') + ' · ' + plural(data.cards.length, 'question') + (auth === 'signedIn' ? ' · sauvegardé dans ton compte. L’export reste utile comme copie de secours.' : ' · stocké sur cet appareil uniquement. Exporte de temps en temps.'),
       exportData: () => this.exportData(),
@@ -2589,7 +3084,7 @@ class Component extends DCLogic {
       hasSetMsg: !!st.setMsg, setMsg: st.setMsg,
       hasDemo: data.courses.some(c => c.demo),
       removeDemo: () => this.updData(d => { const ids = new Set(d.courses.filter(c => c.demo).map(c => c.id)); const deleted = { ...(d.deleted || {}) }; ids.forEach(id => { deleted[id] = t; }); return { ...d, courses: d.courses.filter(c => !c.demo), cards: d.cards.filter(c => !ids.has(c.courseId)), deleted }; }),
-      resetAll: () => { if (window.confirm('Tout effacer ? Tes cours et ton historique seront supprimés.')) { const key = data.settings.apiKey; this.updData(d => { const deleted = { ...(d.deleted || {}) }; d.courses.forEach(c => { deleted[c.id] = t; }); (d.errors || []).concat(d.exos || []).forEach(x => { deleted[x.id] = t; }); return { ...emptyData(), deleted, settings: { ...emptyData().settings, apiKey: key } }; }); this.go('today'); } }
+      resetAll: () => { if (window.confirm('Tout effacer ? Tes cours et ton historique seront supprimés.')) { const key = data.settings.apiKey; this.updData(d => { const deleted = { ...(d.deleted || {}) }; d.courses.forEach(c => { deleted[c.id] = t; }); (d.errors || []).concat(d.exos || [], d.annales || []).forEach(x => { deleted[x.id] = t; }); return { ...emptyData(), deleted, settings: { ...emptyData().settings, apiKey: key } }; }); this.go('today'); } }
     };
   }
 }
