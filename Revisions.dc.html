@@ -193,16 +193,46 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     </sc-if>
     <div style="margin-top:28px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">
+        <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Devoirs à faire</span>
+        <button class="btn btn-ghost" onClick="{{ goPlan }}" style="padding:4px 2px;font-size:13px">Tous les devoirs</button>
+      </div>
+      <sc-for list="{{ hwTodayRows }}" as="h" hint-placeholder-count="2">
+        <button onClick="{{ h.onToggle }}" style="width:100%;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:start;min-height:52px;padding:12px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;opacity:{{ h.op }}">
+          <span style="width:20px;height:20px;border:2px solid var(--color-text);background:{{ h.box }};display:flex;align-items:center;justify-content:center;color:var(--color-bg);margin-top:1px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:3.5;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty;text-decoration:{{ h.deco }}">{{ h.title }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ h.sub }}</span></span>
+          <span class="tag tag-accent">Pronote</span>
+        </button>
+      </sc-for>
+    </div>
+    </sc-if>
+    <div style="margin-top:28px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--color-divider)">
         <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Ton programme · {{ weekBadge }}</span>
         <button class="btn btn-ghost" onClick="{{ goPlan }}" style="padding:4px 2px;font-size:13px">Emploi du temps</button>
       </div>
+      <sc-if value="{{ hasTodayHwSum }}"><div style="font-family:var(--font-heading);font-weight:800;font-size:15px;padding:10px 0;border-bottom:1px solid var(--color-divider)">{{ todayHwSum }}</div></sc-if>
+      <sc-if value="{{ hasHwShort }}">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;background:oklch(0.82 0.15 70);color:oklch(0.24 0.02 50);margin-top:12px">
+        <span style="font-size:14px;font-weight:600;line-height:1.4;text-wrap:pretty">{{ hwShortText }}</span>
+        <button onClick="{{ hwAddSlot }}" style="min-height:44px;padding:8px 12px;border:2px solid currentColor;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:700;cursor:pointer">Ajouter</button>
+      </div>
+    </sc-if>
       <sc-if value="{{ hasTodayPlan }}">
     <sc-for list="{{ todayPlanRows }}" as="r" hint-placeholder-count="4">
+      <sc-if value="{{ r.isPn }}">
+      <button onClick="{{ r.onOpen }}" style="width:100%;display:grid;grid-template-columns:86px minmax(0,1fr) 20px;gap:10px;align-items:center;min-height:52px;padding:8px 10px;border:0;border-bottom:1px solid var(--color-divider);background:var(--color-surface);color:inherit;font:inherit;text-align:left;cursor:pointer">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:13px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ r.time }}</span>
+        <span style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ r.title }}</span><span style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--color-neutral-700)"><span class="tag tag-accent">Pronote</span><sc-if value="{{ r.isLate }}"><span class="tag" style="background:oklch(0.55 0.21 27);color:#fff;border-color:oklch(0.55 0.21 27)">En retard possible</span></sc-if><sc-if value="{{ r.isLock }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4"><rect width="16" height="11" x="4" y="11"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></sc-if><span>{{ r.sub }}</span></span></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="m9 6 6 6-6 6"></path></svg>
+      </button>
+      </sc-if>
+      <sc-if value="{{ r.notPn }}">
       <div style="display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:52px;padding:8px 10px;border-bottom:1px solid var(--color-divider);background:{{ r.bg }};opacity:{{ r.op }}">
         <span style="font-family:var(--font-heading);font-weight:800;font-size:13px;color:{{ r.tc }};font-variant-numeric:tabular-nums">{{ r.time }}</span>
         <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;color:{{ r.fg }};text-wrap:pretty">{{ r.title }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ r.sub }}</span></span>
         <sc-if value="{{ r.hasAct }}"><button class="btn btn-secondary" onClick="{{ r.onAct }}" style="padding:8px 10px;font-size:13px;min-height:44px">{{ r.actLabel }}</button></sc-if>
       </div>
+      </sc-if>
     </sc-for>
       </sc-if>
       <sc-if value="{{ noTodayPlan }}"><p style="font-size:14px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">{{ todayPlanEmpty }}</p></sc-if>
@@ -836,15 +866,29 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 <div data-screen-label="Planning" data-r="screen-narrow" style="padding:12px 20px 28px">
   <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Planning · 7 prochains jours</div>
   <h2 style="font-size:30px;margin:20px 0 6px">Tes devoirs.</h2>
-  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">Programme un devoir : je répartis la préparation dans tes créneaux. Fiches au début, exercices la dernière semaine, devoir blanc à J-2, relecture légère la veille.</p>
-  <sc-if value="{{ hasExams }}">
+  <p style="font-size:14px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">Programme un devoir : je répartis la préparation dans tes créneaux. Fiches au début, exercices la dernière semaine, devoir blanc à J-2, relecture légère la veille. Les devoirs Pronote se placent seuls dans tes créneaux, avant la date.</p>
+  <sc-if value="{{ hasHwShort }}">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;background:oklch(0.82 0.15 70);color:oklch(0.24 0.02 50);margin:0 0 12px">
+        <span style="font-size:14px;font-weight:600;line-height:1.4;text-wrap:pretty">{{ hwShortText }}</span>
+        <button onClick="{{ hwAddSlot }}" style="min-height:44px;padding:8px 12px;border:2px solid currentColor;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:700;cursor:pointer">Ajouter</button>
+      </div>
+    </sc-if>
+  <sc-if value="{{ hasDevs }}">
     <div style="border-top:2px solid var(--color-divider)">
-      <sc-for list="{{ examRows }}" as="x" hint-placeholder-count="2">
+      <sc-for list="{{ devRows }}" as="x" hint-placeholder-count="2">
+        <sc-if value="{{ x.isExam }}">
         <div style="display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:56px;padding:6px 0;border-bottom:1px solid var(--color-divider)">
           <span style="font-family:var(--font-heading);font-weight:800;font-size:22px;color:var(--color-accent);letter-spacing:-.03em">{{ x.count }}</span>
-          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ x.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ x.sub }}</span></span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ x.title }}</span><span style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--color-neutral-700)"><sc-if value="{{ x.isPn }}"><span class="tag tag-accent">Pronote</span></sc-if><span>{{ x.sub }}</span></span></span>
           <button class="btn btn-ghost" onClick="{{ x.onDel }}" style="padding:8px 4px;font-size:13px;min-height:44px">Retirer</button>
         </div>
+        </sc-if>
+        <sc-if value="{{ x.isHw }}">
+        <button onClick="{{ x.onToggle }}" style="width:100%;display:grid;grid-template-columns:56px minmax(0,1fr);gap:10px;align-items:start;min-height:56px;padding:12px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;opacity:{{ x.op }}">
+          <span style="width:20px;height:20px;border:2px solid var(--color-text);background:{{ x.box }};display:flex;align-items:center;justify-content:center;color:var(--color-bg);margin-top:1px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:3.5;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty;text-decoration:{{ x.deco }}">{{ x.title }}</span><span style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--color-neutral-700)"><span class="tag tag-accent">Pronote</span><span>{{ x.when }}</span></span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ x.sub }}</span></span>
+        </button>
+        </sc-if>
       </sc-for>
     </div>
   </sc-if>
@@ -878,13 +922,23 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     <button class="btn btn-ghost" onClick="{{ toggleTtEdit }}" style="padding:4px 2px;font-size:13px">{{ ttEditLabel }}</button>
   </div>
   <sc-if value="{{ ttNotEditing }}">
+    <sc-if value="{{ hasSelHwSum }}"><div style="font-family:var(--font-heading);font-weight:800;font-size:15px;padding:10px 0;border-bottom:1px solid var(--color-divider)">{{ selHwSum }}</div></sc-if>
     <sc-if value="{{ ttHasRows }}">
     <sc-for list="{{ ttRows }}" as="r" hint-placeholder-count="4">
+      <sc-if value="{{ r.isPn }}">
+      <button onClick="{{ r.onOpen }}" style="width:100%;display:grid;grid-template-columns:86px minmax(0,1fr) 20px;gap:10px;align-items:center;min-height:52px;padding:8px 10px;border:0;border-bottom:1px solid var(--color-divider);background:var(--color-surface);color:inherit;font:inherit;text-align:left;cursor:pointer">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:13px;color:var(--color-accent-700);font-variant-numeric:tabular-nums">{{ r.time }}</span>
+        <span style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-size:15px;font-weight:600;text-wrap:pretty">{{ r.title }}</span><span style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--color-neutral-700)"><span class="tag tag-accent">Pronote</span><sc-if value="{{ r.isLate }}"><span class="tag" style="background:oklch(0.55 0.21 27);color:#fff;border-color:oklch(0.55 0.21 27)">En retard possible</span></sc-if><sc-if value="{{ r.isLock }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4"><rect width="16" height="11" x="4" y="11"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg></sc-if><span>{{ r.sub }}</span></span></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="m9 6 6 6-6 6"></path></svg>
+      </button>
+      </sc-if>
+      <sc-if value="{{ r.notPn }}">
       <div style="display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:52px;padding:8px 10px;border-bottom:1px solid var(--color-divider);background:{{ r.bg }};opacity:{{ r.op }}">
         <span style="font-family:var(--font-heading);font-weight:800;font-size:13px;color:{{ r.tc }};font-variant-numeric:tabular-nums">{{ r.time }}</span>
         <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600;color:{{ r.fg }};text-wrap:pretty">{{ r.title }}</span><span style="font-size:12px;color:var(--color-neutral-700);text-wrap:pretty">{{ r.sub }}</span></span>
         <sc-if value="{{ r.hasAct }}"><button class="btn btn-secondary" onClick="{{ r.onAct }}" style="padding:8px 10px;font-size:13px;min-height:44px">{{ r.actLabel }}</button></sc-if>
       </div>
+      </sc-if>
     </sc-for>
     </sc-if>
     <sc-if value="{{ ttEmpty }}"><p style="font-size:14px;color:var(--color-neutral-700);margin:12px 0 0">Rien ce jour-là. Touche « Modifier » pour ajouter des créneaux de révision.</p></sc-if>
@@ -953,6 +1007,38 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 </div>
 </sc-if>
 
+<sc-if value="{{ isPn }}">
+<div data-screen-label="Connecter Pronote" data-r="screen-narrow" style="padding:12px 20px 32px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid var(--color-divider)"><span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600">Réglages · Pronote</span><button class="btn btn-ghost" onClick="{{ pnClose }}" style="padding:8px 4px;min-height:44px;font-size:13px">Annuler</button></div>
+  <h2 style="font-size:30px;margin:20px 0 8px;text-wrap:pretty">Connecte Pronote.</h2>
+  <p style="font-size:14px;line-height:1.5;color:var(--color-neutral-700);margin:0 0 22px;text-wrap:pretty">Sur Pronote (ordinateur), clique sur l'icône QR code / appli mobile en haut de la page → choisis un code PIN → un QR code s'affiche. Il n'est valable que quelques minutes.</p>
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">1. Le QR code</div>
+  <input type="file" ref="{{ pnFileRef }}" accept="image/*" onChange="{{ pnOnFile }}" style="display:none">
+  <sc-if value="{{ pnScanning }}">
+    <div style="margin-top:12px;background:var(--color-text)"><video ref="{{ pnVideoRef }}" style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block"></video></div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:6px"><span style="font-size:13px;color:var(--color-neutral-700);text-wrap:pretty">Vise le QR code affiché sur l'ordinateur.</span><button class="btn btn-ghost" onClick="{{ pnStopScan }}" style="padding:8px 4px;min-height:44px;font-size:13px">Arrêter</button></div>
+  </sc-if>
+  <sc-if value="{{ pnPickQr }}">
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+      <button class="btn btn-secondary" onClick="{{ pnScan }}" disabled="{{ pnReading }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>Scanner</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><path d="M7 12h10"></path></svg></button>
+      <button class="btn btn-secondary" onClick="{{ pnImport }}" disabled="{{ pnReading }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>{{ pnImportLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><rect width="18" height="18" x="3" y="3"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg></button>
+    </div>
+  </sc-if>
+  <sc-if value="{{ pnHasQr }}">
+    <div style="display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:52px;border-bottom:1px solid var(--color-divider)">
+      <span style="width:20px;height:20px;border:2px solid var(--color-accent);background:var(--color-accent);display:flex;align-items:center;justify-content:center;color:var(--color-bg)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:3.5;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></span>
+      <span style="font-size:15px;font-weight:600">QR code lu</span>
+      <button class="btn btn-ghost" onClick="{{ pnResetQr }}" style="padding:8px 4px;min-height:44px;font-size:13px">Refaire</button>
+    </div>
+  </sc-if>
+  <div style="font-family:var(--font-heading);font-weight:800;font-size:16px;padding-bottom:8px;border-bottom:2px solid var(--color-text);margin-top:26px">2. Ton code PIN</div>
+  <div class="field" style="margin-top:12px"><label>Les 4 chiffres choisis sur Pronote</label><input class="input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" value="{{ pnPin }}" onChange="{{ pnOnPin }}" placeholder="····" style="min-height:52px;font-size:22px;letter-spacing:.4em;font-family:var(--font-heading);font-weight:800"></div>
+  <sc-if value="{{ pnHasErr }}"><p style="font-size:13px;color:var(--color-accent-700);font-weight:600;margin:12px 0 0;text-wrap:pretty">{{ pnErr }}</p></sc-if>
+  <button class="btn btn-primary" onClick="{{ pnLink }}" disabled="{{ pnLinkDisabled }}" style="width:100%;justify-content:space-between;padding:18px 16px;font-size:17px;margin-top:20px"><span>{{ pnLinkLabel }}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+  <p style="font-size:12px;color:var(--color-neutral-700);margin:12px 0 0;text-wrap:pretty">Le QR code et le PIN partent une seule fois au serveur de l'appli, qui garde la connexion Pronote. Rien n'est enregistré sur ce téléphone.</p>
+</div>
+</sc-if>
+
 <sc-if value="{{ isSet }}">
 <div data-screen-label="Réglages" data-r="screen-narrow" style="padding:12px 20px 32px">
   <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:10px;border-bottom:2px solid var(--color-divider)">Réglages</div>
@@ -975,6 +1061,29 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     <button class="btn btn-primary" onClick="{{ goAuth }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>Me connecter / créer mon compte</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
     <p style="font-size:12px;color:var(--color-neutral-700);margin:8px 0 0">E-mail et mot de passe, c'est fait. Tes données actuelles passent dans ton compte.</p>
     </sc-if>
+  </sc-if>
+  <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Pronote</h4>
+  <sc-if value="{{ pnLocal }}"><p style="font-size:13px;color:var(--color-neutral-700);margin:0;text-wrap:pretty">Connecte-toi à ton compte pour relier Pronote : tes devoirs arriveront tout seuls dans le planning.</p></sc-if>
+  <sc-if value="{{ pnSignedIn }}">
+    <sc-if value="{{ pnChecking }}"><p style="font-size:13px;color:var(--color-neutral-700);margin:0">Vérification de la connexion…</p></sc-if>
+    <sc-if value="{{ pnReconnect }}">
+      <div style="padding:12px 14px;background:oklch(0.82 0.15 70);color:oklch(0.24 0.02 50);margin-bottom:10px">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:17px">Reconnecte Pronote</div>
+        <div style="font-size:13px;margin-top:4px;text-wrap:pretty">La connexion a expiré. Refais un QR code sur Pronote pour reprendre la synchro. {{ pnLastSync }}</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ pnNone }}"><p style="font-size:13px;color:var(--color-neutral-700);margin:0 0 12px;text-wrap:pretty">Tes devoirs arrivent tout seuls dans le planning. Un contrôle déclenche la préparation complète : fiches, exercices, devoir blanc à J-2, relecture la veille.</p></sc-if>
+    <sc-if value="{{ pnShowConnect }}">
+      <button class="btn btn-primary" onClick="{{ pnOpen }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>Connecter Pronote</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.4;stroke-linecap:square"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+    </sc-if>
+    <sc-if value="{{ pnLinked }}">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:4px 0 12px;border-bottom:1px solid var(--color-divider);margin-bottom:12px">
+        <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:15px;font-weight:600">Pronote connecté</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ pnLastSync }}</span></span>
+        <span class="tag tag-accent">Pronote</span>
+      </div>
+      <button class="btn btn-secondary" onClick="{{ pnSyncNow }}" disabled="{{ pnBusy }}" style="width:100%;justify-content:space-between;padding:14px 16px;font-size:15px"><span>{{ pnSyncLabel }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.2;stroke-linecap:square"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg></button>
+    </sc-if>
+    <sc-if value="{{ pnHasMsg }}"><p style="font-size:13px;font-weight:600;margin:10px 0 0;color:{{ pnMsgColor }};text-wrap:pretty">{{ pnMsg }}</p></sc-if>
   </sc-if>
   <h4 style="margin:28px 0 8px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--color-text)">Apparence</h4>
   <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--color-divider)">
@@ -1056,6 +1165,35 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 </sc-if>
 
 </div>
+<sc-if value="{{ hwSheet }}">
+<div onClick="{{ hsClose }}" style="position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center">
+  <div onClick="{{ hsStop }}" data-screen-label="Devoir Pronote" style="width:100%;max-width:520px;max-height:88dvh;overflow-y:auto;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);padding:16px 20px max(env(safe-area-inset-bottom), 20px);border-top:2px solid var(--color-text)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-accent">Pronote</span><sc-if value="{{ hs.isLate }}"><span class="tag" style="background:oklch(0.55 0.21 27);color:#fff;border-color:oklch(0.55 0.21 27)">En retard possible</span></sc-if></span><button class="btn btn-ghost" onClick="{{ hsClose }}" style="padding:8px 4px;min-height:44px;font-size:13px">Fermer</button></div>
+    <h3 style="font-size:26px;margin:8px 0 2px;text-wrap:pretty">{{ hs.subj }}</h3>
+    <div style="font-size:13px;font-weight:600;color:var(--color-accent-700)">{{ hs.due }}</div>
+    <div style="margin-top:14px;padding:12px 14px;background:var(--color-surface);font-size:15px;line-height:1.5;white-space:pre-wrap;text-wrap:pretty">{{ hs.text }}</div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:16px;padding-bottom:12px;border-bottom:1px solid var(--color-divider)">
+      <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:600">Durée</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ hs.durSrc }}</span></span>
+      <span style="display:flex;align-items:center;border:2px solid var(--color-text)"><button onClick="{{ hsMinus }}" aria-label="Moins 5 minutes" style="width:44px;height:44px;border:0;background:transparent;color:inherit;font:inherit;font-size:20px;font-weight:700;cursor:pointer">−</button><span style="min-width:64px;text-align:center;font-family:var(--font-heading);font-weight:800;font-size:16px">{{ hs.dur }}</span><button onClick="{{ hsPlus }}" aria-label="Plus 5 minutes" style="width:44px;height:44px;border:0;background:transparent;color:inherit;font:inherit;font-size:20px;font-weight:700;cursor:pointer">+</button></span>
+    </div>
+    <sc-if value="{{ hs.isCustom }}"><button class="btn btn-ghost" onClick="{{ hsResetDur }}" style="padding:8px 0;min-height:44px;font-size:13px">Revenir à la durée d’origine</button></sc-if>
+    <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-top:16px;padding-bottom:6px;border-bottom:2px solid var(--color-divider)">{{ hs.planHead }}</div>
+    <sc-for list="{{ hs.chunks }}" as="c" hint-placeholder-count="1"><div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;min-height:44px;border-bottom:1px solid var(--color-divider)"><span style="font-size:14px;font-weight:600">{{ c.label }}</span><span style="font-size:13px;color:{{ c.color }};font-weight:600">{{ c.dur }}</span></div></sc-for>
+    <sc-if value="{{ hs.noChunk }}"><p style="font-size:13px;color:var(--color-accent-700);margin:8px 0 0;text-wrap:pretty">Aucune place avant la date. Ajoute un créneau de révision ou place-le à la main.</p></sc-if>
+    <button class="btn btn-primary" onClick="{{ hsDone }}" style="width:100%;justify-content:space-between;padding:16px;font-size:16px;margin-top:18px"><span>Fait ✓</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width:2.6;stroke-linecap:square"><path d="M20 6 9 17l-5-5"></path></svg></button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+      <button class="btn btn-secondary" onClick="{{ hsLock }}" disabled="{{ hs.lockDisabled }}" style="justify-content:center;padding:12px 8px;min-height:48px;font-size:14px">{{ hs.lockLabel }}</button>
+      <button class="btn btn-secondary" onClick="{{ hsMoveToggle }}" style="justify-content:center;padding:12px 8px;min-height:48px;font-size:14px">{{ hs.moveLabel }}</button>
+    </div>
+    <sc-if value="{{ hs.moveOpen }}">
+      <div style="margin-top:10px;border-top:2px solid var(--color-text)">
+        <sc-for list="{{ hs.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;min-height:48px;padding:6px 0;border:0;border-bottom:1px solid var(--color-divider);background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer"><span style="font-size:14px;font-weight:600">{{ o.label }}</span><span style="font-size:12px;color:{{ o.color }}">{{ o.sub }}</span></button></sc-for>
+        <sc-if value="{{ hs.noOpts }}"><p style="font-size:13px;color:var(--color-neutral-700);margin:10px 0 0">Aucun créneau de révision d’ici la date.</p></sc-if>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
 <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
 <div data-r="tabs" style="display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid var(--color-divider);background:var(--color-bg);padding-bottom:max(env(safe-area-inset-bottom), 8px)">
   <div data-r="brand" style="display:none;flex-direction:column;padding:4px 10px 18px;margin-bottom:10px;border-bottom:2px solid var(--color-divider)"><div style="display:flex;align-items:center;gap:9px"><img data-logo="light" src="logo-mark.png" alt="" style="height:40px;width:auto;display:block"><img data-logo="dark" src="logo-mark-dark.png" alt="" style="height:40px;width:auto;display:none"><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-family:var(--font-heading);font-weight:700;font-size:17px;line-height:1.05;letter-spacing:-.01em;white-space:nowrap">ancre-tes-cours</span><span style="font-size:11px;line-height:1.2">Révise moins, retiens plus.</span></div></div></div>
@@ -1119,6 +1257,13 @@ const isoWeek = k => { const d = pkey(k); d.setDate(d.getDate() + 3 - ((d.getDay
 const subjOf = l => { const n = (l || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); if (/physique|chimie/.test(n)) return 'Physique-Chimie'; if (/math/.test(n)) return 'Maths'; if (/svt|vie et de la terre/.test(n)) return 'SVT'; if (/philo/.test(n)) return 'Philosophie'; if (/histoire|geo|emc/.test(n)) return 'Histoire-Géo'; if (/\bses\b|economi/.test(n)) return 'SES'; if (/anglais/.test(n)) return 'Anglais'; if (/espagnol/.test(n)) return 'Espagnol'; if (/scientifique/.test(n)) return 'Ens. scientifique'; return ''; };
 const TT_KIND = { cours: 'Cours', rev: 'Révision', off: 'Pas dispo' };
 const subjPlan = l => { const s = subjOf(l); return PLAN_SUBJ.includes(s) ? s : ''; };
+const PN_DS = /\bds\b|\bcontrole|\binterro|\bevaluation|devoir surveille/;
+const pnSubj = raw => { const s = subjOf(raw); if (s) return s; const r = String(raw || '').trim().toLowerCase(); return r ? r.charAt(0).toUpperCase() + r.slice(1) : 'Devoir'; };
+const hwDur = h => Math.max(5, Math.min(480, +(h.durUser ?? h.dureeMin) || 30));
+const durL = m => (m < 60 ? m + ' min' : Math.floor(m / 60) + 'h' + (m % 60 ? pad(m % 60) : ''));
+const pnSnip = (s, n) => { s = s || ''; return s.length > n ? s.slice(0, n - 1).trim() + '…' : s; };
+const pnTitle = s => (s.length > 48 ? s.slice(0, 46).trim() + '…' : s);
+const pnCount = r => { if (!r || typeof r !== 'object') return null; for (const k of ['imported', 'count', 'devoirs', 'nb', 'n', 'total']) { const v = r[k]; if (typeof v === 'number') return v; if (Array.isArray(v)) return v.length; } return null; };
 const TYPE_LABEL = { libre: 'Réponse libre', calcul: 'Calcul', trou: 'Texte à trous', qcm: 'QCM', vf: 'Vrai / Faux justifié', explique: 'Explique avec tes mots' };
 const LEVELS = [{ k: 'rate', label: 'Raté' }, { k: 'difficile', label: 'Difficile' }, { k: 'bien', label: 'Bien' }, { k: 'facile', label: 'Facile' }];
 const CAPQ = { 5: 3, 10: 6, 15: 9 };
@@ -1294,6 +1439,8 @@ class Component extends DCLogic {
   exoPhotoRef = React.createRef();
   anPhotoRef = React.createRef();
   anFileRef = React.createRef();
+  pnFileRef = React.createRef();
+  pnVideoRef = React.createRef();
   state = { screen: 'today', auth: 'checking', user: null, dataReady: false, loadError: '', sync: 'idle', syncMsg: '', migrated: false, authStep: 'email', authEmail: '', authCode: '', resendIn: 0, authBusy: false, authError: '', authInfo: '', setupUrl: '', setupKey: '', setupError: '', cfgFromFile: false, data: emptyData(), sess: null, addStep: 'form', addSubj: 'Physique-Chimie', addChap: '', addText: '', addError: '', gen: [], genSel: [], loadIdx: 0, added: 0, manual: [{ q: '', a: '' }], openCourse: null, importStatus: null, aiTest: null, setMsg: '' };
 
   // ── Persistence ──────────────────────────────────────────────
@@ -1441,6 +1588,7 @@ class Component extends DCLogic {
           this.writeCache(data, false);
         }
       }
+      this.pnLoad();
     } catch (e) {
       if (cached && cached.data) this.setState({ sync: 'offline', syncMsg: frErr(e) });
       else this.setState({ loadError: 'Impossible de récupérer tes données : ' + frErr(e) });
@@ -1531,7 +1679,7 @@ class Component extends DCLogic {
     try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
     try { if ('serviceWorker' in navigator && window.top === window && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js'); } catch (e) {}
     this.onVis = () => {
-      if (document.visibilityState === 'visible') { this.forceUpdate(); this.refreshRemote(); this.varKick(3000); }
+      if (document.visibilityState === 'visible') { this.forceUpdate(); this.refreshRemote(); this.varKick(3000); if (this.state.dataReady && Date.now() - (this.pnAt || 0) > 30 * 60000) this.pnLoad(); }
       else this.cloudSave();
     };
     this.onOnline = () => this.cloudSave();
@@ -1554,6 +1702,7 @@ class Component extends DCLogic {
     }
   }
   componentWillUnmount() {
+    this.pnStopCam(true);
     clearTimeout(this.varT); clearTimeout(this.pomoT); document.removeEventListener('visibilitychange', this.onPomoVis); document.removeEventListener('pointerdown', this.onTapAudio);
     document.removeEventListener('visibilitychange', this.onVis);
     window.removeEventListener('online', this.onOnline);
@@ -1562,7 +1711,7 @@ class Component extends DCLogic {
     (this.timers || []).forEach(clearTimeout); clearTimeout(this.saveT); clearTimeout(this.retryT); clearInterval(this.cdT);
   }
 
-  go(screen, extra) { this.setState({ screen, ...(extra || {}) }, () => { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; }); }
+  go(screen, extra) { if (screen !== 'pronote' && this.pnStream) this.pnStopCam(); this.setState({ screen, ...(extra || {}) }, () => { if (this.scrollRef.current) this.scrollRef.current.scrollTop = 0; }); }
 
   aiPref() { return this.state.data.settings.aiMode === 'rules' ? 'rules' : 'auto'; }
   groqKey() { return (lsGet(GROQ_KEY) || '').trim(); }
@@ -1741,16 +1890,11 @@ class Component extends DCLogic {
   }
   weekOf(k) { return isoWeek(k) % 2 === (this.state.data.settings.weekAPar || 0) ? 'A' : 'B'; }
   ttFor(k) { const dw = pkey(k).getDay(), wk = this.weekOf(k); return (this.state.data.settings.tt || []).filter(e => e.d === dw && (!e.w || e.w === wk)).sort((a, b) => toMin(a.s) - toMin(b.s) || (a.k === 'rev') - (b.k === 'rev')); }
-  planDay(k, nowMin) {
-    const data = this.state.data, t = this.today(), cm = this.courseMap(), ents = this.ttFor(k), sv = this.isSavate(k);
-    const subjHas = {}; data.cards.forEach(c => { const s = (cm[c.courseId] || {}).subj; if (s) subjHas[s] = true; });
-    const tasks = [];
-    const dueN = data.cards.filter(c => c.due <= k).length;
-    if (dueN) {
-      const n = sv ? Math.min(dueN, this.capQ()) : dueN;
-      tasks.push({ title: 'Révisions espacées', sub: plural(n, 'question') + ' à ressortir avant l’oubli' + (sv ? ' · séance courte (savate)' : ''), min: Math.min(50, Math.max(5, Math.ceil(n * 1.7))), onAct: k === t ? () => this.startSession() : null, actLabel: 'Go' });
-    }
-    const uniq = a => [...new Set(a.filter(Boolean))];
+  revSlots(k, nowMin) {
+    return this.ttFor(k).filter(e => e.k === 'rev').map(e => { const s0 = toMin(e.s), en = toMin(e.e), st = nowMin != null && s0 < nowMin ? Math.ceil(nowMin / 5) * 5 : s0; return { sid: e.id || e.d + '-' + e.s, s0: st, en, len: Math.max(0, en - st) }; }).filter(s => s.len > 0);
+  }
+  examTasks(k) {
+    const data = this.state.data, t = this.today(), cm = this.courseMap(), sv = this.isSavate(k), tasks = [];
     const subjCount = {}; data.cards.forEach(c => { const s = (cm[c.courseId] || {}).subj; if (s) subjCount[s] = (subjCount[s] || 0) + 1; });
     (data.exams || []).filter(x => x.date >= k).sort((a, b) => (a.date < b.date ? -1 : 1)).forEach(x => {
       const n = diff(k, x.date), name = x.subj + (x.title ? ' (' + x.title + ')' : ''), ex = EXO[x.subj] || EXO['Ens. scientifique'];
@@ -1766,6 +1910,70 @@ class Component extends DCLogic {
       }
       if (n <= 21 && n % 2 === 0) tasks.push({ title: 'Prépare le devoir : ' + name, sub: 'Relis un chapitre au programme et fais sa fiche (définitions, formules, schémas) · J-' + n, min: cap(30) });
     });
+    return tasks;
+  }
+  examFill(slots, tasks) {
+    const fill = {}; let qi = 0;
+    slots.forEach((s, si) => {
+      let cur = 0; const arr = [];
+      while (qi < tasks.length) {
+        let d = tasks[qi].min; const room = s.len - cur;
+        if (d > room) { const minOk = si === slots.length - 1 ? Math.min(15, d) : Math.max(Math.min(15, d), Math.ceil(d * 0.7)); if (room >= minOk) d = room; else break; }
+        arr.push({ tk: tasks[qi], d }); cur += d; qi++;
+      }
+      fill[s.sid] = { arr, used: cur };
+    });
+    return { fill, left: tasks.slice(qi) };
+  }
+  // Placement des devoirs Pronote : verrouillés d'abord, puis séances de DS, puis devoirs (date la plus proche, puis les plus longs), au plus tôt, avant le jour J.
+  hwAlloc() {
+    const data = this.state.data, t = this.today(), now = new Date(), nm = now.getHours() * 60 + now.getMinutes(), key = t + '|' + Math.floor(nm / 5);
+    if (this._al && this._al.data === data && this._al.key === key) return this._al.v;
+    const hw = {}; (data.pronoteHw || []).forEach(x => { hw[x.id] = x; });
+    const list = (data.pronoteHw || []).filter(x => !x.done && x.date >= t);
+    const v = { hw, byDay: {}, perHw: {}, rest: {}, short: [] };
+    if (list.length) {
+      const maxD = list.reduce((m, x) => (x.date > m ? x.date : m), t), days = [];
+      for (let k = t; k <= maxD && days.length < 60; k = addDays(k, 1)) days.push(k);
+      const slots = {}; days.forEach(k => { slots[k] = this.revSlots(k, k === t ? nm : null); });
+      const s0Of = (k, sid) => { const s = (slots[k] || []).find(y => y.sid === sid); return s ? s.s0 : -1; };
+      const chunks = [], pinUse = {}, free = [];
+      list.forEach(x => {
+        const pin = (x.pin || []).filter(p => p && p.k >= t && s0Of(p.k, p.sid) >= 0);
+        if (!pin.length) return free.push(x);
+        pin.forEach(p => { const m = Math.max(5, p.min | 0), kk = p.k + '|' + p.sid; chunks.push({ hid: x.id, k: p.k, sid: p.sid, min: m, pinned: true, late: p.k >= x.date }); pinUse[kk] = (pinUse[kk] || 0) + m; });
+      });
+      const cap = {};
+      days.forEach(k => {
+        const sl = slots[k].map(s => ({ ...s, len: Math.max(0, s.len - (pinUse[k + '|' + s.sid] || 0)) }));
+        const ef = this.examFill(sl, this.examTasks(k));
+        sl.forEach(s => { cap[k + '|' + s.sid] = s.len - ef.fill[s.sid].used; });
+      });
+      free.sort((p, q) => (p.date < q.date ? -1 : p.date > q.date ? 1 : hwDur(q) - hwDur(p)));
+      free.forEach(x => {
+        let rem = hwDur(x);
+        const place = (k, late) => { for (const s of slots[k] || []) { if (rem <= 0) return; const kk = k + '|' + s.sid, take = Math.min(cap[kk] || 0, rem); if (take <= 0 || take < Math.min(10, rem)) continue; chunks.push({ hid: x.id, k, sid: s.sid, min: take, late }); cap[kk] -= take; rem -= take; } };
+        for (const k of days) { if (k >= x.date || rem <= 0) break; place(k, false); }
+        if (rem > 0) place(x.date, true);
+        if (rem > 0) v.rest[x.id] = rem;
+      });
+      chunks.forEach(c => { c.s0 = s0Of(c.k, c.sid); (v.byDay[c.k] = v.byDay[c.k] || []).push(c); (v.perHw[c.hid] = v.perHw[c.hid] || []).push(c); });
+      Object.keys(v.perHw).forEach(id => { const arr = v.perHw[id]; arr.sort((p, q) => (p.k < q.k ? -1 : p.k > q.k ? 1 : p.s0 - q.s0)); arr.forEach((c, i) => { c.part = i + 1; c.parts = arr.length; }); });
+      v.short = list.filter(x => v.rest[x.id] || (v.perHw[x.id] || []).some(c => c.late)).sort((p, q) => (p.date < q.date ? -1 : 1));
+    }
+    this._al = { data, key, v };
+    return v;
+  }
+  planDay(k, nowMin) {
+    const data = this.state.data, t = this.today(), cm = this.courseMap(), ents = this.ttFor(k), sv = this.isSavate(k);
+    const subjHas = {}; data.cards.forEach(c => { const s = (cm[c.courseId] || {}).subj; if (s) subjHas[s] = true; });
+    const tasks = [];
+    const dueN = data.cards.filter(c => c.due <= k).length;
+    if (dueN) {
+      const n = sv ? Math.min(dueN, this.capQ()) : dueN;
+      tasks.push({ title: 'Révisions espacées', sub: plural(n, 'question') + ' à ressortir avant l’oubli' + (sv ? ' · séance courte (savate)' : ''), min: Math.min(50, Math.max(5, Math.ceil(n * 1.7))), onAct: k === t ? () => this.startSession() : null, actLabel: 'Go' });
+    }
+    const uniq = a => [...new Set(a.filter(Boolean))];
     const todaySubs = uniq(ents.filter(e => e.k === 'cours').map(e => subjPlan(e.l)));
     todaySubs.forEach(s => tasks.push({ title: 'Rentre ton cours de ' + s, sub: 'Vu aujourd’hui : je le transforme en questions pour J+1', min: 15, onAct: k === t ? () => this.go('add', { addStep: 'form', addSubj: s, addChap: '', addText: '', addError: '' }) : null, actLabel: 'Ajouter' }));
     const tomSubs = uniq(this.ttFor(addDays(k, 1)).filter(e => e.k === 'cours').map(e => subjPlan(e.l))).filter(s => !todaySubs.includes(s));
@@ -1775,13 +1983,22 @@ class Component extends DCLogic {
       data.courses.map(c => ({ c, r: byC[c.id] ? byC[c.id].reduce((a, b) => a + b, 0) / byC[c.id].length : 1 })).filter(x => x.r < 0.7).sort((a, b) => a.r - b.r).slice(0, 2)
         .forEach(x => tasks.push({ title: 'Renforce : ' + x.c.chap, sub: x.c.subj + ' · rétention ' + Math.round(x.r * 100) + ' %. Relis puis réexplique sans regarder', min: 20 }));
     }
+    const al = this.hwAlloc(), dayHw = al.byDay[k] || [], slots = this.revSlots(k, nowMin), pinUse = {};
+    dayHw.forEach(c => { if (c.pinned) pinUse[c.sid] = (pinUse[c.sid] || 0) + c.min; });
+    const ef = this.examFill(slots.map(s => ({ ...s, len: Math.max(0, s.len - (pinUse[s.sid] || 0)) })), this.examTasks(k));
     const items = []; let qi = 0;
     const lastRev = ents.reduce((a, e, i) => (e.k === 'rev' && !(nowMin != null && toMin(e.e) <= nowMin) ? i : a), -1);
     ents.forEach((e, ei) => {
       const s0 = toMin(e.s), en = toMin(e.e), past = nowMin != null && en <= nowMin;
       if (e.k !== 'rev') return items.push({ kind: e.k, past, time: fmtM(s0) + '–' + fmtM(en), title: e.l || TT_KIND[e.k], sub: [e.r, e.w ? 'Sem. ' + e.w : ''].filter(Boolean).join(' · ') });
       if (past) return items.push({ kind: 'free', past, time: fmtM(s0) + '–' + fmtM(en), title: 'Créneau de révision', sub: 'Passé' });
-      let cur = nowMin != null && s0 < nowMin ? Math.ceil(nowMin / 5) * 5 : s0, run = 0;
+      const sid = e.id || e.d + '-' + e.s, c0 = nowMin != null && s0 < nowMin ? Math.ceil(nowMin / 5) * 5 : s0;
+      let cur = c0;
+      const hwBlock = c => { const x = al.hw[c.hid] || {}, sn = pnSnip(x.text, 34); items.push({ kind: 'hw', hid: c.hid, late: c.late, pinned: c.pinned, time: fmtM(cur) + '–' + fmtM(cur + c.min), title: x.subj + ' — ' + (c.parts > 1 ? 'partie ' + c.part + '/' + c.parts : sn || 'devoir'), sub: (c.parts > 1 && sn ? sn + ' · ' : '') + durL(c.min) }); cur += c.min; };
+      dayHw.filter(c => c.sid === sid && c.pinned).forEach(hwBlock);
+      ((ef.fill[sid] || {}).arr || []).forEach(y => { items.push({ kind: 'task', time: fmtM(cur) + '–' + fmtM(cur + y.d), title: y.tk.title, sub: y.tk.sub, onAct: y.tk.onAct, actLabel: y.tk.actLabel }); cur += y.d; });
+      dayHw.filter(c => c.sid === sid && !c.pinned).forEach(hwBlock);
+      let run = cur - c0;
       while (qi < tasks.length) {
         const tk = tasks[qi]; let d = tk.min;
         if (run >= 40) { if (cur + 10 + Math.min(d, 15) > en) break; items.push({ kind: 'pause', time: fmtM(cur) + '–' + fmtM(cur + 10), title: 'Pause', sub: 'Lève-toi, bois de l’eau, pas d’écran' }); cur += 10; run = 0; }
@@ -1791,16 +2008,60 @@ class Component extends DCLogic {
       }
       if (en - cur >= 15) items.push({ kind: 'free', time: fmtM(cur) + '–' + fmtM(en), title: 'Temps libre', sub: 'Rien d’urgent. Avance un chapitre ou souffle' });
     });
-    return { items, left: tasks.slice(qi).map(x => x.title) };
+    return { items, left: [...ef.left, ...tasks.slice(qi)].map(x => x.title) };
+  }
+  hwVals(t) {
+    const st = this.state, al = this.hwAlloc();
+    const dayName = k => { const n = diff(t, k); return n === 0 ? 'aujourd’hui' : n === 1 ? 'demain' : n <= 6 ? pkey(k).toLocaleDateString('fr-FR', { weekday: 'long' }) : fmtS(k); };
+    const sum = k => { const a = al.byDay[k] || []; if (!a.length) return ''; const n = new Set(a.map(c => c.hid)).size; return plural(n, 'devoir') + ' · ' + durL(a.reduce((s, c) => s + c.min, 0)) + ' de travail'; };
+    const slotLabel = (k, sid) => { const e = (this.state.data.settings.tt || []).find(y => (y.id || y.d + '-' + y.s) === sid); return (k === t ? 'Aujourd’hui' : fmtS(k)) + (e ? ' · ' + fmtM(toMin(e.s)) + '–' + fmtM(toMin(e.e)) : ''); };
+    const setHw = (id, f) => this.updData(d => ({ ...d, pronoteHw: (d.pronoteHw || []).map(y => (y.id === id ? f(y) : y)) }));
+    const oh = st.hwOpen ? al.hw[st.hwOpen] : null;
+    let hs = {};
+    if (oh) {
+      const ch = al.perHw[oh.id] || [], dur = hwDur(oh), pinned = !!(oh.pin && oh.pin.length) && ch.some(c => c.pinned);
+      const opts = [];
+      for (let k = t; k <= oh.date && opts.length < 14; k = addDays(k, 1)) this.revSlots(k, k === t ? new Date().getHours() * 60 + new Date().getMinutes() : null).forEach(s => {
+        if (opts.length < 14) opts.push({ label: slotLabel(k, s.sid), sub: k === oh.date ? 'jour J' : durL(s.en - s.s0) + ' de créneau', color: k === oh.date ? 'oklch(0.55 0.21 27)' : 'var(--color-neutral-700)', onClick: () => { setHw(oh.id, y => ({ ...y, pin: [{ k, sid: s.sid, min: hwDur(y) }] })); this.setState({ hwMove: false }); } });
+      });
+      hs = {
+        subj: oh.subj, due: 'Pour ' + dayName(oh.date) + (diff(t, oh.date) > 1 ? ' · ' + fmtS(oh.date) : ''), text: oh.text || 'Pas de consigne détaillée.',
+        dur: durL(dur), isCustom: oh.durUser != null, durSrc: oh.durUser != null ? 'Modifiée par toi' + (oh.dureeMin ? ' · Pronote : ' + durL(oh.dureeMin) : '') : oh.dureeMin ? 'Estimée par Pronote' : 'Par défaut',
+        isLate: ch.some(c => c.late) || !!al.rest[oh.id], planHead: ch.length ? (pinned ? 'Placé à la main' : 'Placé automatiquement') + (al.rest[oh.id] ? ' · ' + durL(al.rest[oh.id]) + ' sans place' : '') : 'Placement',
+        chunks: ch.map(c => ({ label: slotLabel(c.k, c.sid) + (c.parts > 1 ? ' · partie ' + c.part + '/' + c.parts : ''), dur: c.late ? durL(c.min) + ' · jour J' : durL(c.min), color: c.late ? 'oklch(0.55 0.21 27)' : 'var(--color-neutral-700)' })),
+        noChunk: !ch.length, lockLabel: pinned ? 'Déverrouiller' : 'Verrouiller ici', lockDisabled: !ch.length,
+        moveOpen: !!st.hwMove, moveLabel: st.hwMove ? 'Annuler' : 'Placer à la main', opts, noOpts: !opts.length
+      };
+    }
+    const adjust = delta => setHw(oh.id, y => { const nd = Math.max(5, Math.min(480, hwDur(y) + delta)); let pin = y.pin; if (pin && pin.length) { pin = pin.slice(); const l = pin.length - 1; pin[l] = { ...pin[l], min: Math.max(5, pin[l].min + nd - hwDur(y)) }; } return { ...y, durUser: nd, pin }; });
+    return {
+      todayHwSum: sum(t), hasTodayHwSum: !!sum(t),
+      hwShortText: al.short.length ? 'Pas assez de temps pour : ' + al.short.map(x => x.subj + ' (dû ' + dayName(x.date) + ')').join(', ') + ' — ajoute un créneau' : '', hasHwShort: al.short.length > 0,
+      hwAddSlot: () => { const x = al.short[0]; let k = t; if (x) { const lastFree = addDays(x.date, -1); k = lastFree >= t ? lastFree : t; } this.go('plan', { ttEdit: true, ttDay: pkey(k).getDay(), nfErr: '' }); },
+      hwSum: sum, hwPlanOf: id => al.perHw[id] || [], hwRest: id => al.rest[id] || 0,
+      hwSheet: !!oh, hs,
+      hsStop: e => e.stopPropagation(), hsClose: () => this.setState({ hwOpen: null, hwMove: false }),
+      hsMinus: () => adjust(-5), hsPlus: () => adjust(5),
+      hsResetDur: () => setHw(oh.id, y => ({ ...y, durUser: null, pin: y.pin && y.pin.length === 1 ? [{ ...y.pin[0], min: Math.max(5, +y.dureeMin || 30) }] : y.pin })),
+      hsLock: () => { const ch = al.perHw[oh.id] || []; const pinned = !!(oh.pin && oh.pin.length) && ch.some(c => c.pinned); setHw(oh.id, y => ({ ...y, pin: pinned ? null : ch.map(c => ({ k: c.k, sid: c.sid, min: c.min })) })); },
+      hsMoveToggle: () => this.setState({ hwMove: !st.hwMove }),
+      hsDone: () => { const id = oh.id; this.pnSetDone(id, true); this.setState({ hwOpen: null, hwMove: false }); }
+    };
+  }
+  pnSetDone(id, done) {
+    const x = (this.state.data.pronoteHw || []).find(y => y.id === id);
+    this.updData(d => ({ ...d, pronoteHw: (d.pronoteHw || []).map(y => (y.id === id ? { ...y, done, pin: done ? null : y.pin } : y)) }));
+    if (this.sb && this.state.auth === 'signedIn' && x) this.sb.from('pronote_devoirs').update({ fait: done }).eq('id', x.rid ?? x.id).then(() => {}, () => {});
   }
   planVals(t) {
     const st = this.state, S = st.data.settings, tt = S.tt || [];
     const now = new Date(), nowMin = now.getHours() * 60 + now.getMinutes();
-    const row = i => ({ time: i.time, title: i.title, sub: i.sub || '', fg: i.kind === 'task' || i.kind === 'cours' ? 'var(--color-text)' : 'var(--color-neutral-700)', tc: i.kind === 'task' ? 'var(--color-accent-700)' : 'var(--color-neutral-700)', bg: i.kind === 'task' ? 'var(--color-surface)' : 'transparent', op: i.past ? '.45' : '1', hasAct: !!i.onAct, onAct: i.onAct || null, actLabel: i.actLabel || '' });
+    const openHw = id => () => this.setState({ hwOpen: id, hwMove: false });
+    const row = i => ({ isPn: i.kind === 'hw', notPn: i.kind !== 'hw', onOpen: i.kind === 'hw' ? openHw(i.hid) : null, isLate: !!i.late, isLock: !!i.pinned, time: i.time, title: i.title, sub: i.sub || '', fg: i.kind === 'task' || i.kind === 'cours' ? 'var(--color-text)' : 'var(--color-neutral-700)', tc: i.kind === 'task' ? 'var(--color-accent-700)' : 'var(--color-neutral-700)', bg: i.kind === 'task' ? 'var(--color-surface)' : 'transparent', op: i.past ? '.45' : '1', hasAct: !!i.onAct, onAct: i.onAct || null, actLabel: i.actLabel || '' });
     const tp = this.planDay(t, nowMin);
-    const up = tp.items.filter(i => !i.past && (i.kind === 'task' || i.kind === 'pause' || i.kind === 'free'));
+    const up = tp.items.filter(i => !i.past && (i.kind === 'task' || i.kind === 'hw' || i.kind === 'pause' || i.kind === 'free'));
     let nk = addDays(t, 1), nItems = [];
-    for (let i = 0; i < 7; i++) { nItems = this.planDay(nk, null).items.filter(x => x.kind === 'task'); if (nItems.length) break; nk = addDays(nk, 1); }
+    for (let i = 0; i < 7; i++) { nItems = this.planDay(nk, null).items.filter(x => x.kind === 'task' || x.kind === 'hw'); if (nItems.length) break; nk = addDays(nk, 1); }
     const selDw = st.ttDay != null ? st.ttDay : pkey(t).getDay();
     let k = t; for (let i = 0; i < 7 && pkey(k).getDay() !== selDw; i++) k = addDays(k, 1);
     const sel = this.planDay(k, k === t ? nowMin : null);
@@ -1811,9 +2072,17 @@ class Component extends DCLogic {
     const ne = st.ne || { subj: 'Physique-Chimie', date: '', title: '' };
     const setNe = p => this.setState(s => ({ ne: { ...(s.ne || { subj: 'Physique-Chimie', date: '', title: '' }), ...p }, neErr: '' }));
     const exLabel = x => { const n = diff(t, x.date); return n === 0 ? 'aujourd’hui' : n === 1 ? 'demain' : 'dans ' + n + ' j'; };
+    const pnHw = (st.data.pronoteHw || []).filter(h => h.date >= t);
+    const hwWhen = h => { const n = diff(t, h.date); return 'Pour ' + (n === 0 ? 'aujourd’hui' : n === 1 ? 'demain' : fmtS(h.date)); };
+    const hwV = this.hwVals(t);
+    const hwPlace = h => { if (h.done) return ''; const ch = hwV.hwPlanOf(h.id); if (!ch.length) return ' · pas de place'; const c = ch[0]; return ' · prévu ' + (c.k === t ? 'aujourd’hui' : fmtS(c.k)) + (ch.length > 1 ? ' (' + ch.length + ' parties)' : '') + ' · ' + durL(hwDur(h)); };
+    const hwRow = h => ({ title: h.subj, sub: h.text.length > 160 ? h.text.slice(0, 158).trim() + '…' : h.text, when: hwWhen(h) + hwPlace(h), box: h.done ? 'var(--color-text)' : 'transparent', deco: h.done ? 'line-through' : 'none', op: h.done ? '.55' : '1', onToggle: () => this.pnSetDone(h.id, !h.done) });
+    const devs = [...exams.map(x => ({ date: x.date, o: 0, x })), ...pnHw.map(h => ({ date: h.date, o: 1, hw: h }))].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.o - b.o));
     return {
-      examRows: exams.map(x => ({ title: x.subj + (x.title ? ' · ' + x.title : ''), sub: fmtS(x.date) + ' · ' + exLabel(x), count: diff(t, x.date) === 0 ? 'J' : 'J-' + diff(t, x.date), onDel: () => { if (window.confirm('Supprimer ce devoir ?')) this.updData(d => ({ ...d, exams: (d.exams || []).filter(y => y.id !== x.id) })); } })),
-      hasExams: exams.length > 0, noExams: !exams.length,
+      ...hwV, selHwSum: hwV.hwSum(k), hasSelHwSum: !!hwV.hwSum(k),
+      devRows: devs.map(v => (v.hw ? { isHw: true, isExam: false, ...hwRow(v.hw) } : { isHw: false, isExam: true, isPn: !!v.x.pronoteId, title: v.x.subj + (v.x.title ? ' · ' + v.x.title : ''), sub: fmtS(v.x.date) + ' · ' + exLabel(v.x), count: diff(t, v.x.date) === 0 ? 'J' : 'J-' + diff(t, v.x.date), onDel: () => { const x = v.x; if (window.confirm('Supprimer ce devoir ?')) this.updData(d => ({ ...d, exams: (d.exams || []).filter(y => y.id !== x.id), deleted: x.pronoteId ? { ...(d.deleted || {}), [x.id]: true } : d.deleted })); } })),
+      hasDevs: devs.length > 0, hasExams: exams.length > 0, noExams: !exams.length,
+      hwTodayRows: pnHw.filter(h => diff(t, h.date) <= 1).map(h => ({ ...hwRow(h), sub: hwWhen(h) + (h.text ? ' · ' + hwRow(h).sub : '') })), hasHwToday: pnHw.some(h => diff(t, h.date) <= 1),
       nextExam: exams[0] ? 'Devoir de ' + exams[0].subj + ' ' + exLabel(exams[0]) : '', hasNextExam: exams.length > 0,
       nextExamSub: exams[0] ? fmtS(exams[0].date) + (exams.length > 1 ? ' · ' + plural(exams.length - 1, 'autre devoir') + ' prévu' + (exams.length > 2 ? 's' : '') : '') : '',
       neSubjs: EXAM_SUBJ.map((s, i) => { const on = ne.subj === s; return { label: s, bg: on ? 'var(--color-accent)' : 'transparent', fg: on ? 'var(--color-bg)' : 'var(--color-text)', br: i % 2 === 0 ? '1px solid var(--color-divider)' : '0', onClick: () => setNe({ subj: s }) }; }),
@@ -1922,6 +2191,195 @@ class Component extends DCLogic {
     const ids = new Set(d.courses.filter(c => c.subj === subj).map(c => c.id));
     const [a, b] = g > 2 ? examWindow(g) : [0, 0], lim = addDays(t, b);
     return { ...d, cards: d.cards.map(c => (ids.has(c.courseId) && c.due > lim ? { ...c, due: addDays(t, a + Math.floor(Math.random() * (b - a + 1))) } : c)) };
+  }
+  // ── Pronote ── le jeton reste côté serveur ; le texte du QR ne vit qu'en mémoire, le temps de l'envoi.
+  async pnLoad() {
+    if (this.state.auth !== 'signedIn' || !this.sb || !this.state.user) return null;
+    const uid = this.state.user.id; this.pnAt = Date.now();
+    const safe = q => q.then(r => r, e => ({ error: e }));
+    const [s, d] = await Promise.all([
+      safe(this.sb.from('pronote_statut').select('status, updated_at').limit(1)),
+      safe(this.sb.from('pronote_devoirs').select('*').gte('date', this.today()).eq('fait', false)).then(r => (r.error ? safe(this.sb.from('pronote_devoirs').select('*').gte('date', this.today())) : r))
+    ]);
+    if (!this.state.user || this.state.user.id !== uid) return null;
+    if (!s.error) { const row = (s.data || [])[0]; this.setState({ pn: row ? { uid, status: String(row.status || 'ok').toLowerCase(), at: row.updated_at || '' } : { uid, status: 'none' } }); }
+    else if (!this.state.pn) this.setState({ pn: { uid, status: 'error' } });
+    if (d.error || !Array.isArray(d.data)) return null;
+    if (this.state.dataReady) this.pnMerge(d.data);
+    return d.data.length;
+  }
+  pnMerge(rows) {
+    const t = this.today();
+    const items = rows.map(r => {
+      const pid = String(r.pronote_id ?? r.pronoteId ?? r.id ?? '');
+      const text = String(r.consigne ?? r.description ?? r.contenu ?? r.texte ?? r.titre ?? '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+      const dm = parseInt(r.duree_min ?? r.dureeMin ?? r.duree, 10);
+      return { pid, rid: r.id ?? pid, date: String(r.date || '').slice(0, 10), subj: pnSubj(r.matiere ?? r.subject ?? r.subj ?? ''), text, dureeMin: dm > 0 ? dm : null, ds: PN_DS.test(norm(text)), fait: r.fait === true };
+    }).filter(x => x.pid && x.date >= t && !x.fait);
+    if (this.pnApply(this.state.data, items, t) !== this.state.data) this.updData(d => this.pnApply(d, items, t));
+  }
+  pnApply(d, items, t) {
+    const ids = new Set(items.map(x => x.pid)), del = d.deleted || {}, pulls = [];
+    let exams = (d.exams || []).filter(x => !x.pronoteId || x.date < t || ids.has(x.pronoteId));
+    items.filter(x => x.ds).forEach(x => {
+      const i = exams.findIndex(e => e.pronoteId === x.pid);
+      if (i >= 0) { const e = exams[i]; if (e.date !== x.date || e.subj !== x.subj) { exams = exams.map((y, j) => (j === i ? { ...y, date: x.date, subj: x.subj } : y)); pulls.push(x); } return; }
+      if (del['pn_' + x.pid] || exams.some(e => e.subj === x.subj && e.date === x.date)) return;
+      exams = [...exams, { id: 'pn_' + x.pid, pronoteId: x.pid, subj: x.subj, date: x.date, title: pnTitle(x.text), createdAt: t }];
+      pulls.push(x);
+    });
+    const prev = {}; (d.pronoteHw || []).forEach(h => { prev[h.id] = h; });
+    const pronoteHw = items.filter(x => !x.ds).sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0)).map(x => { const p = prev[x.pid] || {}; return { id: x.pid, rid: x.rid, subj: x.subj, date: x.date, text: x.text, dureeMin: x.dureeMin, durUser: p.durUser ?? null, pin: p.pin || null, done: !!p.done }; });
+    if (JSON.stringify(exams) === JSON.stringify(d.exams || []) && JSON.stringify(pronoteHw) === JSON.stringify(d.pronoteHw || [])) return d;
+    let out = { ...d, exams, pronoteHw };
+    pulls.forEach(x => { out = this.examPull(out, x.subj, x.date); });
+    return out;
+  }
+  pnLib() {
+    if (window.jsQR) return Promise.resolve(window.jsQR);
+    if (this.pnLibP) return this.pnLibP;
+    const load = src => new Promise((ok, ko) => { const s = document.createElement('script'); s.src = src; s.async = true; s.onload = () => (window.jsQR ? ok(window.jsQR) : ko(new Error('jsQR'))); s.onerror = () => { s.remove(); ko(new Error('jsQR')); }; document.head.appendChild(s); });
+    this.pnLibP = load('https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js').catch(() => load('https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js')).catch(e => { this.pnLibP = null; throw e; });
+    return this.pnLibP;
+  }
+  pnAccept(text) {
+    let ok = false;
+    try { const j = JSON.parse(text); ok = !!(j && (j.jeton || j.url || j.login)); } catch (e) { ok = /pronote|index-education/i.test(text); }
+    if (!ok) { this.setState({ pnErr: 'Ce QR code n’est pas celui de Pronote. Utilise celui qui s’affiche après avoir choisi ton code PIN.' }); return; }
+    this.pnQr = text;
+    this.setState({ pnHasQr: true, pnErr: '' });
+  }
+  async pnScan() {
+    this.setState({ pnErr: '' });
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return this.setState({ pnErr: 'Caméra indisponible ici. Importe plutôt une capture du QR code.' });
+    let jsQR, stream;
+    try { jsQR = await this.pnLib(); } catch (e) { return this.setState({ pnErr: 'Impossible de charger le lecteur de QR code. Vérifie ta connexion.' }); }
+    try { stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }); }
+    catch (e) { return this.setState({ pnErr: /notallowed|permission|denied/i.test(String(e && (e.name + ' ' + e.message))) ? 'Accès à la caméra refusé. Autorise-le dans les réglages du téléphone, ou importe une capture.' : 'Caméra indisponible. Importe plutôt une capture du QR code.' }); }
+    this.pnStream = stream;
+    this.setState({ pnScanning: true }, () => {
+      const v = this.pnVideoRef.current; if (!v) return this.pnStopCam();
+      v.setAttribute('playsinline', ''); v.muted = true; v.srcObject = stream; v.play().catch(() => {});
+      const cv = document.createElement('canvas'), ctx = cv.getContext('2d', { willReadFrequently: true });
+      const tick = () => {
+        if (!this.pnStream) return;
+        if (v.readyState >= 2 && v.videoWidth) {
+          const s = Math.min(1, 960 / Math.max(v.videoWidth, v.videoHeight));
+          cv.width = Math.round(v.videoWidth * s); cv.height = Math.round(v.videoHeight * s);
+          ctx.drawImage(v, 0, 0, cv.width, cv.height);
+          const img = ctx.getImageData(0, 0, cv.width, cv.height), code = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
+          if (code && code.data) { this.pnStopCam(); this.pnAccept(code.data); return; }
+        }
+        this.pnRaf = requestAnimationFrame(tick);
+      };
+      this.pnRaf = requestAnimationFrame(tick);
+    });
+  }
+  pnStopCam(silent) {
+    cancelAnimationFrame(this.pnRaf);
+    if (this.pnStream) { this.pnStream.getTracks().forEach(tr => tr.stop()); this.pnStream = null; }
+    if (!silent && this.state.pnScanning) this.setState({ pnScanning: false });
+  }
+  async pnOnFile(e) {
+    const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+    this.setState({ pnReading: true, pnErr: '' });
+    let url = '';
+    try {
+      const jsQR = await this.pnLib();
+      url = URL.createObjectURL(f);
+      const img = await new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = ko; i.src = url; });
+      const W = img.naturalWidth, H = img.naturalHeight, tried = new Set();
+      let code = null;
+      for (const max of [1600, 1000, 2400, 600]) {
+        const s = Math.min(1, max / Math.max(W, H)), w = Math.round(W * s), h = Math.round(H * s);
+        if (tried.has(w)) continue; tried.add(w);
+        const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+        const px = ctx.getImageData(0, 0, w, h);
+        code = jsQR(px.data, w, h, { inversionAttempts: 'attemptBoth' });
+        if (code && code.data) break;
+      }
+      if (code && code.data) this.pnAccept(code.data);
+      else this.setState({ pnErr: 'Pas de QR code trouvé sur cette image. Recadre la capture autour du QR code.' });
+    } catch (err) { this.setState({ pnErr: 'Impossible de lire cette image.' }); }
+    if (url) URL.revokeObjectURL(url);
+    this.setState({ pnReading: false });
+  }
+  async pnFnErr(error) {
+    let m = '';
+    try {
+      const c = error && error.context;
+      if (c && typeof c.text === 'function') {
+        const raw = await (c.bodyUsed ? Promise.resolve('') : c.text());
+        let j = null; try { j = JSON.parse(raw); } catch (e) {}
+        if (j && String(j.status || '').toLowerCase() === 'reconnect') return 'reconnect';
+        m = j ? j.error || j.message || '' : raw;
+        if (m && typeof m !== 'string') m = JSON.stringify(m);
+      }
+    } catch (e) {}
+    return (m && String(m).trim()) || (error && error.message) || frErr(error);
+  }
+  async pnLink() {
+    const pin = (this.state.pnPin || '').replace(/\D/g, '');
+    if (!this.pnQr) return this.setState({ pnErr: 'Scanne ou importe d’abord le QR code.' });
+    if (pin.length !== 4) return this.setState({ pnErr: 'Le code PIN fait 4 chiffres.' });
+    if (!this.sb || this.state.auth !== 'signedIn') return this.setState({ pnErr: 'Connecte-toi d’abord à ton compte.' });
+    this.setState({ pnBusy: true, pnErr: '' });
+    try {
+      const { data, error } = await this.sb.functions.invoke('pronote-sync', { body: { action: 'link', qr: this.pnQr, pin } });
+      if (error) throw new Error(await this.pnFnErr(error));
+      if (data && data.error) throw new Error(String(data.error));
+      this.pnQr = null;
+      const n1 = await this.pnLoad(), n = pnCount(data) ?? n1 ?? 0;
+      this.setState({ pnBusy: false, pnHasQr: false, pnPin: '', pnMsg: 'Pronote connecté ✅ — ' + plural(n, 'devoir') + ' importé' + (n > 1 ? 's' : ''), pnMsgOk: true });
+      this.go('set');
+    } catch (e) {
+      const m = (e && e.message) || '';
+      this.setState({ pnBusy: false, pnErr: m === 'reconnect' ? 'Refais un QR code sur Pronote.' : m || 'Erreur inconnue.' });
+    }
+  }
+  async pnSync() {
+    if (!this.sb || this.state.pnBusy) return;
+    this.setState({ pnBusy: true, pnMsg: '' });
+    try {
+      const { data, error } = await this.sb.functions.invoke('pronote-sync', { body: { action: 'sync' } });
+      if (error) throw new Error(await this.pnFnErr(error));
+      const n1 = await this.pnLoad();
+      if (data && String(data.status || '').toLowerCase() === 'reconnect') throw new Error('reconnect');
+      if (data && data.error) throw new Error(String(data.error));
+      const n = pnCount(data) ?? n1 ?? 0;
+      this.setState({ pnBusy: false, pnMsg: 'Synchronisé ✓ — ' + plural(n, 'devoir') + ' à venir', pnMsgOk: true });
+    } catch (e) {
+      const m = (e && e.message) || '';
+      if (m === 'reconnect') return this.setState(s => ({ pnBusy: false, pnMsg: '', pn: { ...(s.pn || {}), uid: s.user && s.user.id, status: 'reconnect' } }));
+      await this.pnLoad();
+      this.setState({ pnBusy: false, pnMsg: m || 'Erreur inconnue.', pnMsgOk: false });
+    }
+  }
+  pnVals(t, appReady, scr) {
+    const st = this.state, signed = st.auth === 'signedIn', pn = st.pn && st.user && st.pn.uid === st.user.id ? st.pn : null, s = pn && pn.status;
+    const at = pn && pn.at ? new Date(pn.at) : null;
+    const atLabel = at && !isNaN(at) ? at.toLocaleString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'pas encore';
+    const pin = st.pnPin || '', msg = st.pnMsg || (s === 'error' ? 'Pronote est injoignable pour l’instant.' : '');
+    const reset = { pnHasQr: false, pnPin: '', pnErr: '' };
+    return {
+      isPn: appReady && scr === 'pronote',
+      pnLocal: !signed, pnSignedIn: signed, pnChecking: signed && !pn,
+      pnNone: s === 'none', pnReconnect: s === 'reconnect', pnLinked: !!s && !['none', 'reconnect', 'error'].includes(s), pnShowConnect: s === 'none' || s === 'reconnect' || s === 'error',
+      pnLastSync: 'Dernière synchro : ' + atLabel,
+      pnBusy: !!st.pnBusy, pnSyncLabel: st.pnBusy ? 'Synchronisation…' : 'Synchroniser maintenant', pnSyncNow: () => this.pnSync(),
+      pnMsg: msg, pnHasMsg: !!msg, pnMsgColor: st.pnMsg && st.pnMsgOk ? 'var(--color-text)' : 'var(--color-accent-700)',
+      pnOpen: () => { this.pnQr = null; this.go('pronote', { ...reset, pnMsg: '' }); },
+      pnClose: () => { this.pnQr = null; this.go('set', reset); },
+      pnFileRef: this.pnFileRef, pnVideoRef: this.pnVideoRef,
+      pnScanning: !!st.pnScanning, pnPickQr: !st.pnScanning && !st.pnHasQr, pnHasQr: !!st.pnHasQr && !st.pnScanning,
+      pnReading: !!st.pnReading, pnImportLabel: st.pnReading ? 'Lecture de l’image…' : 'Importer une capture du QR code',
+      pnScan: () => this.pnScan(), pnStopScan: () => this.pnStopCam(), pnImport: () => { if (this.pnFileRef.current) this.pnFileRef.current.click(); }, pnOnFile: e => this.pnOnFile(e),
+      pnResetQr: () => { this.pnQr = null; this.setState({ pnHasQr: false, pnErr: '' }); },
+      pnPin: pin, pnOnPin: e => this.setState({ pnPin: e.target.value.replace(/\D/g, '').slice(0, 4), pnErr: '' }),
+      pnErr: st.pnErr || '', pnHasErr: !!st.pnErr,
+      pnLink: () => this.pnLink(), pnLinkDisabled: !!st.pnBusy || !st.pnHasQr || pin.length !== 4, pnLinkLabel: st.pnBusy ? 'Connexion…' : 'Connecter Pronote'
+    };
   }
   courseDays() {
     const S = this.state.data.settings; if (S.courseDays) return S.courseDays;
@@ -2593,10 +3051,10 @@ class Component extends DCLogic {
     const groups = []; let cur = null;
     const hm = s => { const m = s.match(/(\d+)h(\d+)/); return m ? [+m[1], +m[2]] : [0, 0]; };
     this.planDay(k, null).items.forEach(i => {
-      if (i.kind === 'task' || (i.kind === 'pause' && cur)) {
+      if (i.kind === 'task' || i.kind === 'hw' || (i.kind === 'pause' && cur)) {
         const [a, b] = i.time.split('–');
         if (!cur) { cur = { start: hm(a), end: hm(b), tasks: [] }; groups.push(cur); }
-        cur.end = hm(b); if (i.kind === 'task') cur.tasks.push(i);
+        cur.end = hm(b); if (i.kind !== 'pause') cur.tasks.push(i);
       } else cur = null;
     });
     return groups.filter(g => g.tasks.length);
@@ -2925,6 +3383,7 @@ class Component extends DCLogic {
       clearScope: () => this.setState({ curveScope: null }),
       loadDemo: () => { const d = demoData(t); this.updData(x => ({ ...x, courses: [...x.courses, ...d.courses], cards: [...x.cards, ...d.cards] })); },
       ...this.planVals(t),
+      ...this.pnVals(t, appReady, scr),
       exportCalendar: () => this.exportCalendar(), toggleNotif: () => this.toggleNotif(),
       notifLabel: lsGet('revisions.notif') === '1' ? 'Couper les notifications' : 'Activer les notifications',
       remMsg: st.remMsg || '', hasRemMsg: !!st.remMsg,
